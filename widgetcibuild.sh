@@ -1,4 +1,6 @@
-me="./sourcefile.txt"
+#!/bin/bash
+
+tempfilename="./sourcefile.txt"
 cat /dev/null > $tempfilename
 
 allwidgetdirfile="./alldirectories.txt"

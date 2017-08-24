@@ -75,15 +75,12 @@ for $app_name (@dev_apps)
     {
         print $fh "<tr><td>$app_name</td><td>$version_dev</td><td>$version_qa</td><td>$version_uat</td></tr>\n";
     }
-    
-#    print "Versions of '$app_name' is $version_dev and $version_qa and $version_uat.\n";
+    else
+    {
+        print "Not defined app is $app_name\n";
+    }
 }
 
 
 print $fh "</table>\n</body>\n</html>\n";
 close($fh);
-
-#print Dumper(\%dev_hash1);
-#print Dumper(\%qa_hash1);
-#print Dumper(\%uat_hash1);
-

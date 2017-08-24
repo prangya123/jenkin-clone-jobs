@@ -71,7 +71,7 @@ for $app_name (@dev_apps)
         $version_uat = "App missing";
     }
 
-    if (defined $version_dev)
+    if ($version_dev != "null")
     {
         print $fh "<tr><td>$app_name</td><td>$version_dev</td><td>$version_qa</td><td>$version_uat</td></tr>\n";
     }

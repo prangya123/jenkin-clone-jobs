@@ -76,7 +76,7 @@ chomp (@temp_art_nums);
 open (my $fh, '>', $report_name) or die "Could not create file.\n";
 
 print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment dashboard</title>\n<body>\n";
-print $fh "<table border=\"1\" style=\"bgcolor:#e2f4ff\">\n";
+print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Application Name</th><th>DEV01</th><th>QA01</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMODEV01</th></tr>\n";
 
 @dev_apps = keys %dev_hash1;
@@ -116,7 +116,7 @@ for $app_name (@dev_apps)
 
     if ($version_dev ne "null")
     {
-        print $fh "<tr><td>$app_name</td><td>$version_dev</td><td>$version_qa</td><td>$version_uat</td><td>$version_perf</td><td>$version_demoprod</td><td>$version_demodev</td></tr>\n";
+        print $fh "<tr  BGCOLOR=\"#e2f4ff\"><td>$app_name</td><td>$version_dev</td><td>$version_qa</td><td>$version_uat</td><td>$version_perf</td><td>$version_demoprod</td><td>$version_demodev</td></tr>\n";
     }
     else
     {

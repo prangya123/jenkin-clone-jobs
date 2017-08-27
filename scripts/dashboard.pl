@@ -36,7 +36,7 @@ chomp (@temp_app_names);
 chomp (@temp_art_nums);
 @qa_hash1{@temp_app_names} = @temp_art_nums;
 
-`cf curl "/v2/apps?q=space_guid:$dev01_space_id\&results-per-page=100\&order-direction=asc" > apps_list.json`;
+`cf curl "/v2/apps?q=space_guid:$dev01_space_id\&results-per-page=100" > apps_list.json`;
 @temp_app_names = `cat apps_list.json | jq -r ".resources[].entity.name"`;
 @temp_art_nums = `cat apps_list.json | jq -r ".resources[].entity.environment_json.ARTIFACT_VERSION"`;
 chomp (@temp_app_names);
@@ -79,7 +79,7 @@ print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xht
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Application Name</th><th>DEV01</th><th>QA01</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMODEV01</th></tr>\n";
 
-@dev_apps = keys %dev_hash1;
+@dev_apps = sort keys %dev_hash1;
 for $app_name (@dev_apps)
 {
     my $version_dev = $dev_hash1{$app_name};

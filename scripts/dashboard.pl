@@ -24,6 +24,7 @@ my %demodev_hash1;
 
 my $app_name;
 my @dev_apps;
+my $app_count = 1;
 
 my $report_name = 'dashboard.html';
 
@@ -82,7 +83,6 @@ print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><t
 @dev_apps = sort keys %dev_hash1;
 for $app_name (@dev_apps)
 {
-    my $app_count = 1;
     my $version_dev = $dev_hash1{$app_name};
     my $version_qa = $qa_hash1{$app_name};
     my $version_uat = $uat_hash1{$app_name};

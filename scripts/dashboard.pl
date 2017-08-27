@@ -36,7 +36,7 @@ chomp (@temp_app_names);
 chomp (@temp_art_nums);
 @qa_hash1{@temp_app_names} = @temp_art_nums;
 
-`cf curl "/v2/apps?q=space_guid:$dev01_space_id\&results-per-page=100" > apps_list.json`;
+`cf curl "/v2/apps?q=space_guid:$dev01_space_id\&results-per-page=100\&order-direction:asc" > apps_list.json`;
 @temp_app_names = `cat apps_list.json | jq -r ".resources[].entity.name"`;
 @temp_art_nums = `cat apps_list.json | jq -r ".resources[].entity.environment_json.ARTIFACT_VERSION"`;
 chomp (@temp_app_names);

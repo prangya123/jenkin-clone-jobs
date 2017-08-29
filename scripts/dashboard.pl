@@ -11,6 +11,7 @@ my $uat01_space_id="14568591-961d-42f8-b6f2-628c97c4e4fc";
 my $perf01_space_id="cd98d78c-21bf-45d6-aa14-a4226b14c7c5";
 my $demoprod_space_id="f73004e8-a449-4fca-bb72-d7c6524ed070";
 my $demodev_space_id="b568f490-30f9-432a-b277-82303306b3a7";
+my $prod_space_id="88d8a240-068b-43c7-9f27-1365cd4c5a22";
 
 my @temp_app_names;
 my @temp_art_nums;
@@ -21,6 +22,7 @@ my %uat_hash1;
 my %perf_hash1;
 my %demoprod_hash1;
 my %demodev_hash1;
+my %prod_hash1;
 
 my $app_name;
 my @dev_apps;
@@ -74,11 +76,20 @@ chomp (@temp_app_names);
 chomp (@temp_art_nums);
 @demodev_hash1{@temp_app_names} = @temp_art_nums;
 
+`cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o "intellistream_prod" -s prod`;
+
+`cf curl "/v2/apps?q=space_guid:$prod_space_id\&results-per-page=100" > apps_list.json`;
+@temp_app_names = `cat apps_list.json | jq -r ".resources[].entity.name"`;
+@temp_art_nums = `cat apps_list.json | jq -r ".resources[].entity.environment_json.ARTIFACT_VERSION"`;
+chomp (@temp_app_names);
+chomp (@temp_art_nums);
+@prod_hash1{@temp_app_names} = @temp_art_nums;
+
 open (my $fh, '>', $report_name) or die "Could not create file.\n";
 
 print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment dashboard</title>\n<body>\n";
 print $fh "<table border=\"1\">\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>DEV01</th><th>QA01</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMODEV01</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>DEV01</th><th>QA01</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMODEV01</th><th>PROD</th></tr>\n";
 
 @dev_apps = sort keys %dev_hash1;
 for $app_name (@dev_apps)
@@ -89,6 +100,7 @@ for $app_name (@dev_apps)
     my $version_perf = $perf_hash1{$app_name};
     my $version_demoprod = $demoprod_hash1{$app_name};
     my $version_demodev = $demodev_hash1{$app_name};
+    my $version_prod = $prod_hash1{$app_name};
 
     if (!defined $version_qa)
     {
@@ -114,10 +126,15 @@ for $app_name (@dev_apps)
     {
         $version_demodev = "App missing";
     }
+    
+    if (!defined $version_prod)
+    {
+        $version_prod = "App missing";
+    }
 
     if ($version_dev ne "null")
     {
-        print $fh "<tr BGCOLOR=\"#e2f4ff\"><td>$app_count</td><td>$app_name</td><td>$version_dev</td><td>$version_qa</td><td>$version_uat</td><td>$version_perf</td><td>$version_demoprod</td><td>$version_demodev</td></tr>\n";
+        print $fh "<tr BGCOLOR=\"#e2f4ff\"><td>$app_count</td><td>$app_name</td><td>$version_dev</td><td>$version_qa</td><td>$version_uat</td><td>$version_perf</td><td>$version_demoprod</td><td>$version_demodev</td><td>$version_prod</td></tr>\n";
         $app_count++;
     }
     else

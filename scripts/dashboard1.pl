@@ -126,7 +126,7 @@ for $app_name (@dev_apps)
     if ($version_dev ne "null")
     {
         print $fh "<tr BGCOLOR=\"#e2f4ff\"><td NOWRAP bgcolor=\"#30aaf4\">$app_count</td><td NOWRAP bgcolor=\"#30aaf4\">$app_name</td>";
-        print $fh "<td NOWRAP BGCOLOR=\"$dev_hash1{$app_name}[5]\">Version: $version_dev<BR>Instances: $dev_hash1{$app_name}[3]/$dev_hash1{$app_name}[4]<BR>Route: $dev_hash1{$app_name}[2]</td>";
+        print $fh "<td NOWRAP BGCOLOR=\"$dev_hash1{$app_name}[5]\">Version: 1.0.0.$version_dev<BR>Instances running: $dev_hash1{$app_name}[3]/$dev_hash1{$app_name}[4]<BR>Route: $dev_hash1{$app_name}[2]</td>";
 
         if ($version_qa eq "Missing")
         {
@@ -134,7 +134,7 @@ for $app_name (@dev_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[5]\">Version: $version_qa<BR>Instances: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[5]\">Version: 1.0.0.$version_qa<BR>Instances running: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]</td>";
         }
         
         if ($version_uat eq "Missing")
@@ -143,7 +143,7 @@ for $app_name (@dev_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[5]\">Version: $version_uat<BR>Instances: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[5]\">Version: 1.0.0.$version_uat<BR>Instances running: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]</td>";
         }
 
         if ($version_perf eq "Missing")
@@ -152,7 +152,7 @@ for $app_name (@dev_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$perf_hash1{$app_name}[5]\">Version: $version_perf<BR>Instances: $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]<BR>Route: $perf_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$perf_hash1{$app_name}[5]\">Version: 1.0.0.$version_perf<BR>Instances running: $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]<BR>Route: $perf_hash1{$app_name}[2]</td>";
         }
         
         if ($version_demoprod eq "Missing")
@@ -161,7 +161,7 @@ for $app_name (@dev_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$demoprod_hash1{$app_name}[5]\">Version: $version_demoprod<BR>Instances: $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]<BR>Route: $demoprod_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$demoprod_hash1{$app_name}[5]\">Version: 1.0.0.$version_demoprod<BR>Instances running: $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]<BR>Route: $demoprod_hash1{$app_name}[2]</td>";
         }
 
         if ($version_demodev eq "Missing")
@@ -170,7 +170,7 @@ for $app_name (@dev_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$demodev_hash1{$app_name}[5]\">Version: $version_demodev<BR>Instances: $demodev_hash1{$app_name}[3]/$demodev_hash1{$app_name}[4]<BR>Route: $demodev_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$demodev_hash1{$app_name}[5]\">Version: 1.0.0.$version_demodev<BR>Instances running: $demodev_hash1{$app_name}[3]/$demodev_hash1{$app_name}[4]<BR>Route: $demodev_hash1{$app_name}[2]</td>";
         }
 
         if ($version_prod eq "Missing")
@@ -179,7 +179,7 @@ for $app_name (@dev_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$prod_hash1{$app_name}[5]\">Version: $version_prod<BR>Instances: $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]<BR>Route: $prod_hash1{$app_name}[2]</td></tr>\n";
+            print $fh "<td NOWRAP BGCOLOR=\"$prod_hash1{$app_name}[5]\">Version: 1.0.0.$version_prod<BR>Instances running: $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]<BR>Route: $prod_hash1{$app_name}[2]</td></tr>\n";
         }
 
         $app_count++;

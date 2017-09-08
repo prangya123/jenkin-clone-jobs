@@ -301,7 +301,7 @@ for my $i ( 0 .. $#down_apps )
         }
         else
         {
-            print $fh2 "<td NOWRAP bgcolor=\"#ffa8af\"><font size=\"5\">$down_apps[$i][$j]</td>";
+            print $fh2 "<td NOWRAP bgcolor=\"#ff0000\"><font size=\"5\" color=\"white\">$down_apps[$i][$j]</td>";
         }
 	}
     print $fh2 "</tr>\n";

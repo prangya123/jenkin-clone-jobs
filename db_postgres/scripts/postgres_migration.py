@@ -27,12 +27,12 @@ def source_db():
         b=b.strip()
         d[a]=b
 
-    print ("\nSOURCE FILE INFO ....")
-    print(d)
+#    print ("\nSOURCE FILE INFO ....")
+#    print(d)
 
     #print ("\nSOURCE FILE INFO ....")
 
-    print ("\nGENERATING SOURCE FILE INFO ... in db_credentials.txt")
+#    print ("\nGENERATING SOURCE FILE INFO ... in db_credentials.txt")
 
     with open('db_credentials.txt', 'w') as f:
 
@@ -72,11 +72,11 @@ def dest_db():
         d[a] = b
 
 
-    print ("\nDESTINATION FILE INFO....")
-    print(d)
+#    print ("\nDESTINATION FILE INFO....")
+#    print(d)
 
     #print ("\nDESTINATION FILE INFO....")
-    print ("\nGENERATING DESTINATION FILE INFO .. in db_credentials.txt")
+#    print ("\nGENERATING DESTINATION FILE INFO .. in db_credentials.txt")
 
     with open('db_credentials.txt', 'a') as f:
 

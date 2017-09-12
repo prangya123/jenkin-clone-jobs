@@ -22,8 +22,9 @@ def source_db():
         a=x[0]
         a=a.strip()
         b=x[1]
-        c=len(b)-2 #The -1 get len of b -'\n'
-        b=b[0:c]
+        b=x[1].replace(',', '')
+        #c=len(b)-2 #The -1 get len of b -'\n'
+        #b=b[0:c]
         b=b.strip()
         d[a]=b
 
@@ -66,8 +67,9 @@ def dest_db():
         a = x[0]
         a = a.strip()
         b = x[1]
-        c = len(b) - 2  # The -1 get len of b -'\n'
-        b = b[0:c]
+        b=x[1].replace(',', '')
+        #c = len(b) - 2  # The -1 get len of b -'\n'
+        #b = b[0:c]
         b = b.strip()
         d[a] = b
 

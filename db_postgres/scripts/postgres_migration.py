@@ -35,7 +35,7 @@ def source_db():
 
 #    print ("\nGENERATING SOURCE FILE INFO ... in db_credentials.txt")
 
-    with open('db_credentials.txt', 'w') as f:
+    with open('db_commands.txt', 'w') as f:
 
         SRC_DB_HOST=(d['"host"'])
         print >> f, "export SRC_DB_HOST="+SRC_DB_HOST

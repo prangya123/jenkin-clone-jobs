@@ -61,7 +61,7 @@ def dest_db():
 
     destination_file = open("destination.txt", "r")
     d = {}
-    for line in islice(destination_file, 4, 14):
+    for line in islice(destination_file, 4, 13):
         x = line.split(":", 1)
         a = x[0]
         a = a.strip()

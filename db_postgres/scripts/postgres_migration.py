@@ -80,7 +80,7 @@ def dest_db():
 
     with open('db_credentials.txt', 'a') as f:
 
-        DEST_DB_HOST=(d['"host"'])
+        DEST_DB_HOST=(d['"hostname"'])
         print >>f, "export DEST_DB_HOST="+DEST_DB_HOST
 
         DEST_DB_NAME = (d['"database"'])

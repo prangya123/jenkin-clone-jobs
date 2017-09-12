@@ -36,7 +36,7 @@ def source_db():
 
     with open('db_credentials.txt', 'w') as f:
 
-        SRC_DB_HOST=(d['"hostname"'])
+        SRC_DB_HOST=(d['"host"'])
         print >> f, "export SRC_DB_HOST="+SRC_DB_HOST
 
         SRC_DB_PORT=(d['"port"'])
@@ -80,7 +80,7 @@ def dest_db():
 
     with open('db_credentials.txt', 'a') as f:
 
-        DEST_DB_HOST=(d['"hostname"'])
+        DEST_DB_HOST=(d['"host"'])
         print >>f, "export DEST_DB_HOST="+DEST_DB_HOST
 
         DEST_DB_NAME = (d['"database"'])

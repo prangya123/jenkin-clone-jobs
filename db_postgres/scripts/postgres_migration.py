@@ -80,7 +80,7 @@ def dest_db():
     #print ("\nDESTINATION FILE INFO....")
 #    print ("\nGENERATING DESTINATION FILE INFO .. in db_credentials.txt")
 
-    with open('db_credentials.txt', 'a') as f:
+    with open('db_commands.txt', 'a') as f:
 
         DEST_DB_HOST=(d['"hostname"'])
         print >>f, "export DEST_DB_HOST="+DEST_DB_HOST

@@ -17,8 +17,8 @@ def source_db():
     source_file=open("source.txt","r")
     d={}
 
-    #for line in islice(source_file,4,14):
-    for line in islice(source_file,1,12):
+    for line in islice(source_file,4,14):
+    #for line in islice(source_file,1,12):
         x=line.split(":",1)
         a=x[0]
         a=a.strip()
@@ -63,8 +63,8 @@ def dest_db():
 
     destination_file = open("destination.txt", "r")
     d = {}
-    #for line in islice(destination_file, 4, 13):
-    for line in islice(destination_file, 1, 12):
+    for line in islice(destination_file, 4, 13):
+    #for line in islice(destination_file, 1, 12):
         x = line.split(":", 1)
         a = x[0]
         a = a.strip()
@@ -84,7 +84,7 @@ def dest_db():
 
     with open('db_commands.txt', 'a') as f:
 
-        DEST_DB_HOST=(d['"host"'])
+        DEST_DB_HOST=(d['"hostname"'])
         print >>f, "export DEST_DB_HOST="+DEST_DB_HOST
 
         DEST_DB_NAME = (d['"database"'])

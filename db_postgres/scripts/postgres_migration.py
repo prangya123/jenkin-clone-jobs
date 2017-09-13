@@ -17,17 +17,19 @@ def source_db():
     source_file=open("source.txt","r")
     d={}
 
-    for line in islice(source_file,4,14):
+    #for line in islice(source_file,4,14):
     #for line in islice(source_file,1,12):
-        x=line.split(":",1)
-        a=x[0]
-        a=a.strip()
-        b=x[1]
-        b=x[1].replace(',', '')
-        #c=len(b)-2 #The -1 get len of b -'\n'
-        #b=b[0:c]
-        b=b.strip()
-        d[a]=b
+    for line in source_file:
+        if ":" in line:
+            x=line.split(":",1)
+            a=x[0]
+            a=a.strip()
+            b=x[1]
+            b=x[1].replace(',', '')
+            #c=len(b)-2 #The -1 get len of b -'\n'
+            #b=b[0:c]
+            b=b.strip()
+            d[a]=b
 
 #    print ("\nSOURCE FILE INFO ....")
 #    print(d)
@@ -38,8 +40,12 @@ def source_db():
 
     with open('db_commands.txt', 'w') as f:
 
-        SRC_DB_HOST=(d['"host"'])
-        print >> f, "export SRC_DB_HOST="+SRC_DB_HOST
+        if '"host"' in d:
+            SRC_DB_HOST=(d['"host"'])
+            print >> f, "export SRC_DB_HOST="+SRC_DB_HOST
+        elif '"hostname"' in d:
+            SRC_DB_HOST = (d['"hostname"'])
+            print >> f, "export SRC_DB_HOST=" +SRC_DB_HOST
 
         SRC_DB_PORT=(d['"port"'])
         print >>f, "export SRC_DB_PORT="+SRC_DB_PORT
@@ -63,17 +69,19 @@ def dest_db():
 
     destination_file = open("destination.txt", "r")
     d = {}
-    for line in islice(destination_file, 4, 13):
+    #for line in islice(destination_file, 4, 13):
     #for line in islice(destination_file, 1, 12):
-        x = line.split(":", 1)
-        a = x[0]
-        a = a.strip()
-        b = x[1]
-        b=x[1].replace(',', '')
-        #c = len(b) - 2  # The -1 get len of b -'\n'
-        #b = b[0:c]
-        b = b.strip()
-        d[a] = b
+    for line in destination_file:
+        if ":" in line:
+            x = line.split(":", 1)
+            a = x[0]
+            a = a.strip()
+            b = x[1]
+            b=x[1].replace(',', '')
+            #c = len(b) - 2  # The -1 get len of b -'\n'
+            #b = b[0:c]
+            b = b.strip()
+            d[a] = b
 
 
 #    print ("\nDESTINATION FILE INFO....")
@@ -84,8 +92,12 @@ def dest_db():
 
     with open('db_commands.txt', 'a') as f:
 
-        DEST_DB_HOST=(d['"hostname"'])
-        print >>f, "export DEST_DB_HOST="+DEST_DB_HOST
+        if '"host"' in d:
+            DEST_DB_HOST=(d['"host"'])
+            print >> f, "export DEST_DB_HOST="+DEST_DB_HOST
+        elif '"hostname"' in d:
+            DEST_DB_HOST = (d['"hostname"'])
+            print >> f, "export DEST_DB_HOST=" +DEST_DB_HOST
 
         DEST_DB_NAME = (d['"database"'])
         print >>f, "export DEST_DB_NAME=" + DEST_DB_NAME

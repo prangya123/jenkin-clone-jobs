@@ -32,7 +32,7 @@ def source_db():
             d[a]=b
 
 #    print ("\nSOURCE FILE INFO ....")
-#    print(d)
+     print(d)
 
     #print ("\nSOURCE FILE INFO ....")
 
@@ -85,7 +85,7 @@ def dest_db():
 
 
 #    print ("\nDESTINATION FILE INFO....")
-#    print(d)
+     print(d)
 
     #print ("\nDESTINATION FILE INFO....")
 #    print ("\nGENERATING DESTINATION FILE INFO .. in db_credentials.txt")

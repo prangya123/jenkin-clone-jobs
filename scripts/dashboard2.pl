@@ -141,7 +141,7 @@ for $app_name (@dev_apps)
 
         if ($dev_hash1{$app_name}[5] eq "#ffa8af")
         {
-            $down_apps[$dev_ctr][0] = $app_name;
+            $down_apps[$dev_ctr][0] = $app_name.":"." $dev_hash1{$app_name}[3]/$dev_hash1{$app_name}[4]";
             $dev_ctr++;
         }
 
@@ -155,7 +155,7 @@ for $app_name (@dev_apps)
 
             if ($qa_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$qa_ctr][1] = $app_name;
+                $down_apps[$qa_ctr][1] = $app_name.":"." $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]";
                 $qa_ctr++;
             }
         }
@@ -170,7 +170,7 @@ for $app_name (@dev_apps)
 
             if ($uat_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$uat_ctr][2] = $app_name;
+                $down_apps[$uat_ctr][2] = $app_name.":"." $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]";
                 $uat_ctr++;
             }
         }
@@ -185,7 +185,7 @@ for $app_name (@dev_apps)
 
             if ($perf_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$perf_ctr][3] = $app_name;
+                $down_apps[$perf_ctr][3] = $app_name.":"." $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]";
                 $perf_ctr++;
             }
         }
@@ -200,7 +200,7 @@ for $app_name (@dev_apps)
 
             if ($demoprod_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$demoprod_ctr][4] = $app_name;
+                $down_apps[$demoprod_ctr][4] = $app_name.":"." $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]";
                 $demoprod_ctr++;
             }
         }
@@ -215,7 +215,7 @@ for $app_name (@dev_apps)
 
             if($demodev_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$demodev_ctr][5] = $app_name;
+                $down_apps[$demodev_ctr][5] = $app_name.":"." $demodev_hash1{$app_name}[3]/$demodev_hash1{$app_name}[4]";
                 $demodev_ctr++;
             }
         }
@@ -230,7 +230,7 @@ for $app_name (@dev_apps)
 
             if ($prod_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$prod_ctr][6] = $app_name;
+                $down_apps[$prod_ctr][6] = $app_name.":"." $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]";
                 $prod_ctr++;
             }
         }

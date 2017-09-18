@@ -1,0 +1,13 @@
+{
+"uaa_url" : "https://8987ec6b-9124-4db2-bdce-2b2ad83c6941.predix-uaa.run.asv-pr.ice.predix.io",
+"uaa_client_id" : "ingestor.ba693d00-135a-46d5-9945-39f51617a64c.a4c4582c-628a-4c8c-9ce7-f15c127f674c",
+"uaa_client_secret" : "",
+"username"  : "14e11328-81cc-4736-9e84-158deef89885_ingestor",
+"password" : null,
+"tenant" : "14e11328-81cc-4736-9e84-158deef89885",
+"tenant_name" : "pcmchevron01",
+"timeseries_url" : "https://apm-timeseries-services-prod.apm-api.predix.com",
+"export_start_time" : "365d-ago",
+"export_end_time" : null,
+"asset_url" : "https://apm-asset-prod.apm-api.predix.com"
+}

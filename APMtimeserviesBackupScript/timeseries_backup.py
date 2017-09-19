@@ -40,8 +40,8 @@ def get_injestor_token(config):
 		client_secret = getpass.getpass('Enter UAA Secret:')
 		
 	if pswd is None:
-		pswd = getpass.getpass('Enter Password:')
-
+		#pswd = getpass.getpass('Enter Password:')
+		pswd = str(sys.argv[2])
 
 	payload = "grant_type=password&client_id=" + client_id + "&username=" + username + "&password=" + pswd
 	basic_auth = base64.b64encode(client_id + ":" + client_secret)

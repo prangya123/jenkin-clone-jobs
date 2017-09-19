@@ -55,7 +55,7 @@ def get_injestor_token(config):
 	#print (json.dumps(headers))
 	#print(payload)
 	
-	response = requests.request("POST", oauth_url, data=payload, headers=headers)
+	response = requests.request("POST", oauth_url, data=payload, headers=headers, verify=False)
 	#print response.text
 	json_obj = json.loads(response.text)
 	access_token =json_obj["access_token"]

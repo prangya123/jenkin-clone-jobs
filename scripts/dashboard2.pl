@@ -332,12 +332,18 @@ sub create_hash
     @temp_app_state = `cat apps_list.json | jq -r ".apps[].state"`;
     @temp_running_instances = `cat apps_list.json | jq -r ".apps[].running_instances"`;
     @temp_total_instances = `cat apps_list.json | jq -r ".apps[].instances"`;
-    $test_str = `cat apps_list.json | jq ".apps[].urls"`;
-    $test_str =~ s/\[\]/NO_ROUTE/g;
-    $test_str =~ s/\[|\]| |\"//g;
-    $test_str =~ s/\n+/\n/g;
+    $test_str = `cat apps_list.json | jq '.apps[]|"\\(.urls)"' | cut -d',' -f1`;
+   # $test_str = `cat apps_list.json | jq ".apps[].urls"`;
+   # $test_str =~ s/\[\]/NO_ROUTE/g;
+   # $test_str =~ s/\[|\]| |\"//g;
+   # $test_str =~ s/\n+/\n/g;
+    $test_str =~ s/\[//g;
+    $test_str =~ s/\\//g;
+    $test_str =~ s/\"//g;
+    $test_str =~ s/\]//g;
+    
     @temp_app_route = split "\n", $test_str;
-    shift @temp_app_route;
+   # shift @temp_app_route;
     chomp (@temp_app_names);
     chomp (@temp_art_nums);
     chomp (@temp_app_state);

@@ -71,19 +71,25 @@ $RC_TOKEN = get_token($RC_UAA, $RC_AUTHORIZATION);
 
 if ($RC_TOKEN eq "")
 {
-    die " could not get RC token!";
+    $rc_uaa_status = "Could not get token.";
+    $rc_ts_status = "Could not get token.";
+    $rc_asset_status = "Could not get token.";
+    $rc_stuf_status = "Could not get token.";
+    $rc_alerts_status = "Could not get token.";
+    $rc_cases_status = "Could not get token.";
+}
+else
+{
+    $rc_uaa_status = "UP";
+    $rc_asset_status = get_status($RC_ASSET_URL, $RC_TOKEN, $RC_TENANT);
+    $rc_ts_status = get_status($RC_TS_URL, $RC_TOKEN, $RC_TENANT);
+    $rc_stuf_status = get_status($RC_STUF_URL, $RC_TOKEN, $RC_TENANT);
+    $rc_alerts_status = get_status($RC_ALERTS_URL, $RC_TOKEN, $RC_TENANT);
+    $rc_cases_status = get_status($RC_CASES_URL, $RC_TOKEN, $RC_TENANT);
 }
 
-$rc_uaa_status = "UP";
-$rc_asset_status = get_status($RC_ASSET_URL, $RC_TOKEN, $RC_TENANT);
-$rc_ts_status = get_status($RC_TS_URL, $RC_TOKEN, $RC_TENANT);
-$rc_stuf_status = get_status($RC_STUF_URL, $RC_TOKEN, $RC_TENANT);
-$rc_alerts_status = get_status($RC_ALERTS_URL, $RC_TOKEN, $RC_TENANT);
-$rc_cases_status = get_status($RC_CASES_URL, $RC_TOKEN, $RC_TENANT);
 $rc_html_line = generate_line($time_stamp, $rc_uaa_status, $rc_ts_status, $rc_asset_status, $rc_stuf_status, $rc_alerts_status, $rc_cases_status);
 insert_line ($rc_html_line, $rc_report);
-
-# <tr bgcolor="#30aaf4"><td NOWRAP>Fri 2017-10-06 03:40:18 PM PST</td><td bgcolor="#00FF00">UP</td><td bgcolor="#00FF00">UP</td><td bgcolor="#00FF00">UP</td><td bgcolor="#00FF00">UP</td></tr>
 
 printf "RC UAA STATUS IS $rc_uaa_status\n";
 printf "RC ASSET STATUS IS $rc_asset_status\n";
@@ -97,15 +103,23 @@ $PP_TOKEN = get_token($PP_UAA, $PP_AUTHORIZATION);
 
 if ($PP_TOKEN eq "")
 {
-    die " could not get PP token!";
+    $pp_uaa_status = "Could not get token.";
+    $pp_ts_status = "Could not get token.";
+    $pp_asset_status = "Could not get token.";
+    $pp_stuf_status = "Could not get token.";
+    $pp_alerts_status = "Could not get token.";
+    $pp_cases_status = "Could not get token.";
+}
+else
+{
+    $pp_uaa_status = "UP";
+    $pp_asset_status = get_status($PP_ASSET_URL, $PP_TOKEN, $PP_TENANT);
+    $pp_ts_status = get_status($PP_TS_URL, $PP_TOKEN, $PP_TENANT);
+    $pp_stuf_status = get_status($PP_STUF_URL, $PP_TOKEN, $PP_TENANT);
+    $pp_alerts_status = get_status($PP_ALERTS_URL, $PP_TOKEN, $PP_TENANT);
+    $pp_cases_status = get_status($PP_CASES_URL, $PP_TOKEN, $PP_TENANT);
 }
 
-$pp_uaa_status = "UP";
-$pp_asset_status = get_status($PP_ASSET_URL, $PP_TOKEN, $PP_TENANT);
-$pp_ts_status = get_status($PP_TS_URL, $PP_TOKEN, $PP_TENANT);
-$pp_stuf_status = get_status($PP_STUF_URL, $PP_TOKEN, $PP_TENANT);
-$pp_alerts_status = get_status($PP_ALERTS_URL, $PP_TOKEN, $PP_TENANT);
-$pp_cases_status = get_status($PP_CASES_URL, $PP_TOKEN, $PP_TENANT);
 $pp_html_line = generate_line($time_stamp, $pp_uaa_status, $pp_ts_status, $pp_asset_status, $pp_stuf_status, $pp_alerts_status, $pp_cases_status);
 insert_line ($pp_html_line, $pp_report);
 
@@ -121,15 +135,23 @@ $PROD_TOKEN = get_token($PROD_UAA, $PROD_AUTHORIZATION);
 
 if ($PROD_TOKEN eq "")
 {
-    die " could not get PROD token!";
+    $prod_uaa_status = "Could not get token.";
+    $prod_ts_status = "Could not get token.";
+    $prod_asset_status = "Could not get token.";
+    $prod_stuf_status = "Could not get token.";
+    $prod_alerts_status = "Could not get token.";
+    $prod_cases_status = "Could not get token.";
+}
+else
+{
+    $prod_uaa_status = "UP";
+    $prod_asset_status = get_status($PROD_ASSET_URL, $PROD_TOKEN, $PROD_TENANT);
+    $prod_ts_status = get_status($PROD_TS_URL, $PROD_TOKEN, $PROD_TENANT);
+    $prod_stuf_status = get_status($PROD_STUF_URL, $PROD_TOKEN, $PROD_TENANT);
+    $prod_alerts_status = get_status($PROD_ALERTS_URL, $PROD_TOKEN, $PROD_TENANT);
+    $prod_cases_status = get_status($PROD_CASES_URL, $PROD_TOKEN, $PROD_TENANT);
 }
 
-$prod_uaa_status = "UP";
-$prod_asset_status = get_status($PROD_ASSET_URL, $PROD_TOKEN, $PROD_TENANT);
-$prod_ts_status = get_status($PROD_TS_URL, $PROD_TOKEN, $PROD_TENANT);
-$prod_stuf_status = get_status($PROD_STUF_URL, $PROD_TOKEN, $PROD_TENANT);
-$prod_alerts_status = get_status($PROD_ALERTS_URL, $PROD_TOKEN, $PROD_TENANT);
-$prod_cases_status = get_status($PROD_CASES_URL, $PROD_TOKEN, $PROD_TENANT);
 $prod_html_line = generate_line($time_stamp, $prod_uaa_status, $prod_ts_status, $prod_asset_status, $prod_stuf_status, $prod_alerts_status, $prod_cases_status);
 insert_line ($prod_html_line, $prod_report);
 

@@ -3,9 +3,9 @@
 #################################################################################################
 #  required python3 , pyral
 #  updatedefects -- update defects in a workspace/project
-#  to run: python3 updateRallyDefect.py <FormattedID> <FoundInBuild> <FixedInBuild> <VerifiedInBuild> <ScheduleState> <c_PromotedtoEnvironment> --config=rallyuser.cfg
+#  to run: python3 updateRallyUserStory.py <FormattedID> <FoundInBuild> <FixedInBuild> <VerifiedInBuild> <ScheduleState> <c_PromotedtoEnvironment> --config=rallyuser.cfg
 #
-#  e.g.: python3 updateRallyDefect.py DE47147 build303 build909 DEV01 Accepted Dev01  --config=rallyuser.cfg
+#  e.g.: python3 updateRallyUserStory.py DE47147 build303 build909 DEV01 Accepted Dev01  --config=rallyuser.cfg
 #
 #
 # -----------    ----------------  -------------------------------------
@@ -22,7 +22,7 @@ from pyral import Rally, rallyWorkset
 import argparse
 
 USAGE = """
-Usage: updateRallyDefect.py <FormattedID> <Attributes...>
+Usage: updateRallyUserStory.py <FormattedID> <Attributes...>
 """
 #################################################################################################
 
@@ -52,14 +52,9 @@ def main(args):
 
     proj = rally.getProject()
 
-    # python3 updateRallyDefect.py <Defect FormattedID> <foundBuild> <fixedBuild> <scheduleState> <promotedtoEnvironment>.....
-    #defectID, foundBuild, fixedBuild, scheduleState = args[:4]
-    # defectID, foundBuild, fixedBuild, verifiedinBuild, scheduleState, promotedtoEnvironment, kanbanState, kanbanStateDef = args[:8]
+    userStoryID, fixedBuild, verifiedinBuild, scheduleState = args[:4]
 
-    defectID, foundBuild, fixedBuild, verifiedinBuild, scheduleState = args[:5]
-
-    defect_data = {"FormattedID": defectID,
-                   "FoundInBuild": foundBuild,
+    userStory_data = {"FormattedID": userStoryID,
                    "FixedInBuild": fixedBuild,
                    "VerifiedInBuild": verifiedinBuild,
                    "ScheduleState": scheduleState
@@ -68,12 +63,12 @@ def main(args):
     # "KanbanState": kanbanState,
     # "KanbanStateDefofReady": kanbanStateDef
     try:
-        defect = rally.update('Defect', defect_data)
+        userStory = rally.update('UserStory', userStory_data)
     except Exception:
         sys.stderr.write('ERROR: %s \n')
         sys.exit(1)
 
-    print("Defect %s updated" % defect.FormattedID)
+    print("Defect %s updated" % userStory.FormattedID)
 
 
 #################################################################################################

@@ -3,9 +3,9 @@
 #################################################################################################
 #  required python3 , pyral
 #  updatedefects -- update defects in a workspace/project
-#  to run: python3 updateRallyUserStory.py <FormattedID> <FoundInBuild> <FixedInBuild> <VerifiedInBuild> <ScheduleState> <c_PromotedtoEnvironment> --config=rallyuser.cfg
+#  to run: python3 updateRallyUserStory.py <FormattedID> <PromotedImpactedEnvironment> --config=rallyuser.cfg
 #
-#  e.g.: python3 updateRallyUserStory.py DE47147 build303 build909 DEV01 Accepted Dev01  --config=rallyuser.cfg
+#  e.g.: python3 updateRallyUserStory.py US47147 QA01  --config=rallyuser.cfg
 #
 #
 # -----------    ----------------  -------------------------------------
@@ -36,8 +36,15 @@ def main(args):
     args    = [arg for arg in sys.argv[1:] if arg not in options]
     server, username, password, apikey, workspace, project = rallyWorkset(options)
 
-    if len(args) < 2:
-        errout(USAGE)
+    # if len(args) < 2:
+    #     errout(USAGE)
+    #     sys.exit(2)
+    if "-h" in args or "--help" in args or len(args) < 1:
+        parser = argparse.ArgumentParser()
+        parser.add_argument("[Please input 2 Parameters]", help="This script is to Update a given Defect")
+        parser.add_argument("userStoryID, PromotedImpactedEnvironment",
+                            help="Please provide required Defect attributes to update")
+        result = parser.parse_args()
         sys.exit(2)
     # parser = argparse.ArgumentParser()
     # parser.add_argument("Description", help="This script is to Update a given Defect")
@@ -50,25 +57,34 @@ def main(args):
     else:
             rally = Rally(server, user=username, password=password, workspace=workspace, project=project)
 
-    proj = rally.getProject()
+    projects = rally.getProjects(workspace)
+    entity_name = 'UserStory'
 
-    userStoryID, fixedBuild, verifiedinBuild, scheduleState = args[:4]
+    userStoryID, PromotedImpactedEnvironment = args[:2]
 
     userStory_data = {"FormattedID": userStoryID,
-                   "FixedInBuild": fixedBuild,
-                   "VerifiedInBuild": verifiedinBuild,
-                   "ScheduleState": scheduleState
-                   }
+                      "PromotedImpactedEnvironment": PromotedImpactedEnvironment
+                     }
 
-    # "KanbanState": kanbanState,
-    # "KanbanStateDefofReady": kanbanStateDef
+    ident_query = 'FormattedID = "%s"' % userStoryID
+
     try:
-        userStory = rally.update('UserStory', userStory_data)
+        for proj in projects:
+            # print("    %12.12s  %s" % (proj.oid, proj.Name))
+            response = rally.get(entity_name, fetch=True, query=ident_query,
+                                 workspace=workspace, project=proj.Name)
+            if response.resultCount > 0:
+                print("Workspace Name: %s , Project Name: %s , Entity Name: %s , User Story Id: %s" %(workspace, proj.Name, entity_name, userStoryID))
+                userStory = rally.update(entity_name, userStory_data, project=proj.Name)
+                break
+
     except Exception:
-        sys.stderr.write('ERROR: %s \n')
+        sys.stderr.write('ERROR: %s \n'+errout)
         sys.exit(1)
 
-    print("Defect %s updated" % userStory.FormattedID)
+    print("\nUser Story %s updated with following attributes:" % userStoryID)
+    print("FormattedID: " + userStoryID)
+    print("PromotedImpactedEnvironment: " + PromotedImpactedEnvironment+"\n")
 
 
 #################################################################################################

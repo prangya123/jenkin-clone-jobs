@@ -5,14 +5,14 @@
 #update jenkin_param.cfg with the FUNCUSERID and APITOKEN 
 
 #get list of jenkin jobs using RESTAPI
-./jenkinjobLIST.sh <folderViewName> --config jenkin_param.cfg
+./jenkinjobLIST.sh <<folderViewName>> --config jenkin_param.cfg
 
 
 
 
 #get config.xml for each ci job using RESTAPI
 
-./jenkinjobGET.sh <jenkinJobPath> <oldSpace> --config jenkin_param.cfg
+./jenkinjobGET.sh <<jenkinJobPath>> <<oldSpace>> --config jenkin_param.cfg
 
 
 

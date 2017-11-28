@@ -5,14 +5,14 @@
 #update jenkin_param.cfg with the FUNCUSERID and APITOKEN 
 
 #get list of jenkin jobs using RESTAPI
-./jenkinjobLIST.sh <<folderViewName>> --config jenkin_param.cfg
+jenkinjobLIST.sh folderViewName --config jenkin_param.cfg
 
 
 
 
 #get config.xml for each ci job using RESTAPI
 
-./jenkinjobGET.sh <<jenkinJobPath>> <<oldSpace>> --config jenkin_param.cfg
+jenkinjobGET.sh jenkinJobPath oldSpace --config jenkin_param.cfg
 
 
 
@@ -24,7 +24,7 @@ is the folder where to find all the config.xml files, mostly it will be the jenk
 
 #to create job using POST
 
-./jenkinjobPOST.sh <folderViewName> <jenkinJobPath> <oldSpace> <newSpace> --config jenkin_param.cfg
+jenkinjobPOST.sh <folderViewName> <jenkinJobPath> <oldSpace> <newSpace> --config jenkin_param.cfg
 
 
 

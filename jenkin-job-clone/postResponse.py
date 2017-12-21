@@ -58,7 +58,7 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
             for line in lines:
                 jobName = line.split('/')[-2]
                 preJobName = jobName.split('-')[-1]
-                postJobName = jobName.split('-')[-2]
+                postJobName = jobName.rsplit('-',1)[0]
 
                 if arguments[2].upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']:
                     if preJobName.upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']:

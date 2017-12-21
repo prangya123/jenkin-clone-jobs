@@ -64,8 +64,8 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                     if preJobName.upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']:
                         newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         f2.write(newLine)
-                elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02', 'QA01', 'QA02', 'PAMMIUAT01','PAMMIUAT02']:
-                    if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02', 'QA01', 'QA02', 'PAMMIUAT01','PAMMIUAT02']:
+                elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'QA01', 'QA02', 'PAMMIUAT01','PAMMIUAT02']:
+                    if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'QA01', 'QA02', 'PAMMIUAT01','PAMMIUAT02']:
                         newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         f2.write(newLine)
                     else:

@@ -90,9 +90,10 @@ def disableJobs(arguments, fileNameDisable):
             line = re.sub(r'\n$', '', line)
             print("inside disableJobs")
             print(line)
-            str = 'curl -s -X POST ' + line +'disable'
+         #   str = 'curl -s -X POST ' + line +'disable'
+            str = 'curl -s -X POST ' + line +'doDelete'
             print(str)
-            os.system(str)
+            #os.system(str)
 
 
 # code ends

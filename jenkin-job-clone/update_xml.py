@@ -18,7 +18,7 @@
 #
 # e.g:
 # python3 update_xml.py /Users/prangyakar/PycharmProjects/create_ci_job OGD_Development_USWest_01 "'Oil&amp;Gas_Product_Demo'" dev01 demodev02
-#
+# python3 update_xml.py /Users/prangyakar/PycharmProjects/create_ci_job OGD_Development_USWest_01 "'Oil&amp;Gas_Product_Demo'" dev01 uat000
 # ################################################################################################################################
 
 import os
@@ -32,7 +32,6 @@ def read_configfile(arguments, fileName):
         entireFile = f.read()
         #if "--suite" in entireFile:
         if arguments[1] or arguments[3] in entireFile :
-           # newText = entireFile.replace("--AAAA2222", "--suite")
             newText = entireFile.replace(arguments[1], arguments[2]).replace(arguments[3],arguments[4])
             return {fileName: newText}
     f.close()
@@ -49,7 +48,6 @@ def find_config(args):
     for i in args:
         arguments.append(i)
         #indx=indx+1
-
     for root, dirs, files in os.walk(arguments[0], topdown=False):
         for name in files:
             if name.lower().endswith('.xml'):

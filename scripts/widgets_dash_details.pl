@@ -58,14 +58,6 @@ my $UAT01_TOKEN;
 my %uat01_hash;
 my %uat01_widget_info;
 
-my $DEMODEV01_UAA="https://d1730ade-7c0d-4652-8d44-cb563fcc1e27.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token?client_id=ingestor.496bb641-78b5-4a18-b1b7-fde29788db38.991e5c23-3e9c-4944-b08b-9e83ef0ab598&grant_type=password&username=FuncUserFinal&password=Pa55w0rdFinal";
-my $DEMODEV01_AUTHORIZATION="aW5nZXN0b3IuNDk2YmI2NDEtNzhiNS00YTE4LWIxYjctZmRlMjk3ODhkYjM4Ljk5MWU1YzIzLTNlOWMtNDk0NC1iMDhiLTllODNlZjBhYjU5ODo=";
-my $DEMODEV01_TENANT="c7909757-9bb3-4a79-9e0a-16bc5b20064c";
-my $DEMODEV01_WRS="https://apm-widget-repo-service-svc-demodev.apm.aws-usw02-pr.predix.io/v1/widgets/";
-my $DEMODEV01_TOKEN;
-my %demodev01_hash;
-my %demodev01_widget_info;
-
 my $DEMODEV02_UAA="https://f6d0524d-28d1-4af8-a21c-3c779790aff4.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token/?client_id=ingestor.26b305ec-f801-4e76-b03a-ef409403546e.359a82f6-500a-4f27-b63a-6adfc1e819f1&grant_type=password&username=FuncUser01&password=Pa55w0rd";
 my $DEMODEV02_AUTHORIZATION="aW5nZXN0b3IuMjZiMzA1ZWMtZjgwMS00ZTc2LWIwM2EtZWY0MDk0MDM1NDZlLjM1OWE4MmY2LTUwMGEtNGYyNy1iNjNhLTZhZGZjMWU4MTlmMTo=";
 my $DEMODEV02_TENANT="783b862e-f0cd-4cf6-8572-36c6d4280da1";
@@ -280,35 +272,6 @@ for (my $i1=0; $i1<$num1; $i1++)
     $uat01_widget_info{$v1} = $data1->{widgets}[$i1];
 }
 
-## DEMODEV01 ## 
-
-$DEMODEV01_TOKEN = get_token($DEMODEV01_UAA, $DEMODEV01_AUTHORIZATION);
-generate_json($DEMODEV01_WRS, $DEMODEV01_TOKEN, $DEMODEV01_TENANT);
-
-@widget_names = `cat widgets_response.json | jq -r '"\\(.id)"'`;
-@widget_versions = `cat widgets_response.json | jq -r '"\\(.properties.ARTIFACT_VERSION)"'`;
-chomp (@widget_names);
-chomp (@widget_versions);
-
-for($index=0;$index<=$#widget_names;$index++)
-{
-    my $name1;
-    my $version1;
-    $name1 = $widget_names[$index];
-    $version1 = $widget_versions[$index];
-    $demodev01_hash{$name1} = $version1;
-}
-
-$contents = read_file();
-$data1 = decode_json($contents);
-$num1 = keys $data1->{widgets};
-
-for (my $i1=0; $i1<$num1; $i1++)
-{
-    my $v1 = $data1->{widgets}[$i1]->{'id'}; 
-    $demodev01_widget_info{$v1} = $data1->{widgets}[$i1];
-}
-
 ## DEMODEV02 ## 
 
 $DEMODEV02_TOKEN = get_token($DEMODEV02_UAA, $DEMODEV02_AUTHORIZATION);
@@ -404,7 +367,7 @@ print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xht
 print $fh "<link rel=\"stylesheet\" href=\"styles_widgets.css\">";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream widgets dashboard</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>UAT01</th><th>DEMODEV01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>PROD01</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>UAT01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>PROD01</th></tr>\n";
 
 my @dev_widgets = sort keys %dev01_hash;
 for $widget_name (@dev_widgets)
@@ -415,7 +378,6 @@ for $widget_name (@dev_widgets)
     my $widget_version_dev02 = $dev02_hash{$widget_name};
     my $widget_version_qa02 = $qa02_hash{$widget_name};
     my $widget_version_uat01 = $uat01_hash{$widget_name};
-    my $widget_version_demodev01 = $demodev01_hash{$widget_name};
     my $widget_version_demodev02 = $demodev02_hash{$widget_name};
     my $widget_version_demoprod01 = $demoprod01_hash{$widget_name};
     my $widget_version_prod01 = $prod01_hash{$widget_name};
@@ -474,15 +436,6 @@ for $widget_name (@dev_widgets)
         $widget_version_uat01 = "N/A";
     }
 
-    if (!defined $widget_version_demodev01)
-    {
-        $widget_version_demodev01 = "N/A";
-    }
-    elsif ($widget_version_demodev01 eq "null")
-    {
-        $widget_version_demodev01 = "N/A";
-    }
-
     if (!defined $widget_version_demodev02)
     {
         $widget_version_demodev02 = "N/A";
@@ -518,7 +471,6 @@ for $widget_name (@dev_widgets)
     print $fh "<td><a class=\"button\" href=\"#qa02_$widget_name\">$widget_version_qa02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#perf01_$widget_name\">$widget_version_perf</a></td>";
     print $fh "<td><a class=\"button\" href=\"#uat01_$widget_name\">$widget_version_uat01</a></td>";
-    print $fh "<td><a class=\"button\" href=\"#demodev01_$widget_name\">$widget_version_demodev01</a></td>";
     print $fh "<td><a class=\"button\" href=\"#demodev02_$widget_name\">$widget_version_demodev02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#demoprod01_$widget_name\">$widget_version_demoprod01</a></td>";
     print $fh "<td><a class=\"button\" href=\"#prod01_$widget_name\">$widget_version_prod01</a></td></tr>\n";
@@ -546,10 +498,6 @@ for $widget_name (@dev_widgets)
 
     print $fh "<div id=\"uat01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>UAT01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
     print $fh Dumper $uat01_widget_info{$widget_name};
-    print $fh "</PRE></br></div></div></div>\n";
-
-    print $fh "<div id=\"demodev01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEMODEV01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $demodev01_widget_info{$widget_name};
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"demodev02_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEMODEV02 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";

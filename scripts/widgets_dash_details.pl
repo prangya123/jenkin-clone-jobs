@@ -90,6 +90,7 @@ my @widget_versions;
 my $contents;
 my $data1;
 my $num1;
+my $pretty1;
 
 ## DEV01 ## 
 
@@ -477,39 +478,104 @@ for $widget_name (@dev_widgets)
 
 # Print div ids below
     print $fh "<div id=\"dev01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEV01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $dev01_widget_info{$widget_name};
+    $pretty1 = JSON::PP->new->pretty->encode($dev01_widget_info{$widget_name});
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"dev02_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEV02 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $dev02_widget_info{$widget_name};
+    if ($dev02_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($dev02_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"qa01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>QA01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $qa01_widget_info{$widget_name};
+    if ($qa01_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($qa01_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"qa02_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>QA02 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $qa02_widget_info{$widget_name};
+    if ($qa02_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($qa02_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"perf01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>PERF01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $perf01_widget_info{$widget_name};
+    if ($perf01_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($perf01_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"uat01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>UAT01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $uat01_widget_info{$widget_name};
+    if ($uat01_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($uat01_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"demodev02_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEMODEV02 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $demodev02_widget_info{$widget_name};
+    if ($demodev02_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($demodev02_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"demoprod01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEMOPROD01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $demoprod01_widget_info{$widget_name};
+    if ($demoprod01_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($demoprod01_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     print $fh "<div id=\"prod01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>PROD01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
-    print $fh Dumper $prod01_widget_info{$widget_name};
+    if ($prod01_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($prod01_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
     $num++;

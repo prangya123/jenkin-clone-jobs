@@ -37,7 +37,7 @@ public class DashboardAutomationFinalReport {
 			for(File f : parent.listFiles()){
 				if(f.isDirectory()){
 					listOfDirectories.add(f.getName());
-					System.out.println(f.getName());
+					System.out.println("Found tenant : "+f.getName());
 				}
 			}
 			return listOfDirectories;
@@ -76,6 +76,7 @@ public class DashboardAutomationFinalReport {
 		String space;
 		for(Entry<String, List<String>> entry : spaceTenantmap.entrySet()){
 			space = entry.getKey();
+			System.out.println("Creating HTML dashboard page for space : "+space+"\n at "+reportFolder.getAbsolutePath()+"\\"+space+"_automation.html");
 			htmlFile= new File(reportFolder.getAbsolutePath()+"\\"+space+"_automation.html");
 			
 			//delete then create html file if file already exists

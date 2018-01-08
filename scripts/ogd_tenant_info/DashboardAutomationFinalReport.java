@@ -99,7 +99,7 @@ public class DashboardAutomationFinalReport {
 			for(String tenantName : entry.getValue()){
 				out.println("<tr>"
 						+ "<td>"+tenantName+"</td>"
-						+ "<td><a href=\""+inputFolderPath+"/"+tenantName+"/cucumber-html-reports/feature-overview.html\"> Automation Test Reports for "+tenantName+"</td>"
+						+ "<td><a href=\"../"+inputFolderPath+"/"+tenantName+"/cucumber-html-reports/feature-overview.html\"> Automation Test Reports for "+tenantName+"</td>"
 						+ "</tr>");
 			}	
 			

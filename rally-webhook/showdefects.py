@@ -108,8 +108,8 @@ def main(args):
                         print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.VerifiedInBuild, defect.Name, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
                 #print(response.resultCount, "qualifying defects")
         #print("===================================================================================================================================================================================================")
-                stdoutFile.close()
-                sys.stdout = temp
+        stdoutFile.close()
+        sys.stdout = temp
 
         # open(finalFile, 'w').close()
         with open(stageFile) as f1:

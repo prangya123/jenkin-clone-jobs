@@ -100,8 +100,8 @@ def main(args):
                             userstory.FormattedID, userstory.VerifiedinBuild,userstory.Name, userstory.ScheduleState))
                     #print("-----------------------------------------------------------------")
                     #print("%s"%(userstory.VerifiedinBuild))
-                        stdoutFile.close()
-                        sys.stdout = temp
+        stdoutFile.close()
+        sys.stdout = temp
 
         #open(finalFile, 'w').close()
         with open(stageFile) as f1:

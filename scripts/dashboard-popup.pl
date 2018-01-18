@@ -31,7 +31,7 @@ my $dev01_space_id="db7d2aa9-9f50-4e46-b321-d7181752331d";
 my $uat01_space_id="14568591-961d-42f8-b6f2-628c97c4e4fc";
 my $perf01_space_id="cd98d78c-21bf-45d6-aa14-a4226b14c7c5";
 my $demoprod_space_id="f73004e8-a449-4fca-bb72-d7c6524ed070";
-my $demodev_space_id="b568f490-30f9-432a-b277-82303306b3a7";
+
 my $prod_space_id="88d8a240-068b-43c7-9f27-1365cd4c5a22";
 my $dev02_space_id="3ef76363-abd9-4a0a-b479-51c0e6ece072";
 my $qa02_space_id="d1ed22a9-ddb8-4100-b786-719d441b4755";
@@ -42,7 +42,7 @@ my %dev_hash1;
 my %uat_hash1;
 my %perf_hash1;
 my %demoprod_hash1;
-my %demodev_hash1;
+
 my %prod_hash1;
 my %dev02_hash1;
 my %qa02_hash1;
@@ -65,7 +65,7 @@ my $qa_ctr = 0;
 my $uat_ctr = 0;
 my $perf_ctr = 0;
 my $demoprod_ctr = 0;
-my $demodev_ctr = 0;
+
 my $prod_ctr = 0;
 my $dev02_ctr = 0;
 my $qa02_ctr = 0;
@@ -96,8 +96,6 @@ $hash_ref = create_hash($qa02_space_id);
 $hash_ref = create_hash($demoprod_space_id);
 %demoprod_hash1 = %$hash_ref;
 
-$hash_ref = create_hash($demodev_space_id);
-%demodev_hash1 = %$hash_ref;
 
 $hash_ref = create_hash($demodev02_space_id);
 %demodev02_hash1 = %$hash_ref;
@@ -116,7 +114,7 @@ print $fh "<META HTTP-EQUIV=\"refresh\" CONTENT=\"300\">";
 print $fh "<link rel=\"stylesheet\" href=\"styles.css\">";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\" >IntelliStream environments dashboard</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMODEV01</th><th>DEMODEV02</th><th>DEMOPREPROD01</th><th>PROD</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMODEV02</th><th>DEMOPREPROD01</th><th>PROD</th></tr>\n";
 
 @dev_apps = sort keys %dev_hash1;
 for $app_name (@dev_apps)
@@ -126,7 +124,7 @@ for $app_name (@dev_apps)
     my $version_uat = $uat_hash1{$app_name}[0];
     my $version_perf = $perf_hash1{$app_name}[0];
     my $version_demoprod = $demoprod_hash1{$app_name}[0];
-    my $version_demodev = $demodev_hash1{$app_name}[0];
+   
     my $version_prod = $prod_hash1{$app_name}[0];
 	my $version_dev02 = $dev02_hash1{$app_name}[0];
     my $version_qa02 = $qa02_hash1{$app_name}[0];
@@ -150,11 +148,6 @@ for $app_name (@dev_apps)
     if (!defined $version_demoprod)
     {
         $version_demoprod = "Missing";
-    }
-
-    if (!defined $version_demodev)
-    {
-        $version_demodev = "Missing";
     }
 
     if (!defined $version_prod)
@@ -269,22 +262,6 @@ for $app_name (@dev_apps)
             }
         }
 
-##### Demodev01
- 
-        if ($version_demodev eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$demodev_hash1{$app_name}[8]\">Version: 1.0.0.$version_demodev<BR>Instances running: $demodev_hash1{$app_name}[3]/$demodev_hash1{$app_name}[4]<BR>Route: $demodev_hash1{$app_name}[2]<BR>Last uploaded: $demodev_hash1{$app_name}[5]<BR>Memory: $demodev_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#demodev_$app_count\">Bound Services </a></p></td>";
-
-            if($demodev_hash1{$app_name}[8] eq "#ffa8af")
-            {
-                $down_apps[$demodev_ctr][8] = $app_name;
-                $demodev_ctr++;
-            }
-        }
 
 ###### DemoDev02
 		
@@ -337,7 +314,7 @@ for $app_name (@dev_apps)
             }
         }
         $prod_hash1{$app_name}[6] =~ s/,/<br>/g;
-        $demodev_hash1{$app_name}[6] =~ s/,/<br>/g;
+        
         $demoprod_hash1{$app_name}[6]=~ s/,/<br>/g;
         $perf_hash1{$app_name}[6]=~ s/,/<br>/g;
         $uat_hash1{$app_name}[6]=~ s/,/<br>/g;
@@ -348,7 +325,7 @@ for $app_name (@dev_apps)
 		$demodev02_hash1{$app_name}[6] =~ s/,/<br>/g;
 		
     print $fh "<div id=\"prod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $prod_hash1{$app_name}[6]</br></div></div></div>\n";
-    print $fh "<div id=\"demodev_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demodev_hash1{$app_name}[6]</br></div></div></div>\n";
+    
     print $fh "<div id=\"demoprod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demoprod_hash1{$app_name}[6]</br></div></div></div>\n";
     print $fh "<div id=\"perf_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $perf_hash1{$app_name}[6]</br></div></div></div>\n";
     print $fh "<div id=\"uat_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $uat_hash1{$app_name}[6]</br></div></div></div>\n";

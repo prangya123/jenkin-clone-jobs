@@ -14,14 +14,14 @@ public class DashboardAutomationFinalReport {
 	public static void main(String[] args) {
 		
 		try{
-			File reportFolder = new File(args[1]);
+			File reportFolder = new File(args[2]);
 			if(!reportFolder.exists())
 				reportFolder.mkdir();
 			
 			Map<String,List<String>> spaceTenantmap = getSpaceTenantMapping(args[0]);
 			
-			createDashboardHTMLPage(spaceTenantmap, args[0], reportFolder);
-			
+			//createDashboardHTMLPage(spaceTenantmap, args[0], reportFolder);
+			createDashboardHTMLPage(spaceTenantmap, args[0], args[1], reportFolder);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,13 +93,53 @@ public class DashboardAutomationFinalReport {
 					+ "</head>"
 					+ "<body> <br>"
 					+ "	<h1 align=\"center\">"+space.toUpperCase()+" Automation Test Report Dashboard</h1>	<br>"
-					+ "<div>	<table id=\"mytable\" align=\"center\" border=\"2\" >	<tbody>	<tr><th>Tenant </th><th>Automation Report Link</th></tr>");
+					+ "<div>	<table id=\"mytable\" align=\"center\" border=\"2\" >	<tbody>	<tr><th>Tenant </th><th>UI Test Report Links</th><th>API Test Report Links</tr>");
 			
 							
 			for(String tenantName : entry.getValue()){
 				out.println("<tr>"
 						+ "<td>"+tenantName+"</td>"
-						+ "<td><a href=\"../"+inputFolderPath+"/"+tenantName+"/cucumber-html-reports/feature-overview.html\"> Automation Test Reports for "+tenantName+"</td>"
+						+ "<td><a href=\"../"+inputFolderPath+"/"+tenantName+"/cucumber-html-reports/feature-overview.html\"> UI Test Reports for "+tenantName+"</td>"
+						+ "<td><a href=\"../"+inputFolderPath+"/"+tenantName+"/target/site/serenity/index.html\"> API Test Reports for "+tenantName+"</td>"
+						+ "</tr>");
+			}	
+			
+			out.println("</tbody></table>	</div>	<script id=\"wappalyzer\" src=\"chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/js/inject.js\"></script></body></html>");
+			out.close();
+			
+		}
+	}
+	public static void createDashboardHTMLPage(Map<String,List<String>> spaceTenantmap,String InputFolderPathForUI,String InputFolderPathForAPI, File reportFolder) throws IOException{
+		File htmlFile;
+		PrintWriter out;
+		String space;
+		for(Entry<String, List<String>> entry : spaceTenantmap.entrySet()){
+			space = entry.getKey();
+			System.out.println("Creating HTML dashboard page for space : "+space+"\n at "+reportFolder.getAbsolutePath()+File.separator+space.toUpperCase()+"_automation.html");
+			htmlFile= new File(reportFolder.getAbsolutePath()+File.separator+space.toUpperCase()+"_automation.html");
+			
+			//delete then create html file if file already exists
+			if(htmlFile.exists())
+				htmlFile.delete();
+			htmlFile.createNewFile();
+			
+			
+			
+			out = new PrintWriter(new FileWriter(htmlFile));
+			
+			out.println("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"
+					+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"../css/reportformat.css\">"
+					+ "</head>"
+					+ "<body> <br>"
+					+ "	<h1 align=\"center\">"+space.toUpperCase()+" Automation Test Report Dashboard</h1>	<br>"
+					+ "<div>	<table id=\"mytable\" align=\"center\" border=\"2\" >	<tbody>	<tr><th>Tenant </th><th>UI Test Report Links</th><th>API Test Report Links</tr>");
+			
+							
+			for(String tenantName : entry.getValue()){
+				out.println("<tr>"
+						+ "<td>"+tenantName+"</td>"
+						+ "<td><a href=\"../"+InputFolderPathForUI+"/"+tenantName+"/cucumber-html-reports/feature-overview.html\"> UI Test Reports for "+tenantName+"</td>"
+						+ "<td><a href=\"../"+InputFolderPathForAPI+"/"+tenantName+"/target/site/serenity/index.html\"> API Test Reports for "+tenantName+"</td>"
 						+ "</tr>");
 			}	
 			

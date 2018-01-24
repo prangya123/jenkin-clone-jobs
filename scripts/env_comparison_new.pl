@@ -48,6 +48,10 @@ my $demodev02_space_id="1bbc1c0a-3e50-4a4a-ab76-30ca2131ce04";
 my $demodev02_org="Oil\&Gas_Product_Demo";
 my $demodev02_space="demodev02";
 
+my $demoprod02_space_id="0bb3331e-65bc-4125-ade7-cf6878f46bcd";
+my $demoprod02_org="Oil\&Gas_Product_Demo";
+my $demoprod02_space="demoprod02";
+
 my $env1_space_id;
 my $env1_org;
 my $env1_space;
@@ -117,6 +121,12 @@ elsif ($env1 eq "DEMOPROD01")
     $env1_org = $demoprod_org;
     $env1_space = $demoprod_space;
 }
+elsif ($env1 eq "DEMOPROD02")
+{
+    $env1_space_id = $demoprod02_space_id;
+    $env1_org = $demoprod02_org;
+    $env1_space = $demoprod02_space;
+}
 elsif ($env1 eq "DEMODEV01")
 {
     $env1_space_id = $demodev_space_id;
@@ -183,6 +193,12 @@ elsif ($env2 eq "DEMOPROD01")
     $env2_space_id = $demoprod_space_id;
     $env2_org = $demoprod_org;
     $env2_space = $demoprod_space;
+}
+elsif ($env2 eq "DEMOPROD02")
+{
+    $env2_space_id = $demoprod02_space_id;
+    $env2_org = $demoprod02_org;
+    $env2_space = $demoprod02_space;
 }
 elsif ($env2 eq "DEMODEV01")
 {

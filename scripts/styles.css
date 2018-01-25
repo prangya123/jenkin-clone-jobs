@@ -61,7 +61,7 @@ p {
 .overlay {
   position: fixed;
   top: 0;
-#  bottom: 0;
+/*  bottom: 0; */
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -113,9 +113,9 @@ p {
   overflow: auto;
 }
 a:-webkit-any-link {
-   # color: -webkit-link;
+   /* color: -webkit-link; */
     cursor: auto;
- #   text-decoration: underline;
+ /*   text-decoration: underline; */
 }
 
 @media screen and (max-width: 700px){

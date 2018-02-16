@@ -74,6 +74,18 @@ my $DEMOPROD01_TOKEN;
 my %demoprod01_hash;
 my %demoprod01_widget_info;
 
+## DEMOPROD02 ##
+
+my $DEMOPROD02_UAA="https://f6d0524d-28d1-4af8-a21c-3c779790aff4.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token/?client_id=ingestor.26b305ec-f801-4e76-b03a-ef409403546e.359a82f6-500a-4f27-b63a-6adfc1e819f1&grant_type=password&username=FuncUser01&password=Pa55w0rd";
+my $DEMOPROD02_AUTHORIZATION="aW5nZXN0b3IuMjZiMzA1ZWMtZjgwMS00ZTc2LWIwM2EtZWY0MDk0MDM1NDZlLjM1OWE4MmY2LTUwMGEtNGYyNy1iNjNhLTZhZGZjMWU4MTlmMTo=";
+my $DEMOPROD02_TENANT="bd7e3b53-a1e6-4301-8da3-b6fe51d1cc31";
+my $DEMOPROD02_WRS="https://apm-widget-repo-service-svc-apm-demoprod02.apm.aws-usw02-pr.predix.io/v1/widgets/";
+my $DEMOPROD02_TOKEN;
+my %demoprod02_hash;
+my %demoprod02_widget_info;
+
+
+
 my $PROD01_UAA="https://d1e53858-2903-4c21-86c0-95edc7a5cef2.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token/?client_id=ingestor.57e72dd3-6f9e-4931-b4bc-cd04eaaff3e3.1f7dbe12-2372-439e-8104-06a5f4098ec9&grant_type=password&username=FuncUser01&password=Pa55w0rd";
 my $PROD01_AUTHORIZATION="aW5nZXN0b3IuNTdlNzJkZDMtNmY5ZS00OTMxLWI0YmMtY2QwNGVhYWZmM2UzLjFmN2RiZTEyLTIzNzItNDM5ZS04MTA0LTA2YTVmNDA5OGVjOTo=";
 my $PROD01_TENANT="b7875037-e278-43d3-9f9f-8b624b19ba8d";
@@ -330,6 +342,36 @@ for (my $i1=0; $i1<$num1; $i1++)
     my $v1 = $data1->{widgets}[$i1]->{'id'}; 
     $demoprod01_widget_info{$v1} = $data1->{widgets}[$i1];
 }
+## DEMOPROD02 ##
+
+$DEMOPROD02_TOKEN = get_token($DEMOPROD02_UAA, $DEMOPROD02_AUTHORIZATION);
+generate_json($DEMOPROD02_WRS, $DEMOPROD02_TOKEN, $DEMOPROD02_TENANT);
+
+@widget_names = `cat widgets_response.json | jq -r '"\\(.id)"'`;
+@widget_versions = `cat widgets_response.json | jq -r '"\\(.properties.ARTIFACT_VERSION)"'`;
+chomp (@widget_names);
+chomp (@widget_versions);
+
+for($index=0;$index<=$#widget_names;$index++)
+{
+    my $name1;
+    my $version1;
+    $name1 = $widget_names[$index];
+    $version1 = $widget_versions[$index];
+    $demoprod02_hash{$name1} = $version1;
+}
+
+$contents = read_file();
+$data1 = decode_json($contents);
+$num1 = keys $data1->{widgets};
+
+for (my $i1=0; $i1<$num1; $i1++)
+{
+    my $v1 = $data1->{widgets}[$i1]->{'id'};
+    $demoprod02_widget_info{$v1} = $data1->{widgets}[$i1];
+}
+
+#print Dumper(\%demoprod02_hash);
 
 ## PROD01 ## 
 
@@ -368,7 +410,7 @@ print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xht
 print $fh "<link rel=\"stylesheet\" href=\"styles_widgets.css\">";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream widgets dashboard</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>UAT01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>PROD01</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>UAT01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>DEMOPROD02</th><th>PROD01</th></tr>\n";
 
 my @dev_widgets = sort keys %dev01_hash;
 for $widget_name (@dev_widgets)
@@ -381,6 +423,7 @@ for $widget_name (@dev_widgets)
     my $widget_version_uat01 = $uat01_hash{$widget_name};
     my $widget_version_demodev02 = $demodev02_hash{$widget_name};
     my $widget_version_demoprod01 = $demoprod01_hash{$widget_name};
+	my $widget_version_demoprod02 = $demoprod02_hash{$widget_name};
     my $widget_version_prod01 = $prod01_hash{$widget_name};
 
     if (!defined $widget_version_dev)
@@ -454,6 +497,16 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_demoprod01 = "N/A";
     }
+	
+	## DEMOPROD02 ##
+         if (!defined $widget_version_demoprod02)
+    {
+        $widget_version_demoprod02 = "N/A";
+    }
+    elsif ($widget_version_demoprod02 eq "null")
+    {
+        $widget_version_demoprod02 = "N/A";
+    }
 
     if (!defined $widget_version_prod01)
     {
@@ -474,15 +527,16 @@ for $widget_name (@dev_widgets)
     print $fh "<td><a class=\"button\" href=\"#uat01_$widget_name\">$widget_version_uat01</a></td>";
     print $fh "<td><a class=\"button\" href=\"#demodev02_$widget_name\">$widget_version_demodev02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#demoprod01_$widget_name\">$widget_version_demoprod01</a></td>";
+	print $fh "<td><a class=\"button\" href=\"#demoprod02_$widget_name\">$widget_version_demoprod02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#prod01_$widget_name\">$widget_version_prod01</a></td></tr>\n";
 
 # Print div ids below
-    print $fh "<div id=\"dev01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEV01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"dev01_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>DEV01 $widget_name</h2><div><PRE>";
     $pretty1 = JSON::PP->new->pretty->encode($dev01_widget_info{$widget_name});
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"dev02_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEV02 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"dev02_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>DEV02 $widget_name</h2><div><PRE>";
     if ($dev02_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($dev02_widget_info{$widget_name});
@@ -494,7 +548,7 @@ for $widget_name (@dev_widgets)
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"qa01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>QA01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"qa01_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>QA01 $widget_name</h2><div><PRE>";
     if ($qa01_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($qa01_widget_info{$widget_name});
@@ -506,7 +560,7 @@ for $widget_name (@dev_widgets)
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"qa02_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>QA02 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"qa02_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>QA02 $widget_name</h2><div><PRE>";
     if ($qa02_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($qa02_widget_info{$widget_name});
@@ -518,7 +572,7 @@ for $widget_name (@dev_widgets)
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"perf01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>PERF01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"perf01_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>PERF01 $widget_name</h2><div><PRE>";
     if ($perf01_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($perf01_widget_info{$widget_name});
@@ -530,7 +584,7 @@ for $widget_name (@dev_widgets)
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"uat01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>UAT01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"uat01_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>UAT01 $widget_name</h2><div><PRE>";
     if ($uat01_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($uat01_widget_info{$widget_name});
@@ -542,7 +596,7 @@ for $widget_name (@dev_widgets)
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"demodev02_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEMODEV02 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"demodev02_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>DEMODEV02 $widget_name</h2><div><PRE>";
     if ($demodev02_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($demodev02_widget_info{$widget_name});
@@ -554,7 +608,7 @@ for $widget_name (@dev_widgets)
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"demoprod01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>DEMOPROD01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"demoprod01_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>DEMOPROD01 $widget_name</h2><div><PRE>";
     if ($demoprod01_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($demoprod01_widget_info{$widget_name});
@@ -565,8 +619,21 @@ for $widget_name (@dev_widgets)
     }
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
+	
+	## DEMOPROD02 ##
+        print $fh "<div id=\"demoprod02_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>DEMOPROD02 $widget_name</h2><div><PRE>";
+    if ($demoprod02_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($demoprod02_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
+    print $fh "</PRE></br></div></div></div>\n";
 
-    print $fh "<div id=\"prod01_$widget_name\" class=\"modal-window\"><div class=\"header\"><h2>PROD01 $widget_name</h2><div><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><PRE>";
+    print $fh "<div id=\"prod01_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>PROD01 $widget_name</h2><div><PRE>";
     if ($prod01_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($prod01_widget_info{$widget_name});

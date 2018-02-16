@@ -5,7 +5,7 @@ body {
 
 body {
   font: 500 18px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  padding: 2rem;
+  padding: 0rem;
   background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0)
 }
@@ -46,19 +46,23 @@ a {
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   transition: all 0.3s;
-  overflow: auto;
 }
 
+.modal-window .header div{
+	    overflow: auto;
+		height: 100%;
+}
 .modal-window:target {
   opacity: 1;
   pointer-events: auto;
 }
 
 .modal-window>div {
-  width: 800px;
+      width: 85%;
+    height: 85%;
   position: relative;
-  margin: 10% auto;
-  padding: 2rem;
+  margin: 2% auto;
+    padding: 3rem 0rem 0.5rem 1rem;
   background: rgb(201, 255, 208);
   color: #444;
   overflow: auto;
@@ -70,10 +74,17 @@ a {
   font-weight: bold;
 }
 
+.modal-window .header > h2 {
+    padding: 0;
+    position: absolute;
+    top: 2%;
+    margin: 0 22%;
+}
 .modal-close {
   color: rgb(0, 0, 0);
   line-height: 50px;
   font-size: 80%;
+    font-weight: bold;
   position: absolute;
   right: 0;
   text-align: center;

@@ -126,7 +126,7 @@ def postConfigXml(arguments, fileNamePost):
           #  str =  'curl -s -X POST '+ line + '/createItem?name=' + postJobName + '-' + arguments[3] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml'
             str = 'curl -s -X POST ' + line
             print(str)
-            #os.system(str)
+            os.system(str)
 
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-################################################################################################################################
+####################################################################################################################################################################
 #  required python3
 #
 # -----------    ----------------  -------------------------------------
@@ -17,7 +17,8 @@
 # curl -s -X POST https://212609073:14d41061aa074a986dd708daed1a5f30@predix1.jenkins.build.ge.com/job/Oil_and_Gas_Digital/job/DevOps-Jobs/job/Job-Cloning-Automation/createItem?name=DUMMY0000_Single_Well_Intellistream-LOWERPOC2 --data-binary @DUMMY02_Single_Well_Intellistream-LOWERPOC1.xml -H Content-Type:text/xml
 #
 # python3 postResponse.py 212609073 14d41061aa074a986dd708daed1a5f30 LOWERPOC2
-# ################################################################################################################################
+# First create a folder i.g BFX01, Also please make sure the folder is added into script as part of lower or upper env in writePostConfigXml (LINE 64-68)
+# ###################################################################################################################################################################
 
 import requests
 import json
@@ -60,16 +61,16 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                 preJobName = jobName.split('-')[-1]
                 postJobName = jobName.rsplit('-',1)[0]
 
-                if arguments[2].upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']:
-                    if preJobName.upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']:
+                if arguments[2].upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']: #lower target env
+                    if preJobName.upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']: #lower source env
                         newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         f2.write(newLine)
-                elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'QA01', 'QA02', 'PAMMITEMP01','PAMMITEMP02']:
-                    if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'QA01', 'QA02', 'PAMMITEMP01','PAMMITEMP02']:
+                elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #upper target env
+                    if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #upper source env
                         #newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         newLine = line.rsplit('/', 4)[0] +'/'+ arguments[2] +'/createItem?name=' + postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         f2.write(newLine)
-                    else:
+                    else:  #else lower souce to upper target
                         # url = 'curl -XGET https://212609073:14d41061aa074a986dd708daed1a5f30@predix1.jenkins.build.ge.com/job/Oil_and_Gas_Digital-HEnv/checkJobName?value=Job-Cloning-Automation'
                         # print(url)
                         # # Do the HTTP get request

@@ -66,7 +66,8 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                         f2.write(newLine)
                 elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'QA01', 'QA02', 'PAMMITEMP01','PAMMITEMP02']:
                     if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'QA01', 'QA02', 'PAMMITEMP01','PAMMITEMP02']:
-                        newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
+                        #newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
+                        newLine = line.rsplit('/', 4)[0] +'/'+ arguments[2] +'/createItem?name=' + postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         f2.write(newLine)
                     else:
                         # url = 'curl -XGET https://212609073:14d41061aa074a986dd708daed1a5f30@predix1.jenkins.build.ge.com/job/Oil_and_Gas_Digital-HEnv/checkJobName?value=Job-Cloning-Automation'

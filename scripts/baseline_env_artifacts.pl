@@ -66,7 +66,7 @@ my $app_count = 1;
 my $bg_color;
 
 my $report_name = 'baselineEnv_artifacts.html';
-
+my $baseline_arts = 'baselineEnv_artifacts.dat';
 if ($env1 eq "DEV01")
 {
     $env1_space_id = $dev01_space_id;
@@ -179,3 +179,30 @@ for $app_name (@dev_apps)
 
 print $fh "</table>\n</body>\n</html>\n";
 close($fh);
+
+open (my $fh2, '>', $baseline_arts) or die "Could not create file.\n";
+@dev_apps = sort keys %env1_hash1;
+
+for $app_name (@dev_apps)
+{
+    my $version1 = $env1_hash1{$app_name};
+
+    if (!defined $version1)
+    {
+        $version1 = "App missing";    
+    }
+    
+    if ($version1 ne "null")
+    {
+        print $fh2 "$app_name=$version1\n";
+        $app_count++;
+    }
+    else
+    {
+        print "Not defined app is $app_name\n";
+    }
+}
+
+close($fh2);
+
+

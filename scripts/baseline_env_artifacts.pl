@@ -148,7 +148,6 @@ else
 
 `cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o \"$env1_org\" -s $env1_space`;
 
-#LLL
 `cf curl "/v2/apps?q=space_guid:$env1_space_id\&results-per-page=100" > apps_list.json`;
 @temp_app_names = `cat apps_list.json | jq -r ".resources[].entity.name"`;
 @temp_art_nums = `cat apps_list.json | jq -r ".resources[].entity.environment_json.ARTIFACT_VERSION"`;
@@ -156,49 +155,25 @@ chomp (@temp_app_names);
 chomp (@temp_art_nums);
 @env1_hash1{@temp_app_names} = @temp_art_nums;
 
-`cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o \"$env2_org\" -s $env2_space`;
-
-`cf curl "/v2/apps?q=space_guid:$env2_space_id\&results-per-page=100" > apps_list.json`;
-@temp_app_names = `cat apps_list.json | jq -r ".resources[].entity.name"`;
-@temp_art_nums = `cat apps_list.json | jq -r ".resources[].entity.environment_json.ARTIFACT_VERSION"`;
-chomp (@temp_app_names);
-chomp (@temp_art_nums);
-@env2_hash1{@temp_app_names} = @temp_art_nums;
-
 open (my $fh, '>', $report_name) or die "Could not create file.\n";
 
-print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment dashboard</title>\n<body>\n";
+print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>BaseLine Environment Artifacts</title>\n<body>\n";
 print $fh "<table border=\"1\">\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>$env1</th><th>$env2</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>$env1</th></tr>\n";
 
 @dev_apps = sort keys %env1_hash1;
 for $app_name (@dev_apps)
 {
     my $version1 = $env1_hash1{$app_name};
-    my $version2 = $env2_hash1{$app_name};
-
+  
     if (!defined $version1)
     {
         $version1 = "App missing";    
     }
-
-    if (!defined $version2)
-    {
-        $version2 = "App missing";
-    }
-
-    if ($version1 ne $version2)
-    {
-        $bg_color = "#ffa8af";
-    }
-    else
-    {
-        $bg_color = "#e2f4ff";
-    }
-    
+  
     if ($version1 ne "null")
     {
-        print $fh "<tr BGCOLOR=\"$bg_color\"><td>$app_count</td><td>$app_name</td><td>$version1</td><td>$version2</td></tr>\n";
+        print $fh "<tr BGCOLOR=\"$bg_color\"><td>$app_count</td><td>$app_name</td><td>$version1</td></tr>\n";
         $app_count++;
     }
     else

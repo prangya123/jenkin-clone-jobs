@@ -156,15 +156,16 @@ print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>$env1</th></tr>\n";
 
 @dev_apps = sort keys %env1_hash1;
+
 for $app_name (@dev_apps)
 {
     my $version1 = $env1_hash1{$app_name};
-  
+
     if (!defined $version1)
     {
         $version1 = "App missing";    
     }
-  
+    
     if ($version1 ne "null")
     {
         print $fh "<tr BGCOLOR=\"$bg_color\"><td>$app_count</td><td>$app_name</td><td>$version1</td></tr>\n";

@@ -6,7 +6,6 @@ use Data::Dumper qw(Dumper);
 my $cf_user = $ARGV[0];
 my $cf_pwd = $ARGV[1];
 my $env1 = $ARGV[2];
-#my $env2 = $ARGV[3];
 
 my $qa01_space_id="7057482e-d735-47f3-8c20-3a0c99837186";
 my $qa01_org="OGD_Development_USWest_01";
@@ -56,12 +55,7 @@ my $env1_space_id;
 my $env1_org;
 my $env1_space;
 
-#my $env2_space_id;
-#my $env2_org;
-#my $env2_space;
-
 my %env1_hash1;
-#my %env2_hash1;
 
 my @temp_app_names;
 my @temp_art_nums;

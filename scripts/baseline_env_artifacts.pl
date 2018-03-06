@@ -6,7 +6,7 @@ use Data::Dumper qw(Dumper);
 my $cf_user = $ARGV[0];
 my $cf_pwd = $ARGV[1];
 my $env1 = $ARGV[2];
-my $env2 = $ARGV[3];
+#my $env2 = $ARGV[3];
 
 my $qa01_space_id="7057482e-d735-47f3-8c20-3a0c99837186";
 my $qa01_org="OGD_Development_USWest_01";
@@ -56,12 +56,12 @@ my $env1_space_id;
 my $env1_org;
 my $env1_space;
 
-my $env2_space_id;
-my $env2_org;
-my $env2_space;
+#my $env2_space_id;
+#my $env2_org;
+#my $env2_space;
 
 my %env1_hash1;
-my %env2_hash1;
+#my %env2_hash1;
 
 my @temp_app_names;
 my @temp_art_nums;
@@ -71,13 +71,7 @@ my @dev_apps;
 my $app_count = 1;
 my $bg_color;
 
-my $report_name = 'env_comparison.html';
-
-if ($env1 eq $env2)
-{
-    printf "Cannot compare same environments!\nQuitting!\n\n";
-    exit 1;
-}
+my $report_name = 'baselineEnv_artifacts.html';
 
 if ($env1 eq "DEV01")
 {
@@ -152,81 +146,9 @@ else
     $env1_space = $dev01_space;
 }
 
-if ($env2 eq "DEV01")
-{
-    $env2_space_id = $dev01_space_id;
-    $env2_org = $dev01_org;
-    $env2_space = $dev01_space;
-}
-elsif ($env2 eq "DEV02")
-{
-    $env2_space_id = $dev02_space_id;
-    $env2_org = $dev02_org;
-    $env2_space = $dev02_space;
-}
-elsif ($env2 eq "QA01")
-{
-    $env2_space_id = $qa01_space_id;
-    $env2_org = $qa01_org;
-    $env2_space = $qa01_space;
-}
-elsif ($env2 eq "QA02")
-{
-    $env2_space_id = $qa02_space_id;
-    $env2_org = $qa02_org;
-    $env2_space = $qa02_space;
-}
-elsif ($env2 eq "UAT01")
-{
-    $env2_space_id = $uat01_space_id;
-    $env2_org = $uat01_org;
-    $env2_space = $uat01_space;
-}
-elsif ($env2 eq "PERF01")
-{
-    $env2_space_id = $perf01_space_id;
-    $env2_org = $perf01_org;
-    $env2_space = $perf01_space;
-}
-elsif ($env2 eq "DEMOPROD01")
-{
-    $env2_space_id = $demoprod_space_id;
-    $env2_org = $demoprod_org;
-    $env2_space = $demoprod_space;
-}
-elsif ($env2 eq "DEMOPROD02")
-{
-    $env2_space_id = $demoprod02_space_id;
-    $env2_org = $demoprod02_org;
-    $env2_space = $demoprod02_space;
-}
-elsif ($env2 eq "DEMODEV01")
-{
-    $env2_space_id = $demodev_space_id;
-    $env2_org = $demodev_org;
-    $env2_space = $demodev_space;
-}
-elsif ($env2 eq "DEMODEV02")
-{
-    $env2_space_id = $demodev02_space_id;
-    $env2_org = $demodev02_org;
-    $env2_space = $demodev02_space;
-}
-elsif ($env2 eq "PROD01")
-{
-    $env2_space_id = $prod_space_id;
-    $env2_org = $prod_org;
-    $env2_space = $prod_space;
-}
-else
-{
-    $env2_space_id = $qa01_space_id;
-    $env2_org = $qa01_org;
-    $env2_space = $qa01_space;
-}
-
 `cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o \"$env1_org\" -s $env1_space`;
 
+#LLL
 `cf curl "/v2/apps?q=space_guid:$env1_space_id\&results-per-page=100" > apps_list.json`;
 @temp_app_names = `cat apps_list.json | jq -r ".resources[].entity.name"`;
 @temp_art_nums = `cat apps_list.json | jq -r ".resources[].entity.environment_json.ARTIFACT_VERSION"`;

@@ -194,7 +194,7 @@ for $app_name (@dev_apps)
     
     if ($version1 ne "null")
     {
-        print $fh2 "$app_name#$version1\n";
+        print $fh2 "$app_name:$version1\n";
         $app_count++;
     }
     else

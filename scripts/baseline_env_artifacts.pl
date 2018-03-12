@@ -168,7 +168,7 @@ for $app_name (@dev_apps)
     
     if ($version1 ne "null")
     {
-        print $fh "<tr BGCOLOR=\" "><td>$app_count</td><td>$app_name</td><td>$version1</td></tr>\n";
+        print $fh "<tr><td>$app_count</td><td>$app_name</td><td>$version1</td></tr>\n";
         $app_count++;
     }
     else

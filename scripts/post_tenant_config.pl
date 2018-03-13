@@ -9,10 +9,6 @@ my $product = $ARGV[2];
 my $new_artifact = $ARGV[3];
 
 my $contents;
-my $env;
-my $task;
-my $product;
-my $new_artifact;
 my $row_start;
 my $row_offset;
 my $cell_end;

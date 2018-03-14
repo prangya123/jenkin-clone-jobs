@@ -434,6 +434,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_dev = "N/A";
     }
+    else
+    {
+        $widget_version_dev = $widget_name . "_" . $widget_version_dev . ".tar.gz";
+    }
 
     if (!defined $widget_version_qa)
     {
@@ -442,6 +446,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_qa eq "null")
     {
         $widget_version_qa = "N/A";
+    }
+    else
+    {
+        $widget_version_qa = $widget_name . "_" . $widget_version_qa . ".tar.gz";
     }
 
     if (!defined $widget_version_perf)
@@ -452,6 +460,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_perf = "N/A";
     }
+    else
+    {
+        $widget_version_perf = $widget_name . "_" . $widget_version_perf . ".tar.gz";
+    }
 
     if (!defined $widget_version_dev02)
     {
@@ -461,7 +473,11 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_dev02 = "N/A";
     }
-
+    else
+    {
+        $widget_version_dev02 = $widget_name . "_" . $widget_version_dev02 . ".tar.gz";
+    }
+    
     if (!defined $widget_version_qa02)
     {
         $widget_version_qa02 = "N/A";
@@ -469,6 +485,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_qa02 eq "null")
     {
         $widget_version_qa02 = "N/A";
+    }
+    else
+    {
+        $widget_version_qa02 = $widget_name . "_" . $widget_version_qa02 . ".tar.gz";
     }
 
     if (!defined $widget_version_uat01)
@@ -479,6 +499,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_uat01 = "N/A";
     }
+    else
+    {
+        $widget_version_uat01 = $widget_name . "_" . $widget_version_uat01 . ".tar.gz";
+    }
 
     if (!defined $widget_version_demodev02)
     {
@@ -487,6 +511,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_demodev02 eq "null")
     {
         $widget_version_demodev02 = "N/A";
+    }
+    else
+    {
+        $widget_version_demodev02 = $widget_name . "_" . $widget_version_demodev02 . ".tar.gz";
     }
 
     if (!defined $widget_version_demoprod01)
@@ -497,15 +525,22 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_demoprod01 = "N/A";
     }
+    else
+    {
+        $widget_version_demoprod01 = $widget_name . "_" . $widget_version_demoprod01 . ".tar.gz";
+    }
 	
-	## DEMOPROD02 ##
-         if (!defined $widget_version_demoprod02)
+    if (!defined $widget_version_demoprod02)
     {
         $widget_version_demoprod02 = "N/A";
     }
     elsif ($widget_version_demoprod02 eq "null")
     {
         $widget_version_demoprod02 = "N/A";
+    }
+    else
+    {
+        $widget_version_demoprod02 = $widget_name . "_" . $widget_version_demoprod02 . ".tar.gz";
     }
 
     if (!defined $widget_version_prod01)
@@ -515,6 +550,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_prod01 eq "null")
     {
         $widget_version_prod01 = "N/A";
+    }
+    else
+    {
+        $widget_version_prod01 = $widget_name . "_" . $widget_version_prod01 . ".tar.gz";
     }
 
 # Print table row below

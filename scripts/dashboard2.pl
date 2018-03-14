@@ -10,7 +10,6 @@ my $cf_user = $ARGV[0];
 my $cf_pwd = $ARGV[1];
 
 my $qa01_space_id="7057482e-d735-47f3-8c20-3a0c99837186";
-my $dev01_space_id="db7d2aa9-9f50-4e46-b321-d7181752331d";
 my $uat01_space_id="14568591-961d-42f8-b6f2-628c97c4e4fc";
 my $perf01_space_id="cd98d78c-21bf-45d6-aa14-a4226b14c7c5";
 my $demoprod_space_id="f73004e8-a449-4fca-bb72-d7c6524ed070";
@@ -20,7 +19,6 @@ my $qa02_space_id="d1ed22a9-ddb8-4100-b786-719d441b4755";
 my $demodev02_space_id="1bbc1c0a-3e50-4a4a-ab76-30ca2131ce04";
 
 my %qa_hash1;
-my %dev_hash1;
 my %uat_hash1;
 my %perf_hash1;
 my %demoprod_hash1;
@@ -31,16 +29,13 @@ my %demodev02_hash1;
 
 my $hash_ref;
 my $app_name;
-my @dev_apps;
+my @index_apps;
 my $app_count = 1;
 
 my $report_name = 'dashboard.html';
 
-my $dev_bg_color;
-
 # New variables
 my @down_apps;
-my $dev_ctr = 0;
 my $qa_ctr = 0;
 my $uat_ctr = 0;
 my $perf_ctr = 0;
@@ -54,9 +49,6 @@ my $demodev02_ctr = 0;
 
 $hash_ref = create_hash($qa01_space_id);
 %qa_hash1 = %$hash_ref;
-
-$hash_ref = create_hash($dev01_space_id);
-%dev_hash1 = %$hash_ref;
 
 $hash_ref = create_hash($uat01_space_id);
 %uat_hash1 = %$hash_ref;
@@ -89,13 +81,12 @@ open (my $fh, '>', $report_name) or die "Could not create file.\n";
 
 print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment dashboard</title>\n<body>\n";
 print $fh "<table border=\"1\">\n";
-print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream environments dashboard</font> - Last run on $time_stamp PST<BR><a href=\"https\:\/\/ogd-dashboard-auth.run.aws-usw02-pr.ice.predix.io\" target=\"_blank\">Click here to visit Dashboard version 2 beta!</a><BR><a href=\"https\:\/\/ogddash.run.aws-usw02-pr.ice.predix.io\/widgets_dashboard.html\" target=\"_blank\">Click for widgets dashboard</a></th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMODEV02</th><th>PROD</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream environments dashboard</font> - Last run on $time_stamp PST<BR><a href=\"https\:\/\/ogd-dashboard-auth.run.aws-usw02-pr.ice.predix.io\" target=\"_blank\">Click here to visit Dashboard version 2 beta!</a><BR><a href=\"https\:\/\/ogddash.run.aws-usw02-pr.ice.predix.io\/widgets_dashboard_details.html\" target=\"_blank\">Click for widgets dashboard</a></th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMODEV02</th><th>PROD</th></tr>\n";
 
-@dev_apps = sort keys %dev_hash1;
-for $app_name (@dev_apps)
+@index_apps = sort keys %dev02_hash1;
+for $app_name (@index_apps)
 {
-    my $version_dev = $dev_hash1{$app_name}[0];
     my $version_qa = $qa_hash1{$app_name}[0];
     my $version_uat = $uat_hash1{$app_name}[0];
     my $version_perf = $perf_hash1{$app_name}[0];
@@ -130,11 +121,6 @@ for $app_name (@dev_apps)
         $version_prod = "Missing";
     }
 
-    if (!defined $version_dev02)
-    {
-        $version_dev02 = "Missing";
-    }
-
     if (!defined $version_qa02)
     {
         $version_qa02 = "Missing";
@@ -145,43 +131,15 @@ for $app_name (@dev_apps)
         $version_demodev02 = "Missing";
     }
 
-    # if ($version_dev ne "null")
-    # {
-    #     print $fh "<tr BGCOLOR=\"#e2f4ff\"><td bgcolor=\"#30aaf4\">$app_count</td><td bgcolor=\"#30aaf4\">$app_name</td>";
-    #     print $fh "<td title=\"https://$dev_hash1{$app_name}[2]\">$version_dev - $dev_hash1{$app_name}[1]</td>";
-    #     print $fh "<td>$version_qa - $qa_hash1{$app_name}[1]<BR>https://$qa_hash1{$app_name}[2]</td>";
-    #     print $fh "<td>$version_uat - $uat_hash1{$app_name}[1]<BR>$uat_hash1{$app_name}[2]</td>";
-    #     print $fh "<td>$version_perf - $perf_hash1{$app_name}[1]<BR>$perf_hash1{$app_name}[2]</td>";
-    #     print $fh "<td>$version_demoprod - $demoprod_hash1{$app_name}[1]<BR>$demoprod_hash1{$app_name}[2]</td>";
-    #     print $fh "<td>$version_demodev - $demodev_hash1{$app_name}[1]<BR>$demodev_hash1{$app_name}[2]</td>";
-    #     print $fh "<td>$version_prod - $prod_hash1{$app_name}[1]<BR>$prod_hash1{$app_name}[2]</td></tr>\n";
-    #     $app_count++;
-    # }
-
-    if ($version_dev ne "null")
+    if ($version_dev02 ne "null")
     {
         print $fh "<tr BGCOLOR=\"#e2f4ff\"><td NOWRAP bgcolor=\"#30aaf4\">$app_count</td><td NOWRAP bgcolor=\"#30aaf4\">$app_name</td>";
-        print $fh "<td NOWRAP BGCOLOR=\"$dev_hash1{$app_name}[5]\">Artifact: $version_dev<BR>Instances running: $dev_hash1{$app_name}[3]/$dev_hash1{$app_name}[4]<BR>Route: $dev_hash1{$app_name}[2]</td>";
+        print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[5]\">Artifact: $version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]</td>";
 
-        if ($dev_hash1{$app_name}[5] eq "#ffa8af")
+        if ($dev02_hash1{$app_name}[5] eq "#ffa8af")
         {
-            $down_apps[$dev_ctr][0] = $app_name.":"." $dev_hash1{$app_name}[3]/$dev_hash1{$app_name}[4]";
-            $dev_ctr++;
-        }
-
-        if ($version_dev02 eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[5]\">Artifact: $version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]</td>";
-
-            if ($dev02_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$dev02_ctr][1] = $app_name.":"." $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]";
-                $dev02_ctr++;
-            }
+            $down_apps[$dev02_ctr][0] = $app_name.":"." $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]";
+            $dev02_ctr++;
         }
 
         if ($version_qa eq "Missing")
@@ -194,7 +152,7 @@ for $app_name (@dev_apps)
 
             if ($qa_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$qa_ctr][2] = $app_name.":"." $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]";
+                $down_apps[$qa_ctr][1] = $app_name.":"." $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]";
                 $qa_ctr++;
             }
         }
@@ -209,7 +167,7 @@ for $app_name (@dev_apps)
 
             if ($qa02_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$qa02_ctr][3] = $app_name.":"." $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]";
+                $down_apps[$qa02_ctr][2] = $app_name.":"." $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]";
                 $qa02_ctr++;
             }
         }
@@ -224,7 +182,7 @@ for $app_name (@dev_apps)
 
             if ($uat_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$uat_ctr][4] = $app_name.":"." $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]";
+                $down_apps[$uat_ctr][3] = $app_name.":"." $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]";
                 $uat_ctr++;
             }
         }
@@ -239,7 +197,7 @@ for $app_name (@dev_apps)
 
             if ($perf_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$perf_ctr][5] = $app_name.":"." $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]";
+                $down_apps[$perf_ctr][4] = $app_name.":"." $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]";
                 $perf_ctr++;
             }
         }
@@ -254,7 +212,7 @@ for $app_name (@dev_apps)
 
             if ($demoprod_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$demoprod_ctr][6] = $app_name.":"." $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]";
+                $down_apps[$demoprod_ctr][5] = $app_name.":"." $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]";
                 $demoprod_ctr++;
             }
         }
@@ -269,7 +227,7 @@ for $app_name (@dev_apps)
 
             if($demodev02_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$demodev02_ctr][8] = $app_name.":"." $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]";
+                $down_apps[$demodev02_ctr][6] = $app_name.":"." $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]";
                 $demodev02_ctr++;
             }
         }
@@ -284,7 +242,7 @@ for $app_name (@dev_apps)
 
             if ($prod_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$prod_ctr][9] = $app_name.":"." $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]";
+                $down_apps[$prod_ctr][7] = $app_name.":"." $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]";
                 $prod_ctr++;
             }
         }
@@ -341,13 +299,13 @@ open (my $fh2, '>', $report2_name) or die "Could not create file.\n";
 print $fh2 "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment report</title>\n<body>\n";
 print $fh2 "<table border=\"1\">\n";
 print $fh2 "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"7\">IntelliStream services unavailability report</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh2 "<tr bgcolor=\"#30aaf4\"><th><font size=\"5\">DEV01</th><th><font size=\"5\">DEV02</th><th><font size=\"5\">QA01</th><th><font size=\"5\">QA02</th><th><font size=\"5\">UAT01</th><th><font size=\"5\">PERF01</th><th><font size=\"5\">DEMOPREPROD01</th><th><font size=\"5\">DEMODEV02</th><th><font size=\"5\">PROD</th></tr>\n";
+print $fh2 "<tr bgcolor=\"#30aaf4\"><th><font size=\"5\">DEV02</th><th><font size=\"5\">QA01</th><th><font size=\"5\">QA02</th><th><font size=\"5\">UAT01</th><th><font size=\"5\">PERF01</th><th><font size=\"5\">DEMOPREPROD01</th><th><font size=\"5\">DEMODEV02</th><th><font size=\"5\">PROD</th></tr>\n";
 
 for my $i ( 0 .. $#down_apps ) 
 {
     print $fh2 "<tr>";
 
-	for my $j ( 0 .. 9 )
+	for my $j ( 0 .. 7 )
     {
         if (!defined $down_apps[$i][$j])
         {

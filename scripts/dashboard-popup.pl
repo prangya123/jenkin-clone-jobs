@@ -8,6 +8,7 @@
 # Bug fixed version 1.2 (CSS popup jumps back to top of page when closed).
 # Bug fixed version 1.3 (Wrong route display for prod app).
 # Added Dev02, Qa02 and DemoDev02
+# Removed Dev01
 # Author: Sufyan
 # Version: 1.4
 
@@ -27,7 +28,7 @@ my $cf_user = $ARGV[0];
 my $cf_pwd = $ARGV[1];
 
 my $qa01_space_id="7057482e-d735-47f3-8c20-3a0c99837186";
-my $dev01_space_id="db7d2aa9-9f50-4e46-b321-d7181752331d";
+
 my $uat01_space_id="14568591-961d-42f8-b6f2-628c97c4e4fc";
 my $perf01_space_id="cd98d78c-21bf-45d6-aa14-a4226b14c7c5";
 my $demoprod_space_id="f73004e8-a449-4fca-bb72-d7c6524ed070";
@@ -38,7 +39,7 @@ my $qa02_space_id="d1ed22a9-ddb8-4100-b786-719d441b4755";
 my $demodev02_space_id="1bbc1c0a-3e50-4a4a-ab76-30ca2131ce04";
 
 my %qa_hash1;
-my %dev_hash1;
+
 my %uat_hash1;
 my %perf_hash1;
 my %demoprod_hash1;
@@ -50,7 +51,7 @@ my %demodev02_hash1;
 
 my $hash_ref;
 my $app_name;
-my @dev_apps;
+my @dev02_apps;
 my $app_count = 1;
 my $popup;
 
@@ -60,7 +61,7 @@ my $dev_bg_color;
 
 # New variables
 my @down_apps;
-my $dev_ctr = 0;
+
 my $qa_ctr = 0;
 my $uat_ctr = 0;
 my $perf_ctr = 0;
@@ -76,8 +77,6 @@ my $demodev02_ctr = 0;
 $hash_ref = create_hash($qa01_space_id);
 %qa_hash1 = %$hash_ref;
 
-$hash_ref = create_hash($dev01_space_id);
-%dev_hash1 = %$hash_ref;
 
 $hash_ref = create_hash($uat01_space_id);
 %uat_hash1 = %$hash_ref;
@@ -114,19 +113,19 @@ print $fh "<META HTTP-EQUIV=\"refresh\" CONTENT=\"300\">";
 print $fh "<link rel=\"stylesheet\" href=\"styles.css\">";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\" >IntelliStream environments dashboard</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV01</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMODEV02</th><th>DEMOPREPROD01</th><th>PROD</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMODEV02</th><th>DEMOPREPROD01</th><th>PROD</th></tr>\n";
 
-@dev_apps = sort keys %dev_hash1;
-for $app_name (@dev_apps)
+@dev02_apps = sort keys %dev02_hash1;
+for $app_name (@dev02_apps)
 {
-    my $version_dev = $dev_hash1{$app_name}[0];
+    my $version_dev02 = $dev02_hash1{$app_name}[0];
     my $version_qa = $qa_hash1{$app_name}[0];
     my $version_uat = $uat_hash1{$app_name}[0];
     my $version_perf = $perf_hash1{$app_name}[0];
     my $version_demoprod = $demoprod_hash1{$app_name}[0];
    
     my $version_prod = $prod_hash1{$app_name}[0];
-	my $version_dev02 = $dev02_hash1{$app_name}[0];
+	
     my $version_qa02 = $qa02_hash1{$app_name}[0];
     my $version_demodev02 = $demodev02_hash1{$app_name}[0];
 
@@ -155,10 +154,7 @@ for $app_name (@dev_apps)
         $version_prod = "Missing";
     }
      
-	if (!defined $version_dev02)
-    {
-        $version_dev02 = "Missing";
-    }
+	
 
     if (!defined $version_qa02)
     {
@@ -169,33 +165,19 @@ for $app_name (@dev_apps)
     {
         $version_demodev02 = "Missing";
     }
-
-    if ($version_dev ne "null")
+##### Dev02		
+    if ($version_dev02 ne "null")
     {
         print $fh "<tr BGCOLOR=\"#e2f4ff\"><td NOWRAP bgcolor=\"#30aaf4\">$app_count</td><td NOWRAP bgcolor=\"#30aaf4\">$app_name</td>";
-        print $fh "<td NOWRAP BGCOLOR=\"$dev_hash1{$app_name}[8]\">Version: 1.0.0.$version_dev<BR>Instances running: $dev_hash1{$app_name}[3]/$dev_hash1{$app_name}[4]<BR>Route: $dev_hash1{$app_name}[2]<BR>Last uploaded: $dev_hash1{$app_name}[5]<BR>Memory: $dev_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#dev_$app_count\">Bound Services </a></p></td>";
-
-        if ($dev_hash1{$app_name}[8] eq "#ffa8af")
-        {
-            $down_apps[$dev_ctr][0] = $app_name;
-            $dev_ctr++;
-        }
-##### Dev02		
-   if ($version_dev02 eq "Missing")
-   
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-       {
-			print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[8]\">Version: 1.0.0.$version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]<BR>Last uploaded: $dev02_hash1{$app_name}[5]<BR>Memory: $dev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#dev02_$app_count\">Bound Services </a></p></td>";
+        print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[8]\">Version: 1.0.0.$version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]<BR>Last uploaded: $dev02_hash1{$app_name}[5]<BR>Memory: $dev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#dev02_$app_count\">Bound Services </a></p></td>";
 
         if ($dev02_hash1{$app_name}[8] eq "#ffa8af")
-           {
-				$down_apps[$dev02_ctr][0] = $app_name;
-				$dev02_ctr++;
-			}
+        {
+            $down_apps[$dev02_ctr][0] = $app_name;
+            $dev02_ctr++;
         }
+
+
 
 ##### 	Qa01	
 
@@ -318,7 +300,6 @@ for $app_name (@dev_apps)
         $demoprod_hash1{$app_name}[6]=~ s/,/<br>/g;
         $perf_hash1{$app_name}[6]=~ s/,/<br>/g;
         $uat_hash1{$app_name}[6]=~ s/,/<br>/g;
-        $dev_hash1{$app_name}[6]=~ s/,/<br>/g;
         $qa_hash1{$app_name}[6]=~ s/,/<br>/g;
 		$dev02_hash1{$app_name}[6]=~ s/,/<br>/g;
 		$qa02_hash1{$app_name}[6]=~ s/,/<br>/g;
@@ -329,7 +310,7 @@ for $app_name (@dev_apps)
     print $fh "<div id=\"demoprod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demoprod_hash1{$app_name}[6]</br></div></div></div>\n";
     print $fh "<div id=\"perf_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $perf_hash1{$app_name}[6]</br></div></div></div>\n";
     print $fh "<div id=\"uat_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $uat_hash1{$app_name}[6]</br></div></div></div>\n";
-    print $fh "<div id=\"dev_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $dev_hash1{$app_name}[6]</br></div></div></div>\n";
+    
     print $fh "<div id=\"qa_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa_hash1{$app_name}[6]</br></div></div></div>\n";
     print $fh "<div id=\"dev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $dev02_hash1{$app_name}[6]</br></div></div></div>\n";
 	print $fh "<div id=\"qa02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa02_hash1{$app_name}[6]</br></div></div></div>\n";

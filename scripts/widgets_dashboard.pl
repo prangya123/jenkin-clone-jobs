@@ -19,7 +19,8 @@ my %dev01_hash;
 my $QA01_UAA="https://d1730ade-7c0d-4652-8d44-cb563fcc1e27.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token?client_id=ingestor.496bb641-78b5-4a18-b1b7-fde29788db38.991e5c23-3e9c-4944-b08b-9e83ef0ab598&grant_type=password&username=FuncUser01&password=Pa55w0rd";
 my $QA01_AUTHORIZATION="aW5nZXN0b3IuNDk2YmI2NDEtNzhiNS00YTE4LWIxYjctZmRlMjk3ODhkYjM4Ljk5MWU1YzIzLTNlOWMtNDk0NC1iMDhiLTllODNlZjBhYjU5ODo=";
 my $QA01_TENANT="f1d57854-05d9-4e94-b9bb-b80ec812a309";
-my $QA01_WRS="https://apm-widget-repo-service-svc-sbxqa.apm.aws-usw02-pr.predix.io/v1/widgets/";
+#my $QA01_WRS="https://apm-widget-repo-service-svc-sbxqa.apm.aws-usw02-pr.predix.io/v1/widgets/";
+my $QA01_WRS="https://apm-widget-repo-service-svc-rc.int-app.aws-usw02-pr.predix.io/v1/widgets/";
 my $QA01_TOKEN;
 my %qa01_hash;
 

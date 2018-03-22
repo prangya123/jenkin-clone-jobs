@@ -19,7 +19,8 @@ my %dev01_hash;
 my $QA01_UAA="https://d1730ade-7c0d-4652-8d44-cb563fcc1e27.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token?client_id=ingestor.496bb641-78b5-4a18-b1b7-fde29788db38.991e5c23-3e9c-4944-b08b-9e83ef0ab598&grant_type=password&username=FuncUser01&password=Pa55w0rd";
 my $QA01_AUTHORIZATION="aW5nZXN0b3IuNDk2YmI2NDEtNzhiNS00YTE4LWIxYjctZmRlMjk3ODhkYjM4Ljk5MWU1YzIzLTNlOWMtNDk0NC1iMDhiLTllODNlZjBhYjU5ODo=";
 my $QA01_TENANT="f1d57854-05d9-4e94-b9bb-b80ec812a309";
-my $QA01_WRS="https://apm-widget-repo-service-svc-sbxqa.apm.aws-usw02-pr.predix.io/v1/widgets/";
+#my $QA01_WRS="https://apm-widget-repo-service-svc-sbxqa.apm.aws-usw02-pr.predix.io/v1/widgets/";
+my $QA01_WRS="https://apm-widget-repo-service-svc-rc.int-app.aws-usw02-pr.predix.io/v1/widgets/";
 my $QA01_TOKEN;
 my %qa01_hash;
 
@@ -286,6 +287,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_dev = "N/A";
     }
+    else
+    {
+        $widget_version_dev = $widget_name . "_" . $widget_version_dev . ".tar.gz";
+    }
 
     if (!defined $widget_version_qa)
     {
@@ -294,6 +299,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_qa eq "null")
     {
         $widget_version_qa = "N/A";
+    }
+    else
+    {
+        $widget_version_qa = $widget_name . "_" . $widget_version_qa . ".tar.gz";
     }
 
     if (!defined $widget_version_perf)
@@ -304,6 +313,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_perf = "N/A";
     }
+    else
+    {
+        $widget_version_perf = $widget_name . "_" . $widget_version_perf . ".tar.gz";
+    }
 
     if (!defined $widget_version_dev02)
     {
@@ -312,6 +325,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_dev02 eq "null")
     {
         $widget_version_dev02 = "N/A";
+    }
+    else
+    {
+        $widget_version_dev02 = $widget_name . "_" . $widget_version_dev02 . ".tar.gz";
     }
 
     if (!defined $widget_version_qa02)
@@ -322,6 +339,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_qa02 = "N/A";
     }
+    else
+    {
+        $widget_version_qa02 = $widget_name . "_" . $widget_version_qa02 . ".tar.gz";
+    }
 
     if (!defined $widget_version_uat01)
     {
@@ -330,6 +351,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_uat01 eq "null")
     {
         $widget_version_uat01 = "N/A";
+    }
+    else
+    {
+        $widget_version_uat01 = $widget_name . "_" . $widget_version_uat01 . ".tar.gz";
     }
 
     if (!defined $widget_version_demodev01)
@@ -340,6 +365,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_demodev01 = "N/A";
     }
+    else
+    {
+        $widget_version_demodev01 = $widget_name . "_" . $widget_version_demodev01 . ".tar.gz";
+    }
 
     if (!defined $widget_version_demodev02)
     {
@@ -348,6 +377,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_demodev02 eq "null")
     {
         $widget_version_demodev02 = "N/A";
+    }
+    else
+    {
+        $widget_version_demodev02 = $widget_name . "_" . $widget_version_demodev02 . ".tar.gz";
     }
 
     if (!defined $widget_version_demoprod01)
@@ -358,6 +391,10 @@ for $widget_name (@dev_widgets)
     {
         $widget_version_demoprod01 = "N/A";
     }
+    else
+    {
+        $widget_version_demoprod01 = $widget_name . "_" . $widget_version_demoprod01 . ".tar.gz";
+    }
 
     if (!defined $widget_version_prod01)
     {
@@ -366,6 +403,10 @@ for $widget_name (@dev_widgets)
     elsif ($widget_version_prod01 eq "null")
     {
         $widget_version_prod01 = "N/A";
+    }
+    else
+    {
+        $widget_version_prod01 = $widget_name . "_" . $widget_version_prod01 . ".tar.gz";
     }
 
     print $fh "<tr BGCOLOR=\"#e2f4ff\"><td BGCOLOR=\"#30aaf4\">$num</td><td BGCOLOR=\"#30aaf4\">$widget_name</td><td>$widget_version_dev</td><td>$widget_version_dev02</td><td>$widget_version_qa</td><td>$widget_version_qa02</td><td>$widget_version_perf</td><td>$widget_version_uat01</td><td>$widget_version_demodev01</td><td>$widget_version_demodev02</td><td>$widget_version_demoprod01</td><td>$widget_version_prod01</td></tr>\n";

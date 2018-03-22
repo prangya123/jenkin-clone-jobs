@@ -68,10 +68,15 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                     #if preJobName.upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']: #lower source env
                         newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[-3] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         f2.write(newLine)
+<<<<<<< HEAD
                 elif arguments[-1].upper() == 'HIGHER':
                 #elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #higher target env
                     if arguments[-2].upper() == 'HIGHER':
                     #if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #higher source env
+=======
+                elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'MASTER01','PAMMITEMP02']: #upper target env
+                    if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01','MASTER01','PAMMITEMP01','PAMMITEMP02']: #upper source env
+>>>>>>> 15248d571e0c3cfc31e00b9bd69883da4a208d16
                         #newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         newLine = line.rsplit('/', 4)[0] +'/'+ arguments[-3] +'/createItem?name=' + postJobName + '-' + arguments[-3] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         f2.write(newLine)

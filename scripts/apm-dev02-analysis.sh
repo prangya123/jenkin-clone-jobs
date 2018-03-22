@@ -23,6 +23,6 @@ cf cups upstream-iprcurve-integration -p '{"uri": "https://ogd-is-iprcurve-'${en
 cf cups upstream-gradientcurve-integration -p '{"uri": "https://ogd-is-gradientcurve-'${env}'.run.aws-usw02-pr.ice.predix.io/v1"}'
 cf cups upstream-wellmodel -p  '{"uri": "https://ogd-is-wellmodel-'${env}'.run.aws-usw02-pr.ice.predix.io"}'
 cf cups apm-analytic -p '{"uri": "https://caf-mgmt-svc-preprod.preprod-app-api.aws-usw02-pr.predix.io"}'
-cf cups apm-widget-repo-service -p '{"uri": "https://apm-widget-repo-service-svc-apm-'${env}'.apm.aws-usw02-pr.predix.io/v1"}'
+cf cups apm-widget-repo-service -p '{"uri": "https://apm-widget-repo-service-svc-'${env}'.apm.aws-usw02-pr.predix.io/v1"}'
 cf create-service redis-16 shared-vm avid-redis
 cf cs logstash-19 free avid-logstash

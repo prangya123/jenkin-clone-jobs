@@ -69,7 +69,8 @@ def main(args):
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
 
-    ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change'
+    #ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change'
+    ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change'
     # and Project = The Fellowship and Project != Hulk and Project != Hydra and Project != Shield and Project != Thor and Resolution = Code Change'
     try:
         # for proj in projects:

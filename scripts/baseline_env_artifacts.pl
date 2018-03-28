@@ -140,7 +140,7 @@ for $app_name (@index_apps)
     if ($version_dev02 ne "null")
     {
         print $fh "<tr BGCOLOR=\"#e2f4ff\"><td NOWRAP bgcolor=\"#30aaf4\">$app_count</td><td NOWRAP bgcolor=\"#30aaf4\">$app_name</td>";
-        print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[5]\">Artifact: $version_dev02<BR>$dev02_hash1{$app_name}[1]:::$dev02_hash1{$app_name}[2]<BR>Route: $dev02_hash1{$app_name}[2]</td>";
+        print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[5]\">Artifact: $version_dev02<BR>Route: $dev02_hash1{$app_name}[2]</td>";
 
         if ($dev02_hash1{$app_name}[5] eq "#ffa8af")
         {
@@ -154,7 +154,7 @@ for $app_name (@index_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[5]\">Artifact: $version_qa<BR>Instances running: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[5]\">Artifact: $version_qa<BR>IIIInstances running: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]</td>";
 
             if ($qa_hash1{$app_name}[5] eq "#ffa8af")
             {
@@ -169,7 +169,7 @@ for $app_name (@index_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$qa02_hash1{$app_name}[5]\">Artifact: $version_qa02<BR>Instances running: $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]<BR>Route: $qa02_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$qa02_hash1{$app_name}[5]\">Artifact: $version_qa02<BR>JJJInstances running: $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]<BR>Route: $qa02_hash1{$app_name}[2]</td>";
 
             if ($qa02_hash1{$app_name}[5] eq "#ffa8af")
             {
@@ -184,7 +184,7 @@ for $app_name (@index_apps)
         }
         else
         {
-            print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[5]\">Artifact: $version_uat<BR>Instances running: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]</td>";
+            print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[5]\">Artifact: $version_uat<BR>KKKInstances running: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]</td>";
 
             if ($uat_hash1{$app_name}[5] eq "#ffa8af")
             {

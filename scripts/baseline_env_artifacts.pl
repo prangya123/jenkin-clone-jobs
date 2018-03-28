@@ -157,11 +157,11 @@ close($fh);
 
 # Create HTML Report below
 
-open (my $fh, '>', $report_name) or die "Could not create file.\n";
+open (my $fh1, '>', $report_name) or die "Could not create file.\n";
 
-print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>BaseLine Environment Artifacts</title>\n<body>\n";
-print $fh "<table border=\"1\">\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>$env1</th></tr>\n";
+print $fh1 "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>BaseLine Environment Artifacts</title>\n<body>\n";
+print $fh1 "<table border=\"1\">\n";
+print $fh1 "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>$env1</th></tr>\n";
     
 @index_apps = sort keys %dev02_hash1;
 for $app_name (@index_apps)
@@ -212,7 +212,7 @@ for $app_name (@index_apps)
 
     if ($version_dev02 ne "null")
     {
-        print $fh "$dev02_hash1{$app_name}[5]:$version_dev02:$dev02_hash1{$app_name}[2]";
+        print $fh1 "$dev02_hash1{$app_name}[5]:$version_dev02:$dev02_hash1{$app_name}[2]";
 
         if ($dev02_hash1{$app_name}[5] eq "#ffa8af")
         {

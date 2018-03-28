@@ -147,7 +147,7 @@ for $app_name (@index_apps)
             $down_apps[$dev02_ctr][0] = $app_name.":"." $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]";
             $dev02_ctr++;
         }
-
+=for comment
         if ($version_qa eq "Missing")
         {
             print $fh "<td NOWRAP>App is missing</td>";
@@ -252,7 +252,7 @@ for $app_name (@index_apps)
                 $prod_ctr++;
             }
         }
-
+=cut
         $app_count++;
     }
     else

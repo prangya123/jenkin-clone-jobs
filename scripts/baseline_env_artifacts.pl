@@ -32,6 +32,7 @@ my $hash_ref;
 my $app_name;
 my @index_apps;
 my $app_count = 1;
+my $app_count1 = 1;
 
 my $report_name = 'baselineEnv_artifacts.html';
 my $baseline_arts = 'baselineEnv_artifacts.dat';
@@ -80,11 +81,6 @@ $hash_ref = create_hash($prod_space_id);
 # Create HTML Report below
 
 open (my $fh, '>', $report_name) or die "Could not create file.\n";
-
-#print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment dashboard</title>\n<body>\n";
-#print $fh "<table border=\"1\">\n";
-#print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream environments dashboard</font> - Last run on $time_stamp PST<BR><a href=\"https\:\/\/ogd-dashboard-auth.run.aws-usw02-pr.ice.predix.io\" target=\"_blank\">Click here to visit Dashboard version 2 beta!</a><BR><a href=\"https\:\/\/ogddash.run.aws-usw02-pr.ice.predix.io\/widgets_dashboard_details.html\" target=\"_blank\">Click for widgets dashboard</a></th></tr>\n";
-#print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMODEV02</th><th>PROD</th></tr>\n";
 
 print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>BaseLine Environment Artifacts</title>\n<body>\n";
 print $fh "<table border=\"1\">\n";
@@ -147,112 +143,7 @@ for $app_name (@index_apps)
             $down_apps[$dev02_ctr][0] = $app_name.":"." $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]";
             $dev02_ctr++;
         }
-=for comment
-        if ($version_qa eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[5]\">Artifact: $version_qa<BR>IIIInstances running: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]</td>";
 
-            if ($qa_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$qa_ctr][1] = $app_name.":"." $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]";
-                $qa_ctr++;
-            }
-        }
-
-        if ($version_qa02 eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$qa02_hash1{$app_name}[5]\">Artifact: $version_qa02<BR>JJJInstances running: $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]<BR>Route: $qa02_hash1{$app_name}[2]</td>";
-
-            if ($qa02_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$qa02_ctr][2] = $app_name.":"." $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]";
-                $qa02_ctr++;
-            }
-        }
-        
-        if ($version_uat eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[5]\">Artifact: $version_uat<BR>KKKInstances running: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]</td>";
-
-            if ($uat_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$uat_ctr][3] = $app_name.":"." $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]";
-                $uat_ctr++;
-            }
-        }
-
-        if ($version_perf eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$perf_hash1{$app_name}[5]\">Artifact: $version_perf<BR>Instances running: $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]<BR>Route: $perf_hash1{$app_name}[2]</td>";
-
-            if ($perf_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$perf_ctr][4] = $app_name.":"." $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]";
-                $perf_ctr++;
-            }
-        }
-        
-        if ($version_demoprod eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$demoprod_hash1{$app_name}[5]\">Artifact: $version_demoprod<BR>Instances running: $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]<BR>Route: $demoprod_hash1{$app_name}[2]</td>";
-
-            if ($demoprod_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$demoprod_ctr][5] = $app_name.":"." $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]";
-                $demoprod_ctr++;
-            }
-        }
-
-        if ($version_demodev02 eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td>";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$demodev02_hash1{$app_name}[5]\">Artifact: $version_demodev02<BR>Instances running: $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]<BR>Route: $demodev02_hash1{$app_name}[2]</td>";
-
-            if($demodev02_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$demodev02_ctr][6] = $app_name.":"." $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]";
-                $demodev02_ctr++;
-            }
-        }
-
-        if ($version_prod eq "Missing")
-        {
-            print $fh "<td NOWRAP>App is missing</td></tr>\n";
-        }
-        else
-        {
-            print $fh "<td NOWRAP BGCOLOR=\"$prod_hash1{$app_name}[5]\">Artifact: $version_prod<BR>Instances running: $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]<BR>Route: $prod_hash1{$app_name}[2]</td></tr>\n";
-
-            if ($prod_hash1{$app_name}[5] eq "#ffa8af")
-            {
-                $down_apps[$prod_ctr][7] = $app_name.":"." $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]";
-                $prod_ctr++;
-            }
-        }
-=cut
         $app_count++;
     }
     else
@@ -263,6 +154,81 @@ for $app_name (@index_apps)
 
 print $fh "</table>\n</body>\n</html>\n";
 close($fh);
+
+# Create HTML Report below
+
+open (my $fh, '>', $report_name) or die "Could not create file.\n";
+
+print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>BaseLine Environment Artifacts</title>\n<body>\n";
+print $fh "<table border=\"1\">\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th>Sr. No.</th><th>Application Name</th><th>$env1</th></tr>\n";
+    
+@index_apps = sort keys %dev02_hash1;
+for $app_name (@index_apps)
+{
+    my $version_qa = $qa_hash1{$app_name}[0];
+    my $version_uat = $uat_hash1{$app_name}[0];
+    my $version_perf = $perf_hash1{$app_name}[0];
+    my $version_demoprod = $demoprod_hash1{$app_name}[0];
+    my $version_prod = $prod_hash1{$app_name}[0];
+    my $version_dev02 = $dev02_hash1{$app_name}[0];
+    my $version_qa02 = $qa02_hash1{$app_name}[0];
+    my $version_demodev02 = $demodev02_hash1{$app_name}[0];
+
+    if (!defined $version_qa)
+    {
+        $version_qa = "Missing";
+    }
+
+    if (!defined $version_uat)
+    {
+        $version_uat = "Missing";
+    }
+    
+    if (!defined $version_perf)
+    {
+        $version_perf = "Missing";
+    }
+
+    if (!defined $version_demoprod)
+    {
+        $version_demoprod = "Missing";
+    }
+    
+    if (!defined $version_prod)
+    {
+        $version_prod = "Missing";
+    }
+
+    if (!defined $version_qa02)
+    {
+        $version_qa02 = "Missing";
+    }
+
+    if (!defined $version_demodev02)
+    {
+        $version_demodev02 = "Missing";
+    }
+
+    if ($version_dev02 ne "null")
+    {
+        print $fh "$dev02_hash1{$app_name}[5]:$version_dev02:$dev02_hash1{$app_name}[2]";
+
+        if ($dev02_hash1{$app_name}[5] eq "#ffa8af")
+        {
+            $down_apps[$dev02_ctr][0] = $app_name.":"." $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]";
+            $dev02_ctr++;
+        }
+
+        $app_count1++;
+    }
+    else
+    {
+        print "Not defined app is $app_name\n";
+    }
+}
+
+close($fh1);
 
 ## SUBROUTINES BELOW
 

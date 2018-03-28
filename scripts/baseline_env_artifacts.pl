@@ -157,7 +157,7 @@ close($fh);
 
 # Create HTML Report below
 
-open (my $fh1, '>', $report_name) or die "Could not create file.\n";
+open (my $fh1, '>', $baseline_arts) or die "Could not create file.\n";
     
 @index_apps = sort keys %dev02_hash1;
 for $app_name (@index_apps)

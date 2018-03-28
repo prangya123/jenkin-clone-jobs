@@ -140,7 +140,7 @@ for $app_name (@index_apps)
     if ($version_dev02 ne "null")
     {
         print $fh "<tr BGCOLOR=\"#e2f4ff\"><td NOWRAP bgcolor=\"#30aaf4\">$app_count</td><td NOWRAP bgcolor=\"#30aaf4\">$app_name</td>";
-        print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[5]\">Artifact: $version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]</td>";
+        print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[5]\">Artifact: $version_dev02<BR>$dev02_hash1{$app_name}[1]:::$dev02_hash1{$app_name}[2]<BR>Route: $dev02_hash1{$app_name}[2]</td>";
 
         if ($dev02_hash1{$app_name}[5] eq "#ffa8af")
         {

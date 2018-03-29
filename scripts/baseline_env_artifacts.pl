@@ -208,7 +208,8 @@ for $app_name (@index_apps)
 
     if ($version_dev02 ne "null")
     {
-        print $fh1 "$version_dev02:$dev02_hash1{$app_name}[2]\n";
+        print $fh1 "$dev02_hash1{$app_name}[0]:$dev02_hash1{$app_name}[1]:$dev02_hash1{$app_name}[2]:$dev02_hash1{$app_name}[3]";
+        print $fh1 "\n";
 
         if ($dev02_hash1{$app_name}[5] eq "#ffa8af")
         {

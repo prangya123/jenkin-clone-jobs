@@ -52,6 +52,10 @@ my $demoprod02_space_id="0bb3331e-65bc-4125-ade7-cf6878f46bcd";
 my $demoprod02_org="Oil\&Gas_Product_Demo";
 my $demoprod02_space="demoprod02";
 
+my $bfx01_space_id="ae0ceb24-5dde-40b1-ad41-ee2fd6ee8764";
+my $bfx01_org="OGD_Development_USWest_01";
+my $bfx01_space="bfx01";
+
 my $env1_space_id;
 my $env1_org;
 my $env1_space;
@@ -75,7 +79,7 @@ my $report_name = 'env_comparison.html';
 
 if ($env1 eq $env2)
 {
-    printf "Cannot compare same environments!\nQuitting!\n\n";
+    printf "ERROR: Cannot compare same environments!\nQuitting!\n\n";
     exit 1;
 }
 
@@ -145,11 +149,16 @@ elsif ($env1 eq "PROD01")
     $env1_org = $prod_org;
     $env1_space = $prod_space;
 }
+elsif ($env1 eq "BFX01")
+{
+    $env1_space_id = $bfx01_space_id;
+    $env1_org = $bfx01_org;
+    $env1_space = $bfx01_space;
+}
 else
 {
-    $env1_space_id = $dev01_space_id;
-    $env1_org = $dev01_org;
-    $env1_space = $dev01_space;
+    printf "ERROR: $env1 seems like a new environment, please update the script to include it.\nIf it is not a new environment, please file a defect.\nQuitting!\n\n";
+    exit 1;
 }
 
 if ($env2 eq "DEV01")
@@ -218,11 +227,16 @@ elsif ($env2 eq "PROD01")
     $env2_org = $prod_org;
     $env2_space = $prod_space;
 }
+elsif ($env2 eq "BFX01")
+{
+    $env2_space_id = $bfx01_space_id;
+    $env2_org = $bfx01_org;
+    $env2_space = $bfx01_space;
+}
 else
 {
-    $env2_space_id = $qa01_space_id;
-    $env2_org = $qa01_org;
-    $env2_space = $qa01_space;
+    printf "ERROR: $env2 seems like a new environment, please update the script to include it.\nIf it is not a new environment, please file a defect.\nQuitting!\n\n";
+    exit 1;
 }
 
 `cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o \"$env1_org\" -s $env1_space`;

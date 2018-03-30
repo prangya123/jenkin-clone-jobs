@@ -148,9 +148,9 @@ else
     exit 1;
 }
 
-cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -o $env1_org -s $env1_space -p $cf_pwd;
-cf space $env1_space --guid;
-cf curl "/v2/apps?q=space_guid:$env1_space_id&results-per-page=100";
-cf curl "/v2/apps?order-direction=asc&page=2&q=space_guid:$env1_space_id&results-per-page=100";
-cf curl "/v2/apps?q=space_guid:$env1_space_id" |  jq -r '.resources[] | "\(.entity.name): \(.entity.environment_json.ARTIFACT_VERSION)"';
-cf curl "/v2/apps?q=space_guid:$env1_space_id&results-per-page=100" |  jq -r '.resources[] | "\(.entity.name): \(.entity.environment_json.BUILD_NUMBER)"';
+`cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o $env1_org -s $env1_space`;
+`cf space $env1_space --guid`;
+`cf curl "/v2/apps?q=space_guid:$env1_space_id&results-per-page=100"`;
+`cf curl "/v2/apps?order-direction=asc&page=2&q=space_guid:$env1_space_id&results-per-page=100"`;
+`cf curl "/v2/apps?q=space_guid:$env1_space_id" |  jq -r '.resources[] | "\(.entity.name): \(.entity.environment_json.ARTIFACT_VERSION)"'`;
+`cf curl "/v2/apps?q=space_guid:$env1_space_id&results-per-page=100" |  jq -r '.resources[] | "\(.entity.name): \(.entity.environment_json.BUILD_NUMBER)"'`;

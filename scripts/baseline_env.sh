@@ -4,9 +4,9 @@ cf_user = $ARGV[0];
 cf_pwd = $ARGV[1];
 env1 = $ARGV[2];
 
-qa01_space_id="7057482e-d735-47f3-8c20-3a0c99837186";
-qa01_org="OGD_Development_USWest_01";
-qa01_space="qa01";
+qa01_space_id = "7057482e-d735-47f3-8c20-3a0c99837186";
+qa01_org = "OGD_Development_USWest_01";
+qa01_space = "qa01";
 
 dev01_space_id="db7d2aa9-9f50-4e46-b321-d7181752331d";
 dev01_org="OGD_Development_USWest_01";

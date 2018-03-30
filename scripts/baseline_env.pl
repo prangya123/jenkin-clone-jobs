@@ -70,8 +70,6 @@ my @dev_apps;
 my $app_count = 1;
 my $bg_color;
 
-my $report_name = ‘apps.dat’;
-
 if ($env1 eq "DEV01")
 {
     $env1_space_id = $dev01_space_id;

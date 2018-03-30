@@ -56,73 +56,73 @@ env1_space_id=“”;
 env1_org=“”;
 env1_space=“”;
 
-   if [[ $env` = *DEV01* ]]
+   if [[ $env = *DEV01* ]]
     then
 	 env1_space_id = $dev01_space_id;
    	 env1_org = $dev01_org;
    	 env1_space = $dev01_space;
     fi
-   if [[ $env` = *DEV02* ]]
+   if [[ $env = *DEV02* ]]
     then
 	 env1_space_id = $dev02_space_id;
    	 env1_org = $dev02_org;
    	 env1_space = $dev02_space;
     fi
-   if [[ $env` = *QA01* ]]
+   if [[ $env = *QA01* ]]
     then
 	 env1_space_id = $qa01_space_id;
    	 env1_org = $qa01_org;
    	 env1_space = $qa01_space;
     fi
-   if [[ $env` = *QA02* ]]
+   if [[ $env = *QA02* ]]
     then
 	 env1_space_id = $qa02_space_id;
    	 env1_org = $qa02_org;
    	 env1_space = $qa02_space;
     fi
-   if [[ $env` = *UAT01* ]]
+   if [[ $env = *UAT01* ]]
     then
 	 env1_space_id = $uat01_space_id;
    	 env1_org = $uat01_org;
    	 env1_space = $uat01_space;
     fi
-   if [[ $env` = *UAT02* ]]
+   if [[ $env = *UAT02* ]]
     then
 	 env1_space_id = $uat02_space_id;
    	 env1_org = $uat02_org;
    	 env1_space = $uat02_space;
     fi
-   if [[ $env` = *DEMOPROD01* ]]
+   if [[ $env = *DEMOPROD01* ]]
     then
 	 env1_space_id = $demoprod_space_id;
    	 env1_org = $demoprod_org;
    	 env1_space = $demoprod_space;
     fi
-   if [[ $env` = *DEMOPROD02* ]]
+   if [[ $env = *DEMOPROD02* ]]
     then
 	 env1_space_id = $demoprod02_space_id;
    	 env1_org = $demoprod02_org;
    	 env1_space = $demoprod02_space;
     fi
-   if [[ $env` = *DEMODEV01* ]]
+   if [[ $env = *DEMODEV01* ]]
     then
 	 env1_space_id = $demodev01_space_id;
    	 env1_org = $demodev01_org;
    	 env1_space = $demodev01_space;
     fi
-   if [[ $env` = *DEMODEV02* ]]
+   if [[ $env = *DEMODEV02* ]]
     then
 	 env1_space_id = $demodev02_space_id;
    	 env1_org = $demodev02_org;
    	 env1_space = $demodev02_space;
     fi
-   if [[ $env` = *PROD01* ]]
+   if [[ $env = *PROD01* ]]
     then
 	 env1_space_id = $prod_space_id;
    	 env1_org = $prod_org;
    	 env1_space = $prod_space;
     fi
-   if [[ $env` = *BFX01* ]]
+   if [[ $env = *BFX01* ]]
     then
 	 env1_space_id = $bfx01_space_id;
    	 env1_org = $bfx01_org;

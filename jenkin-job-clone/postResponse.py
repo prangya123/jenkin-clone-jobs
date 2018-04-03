@@ -61,6 +61,7 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                 jobName = line.split('/')[-2]
                 preJobName = jobName.split('-')[-1]
                 postJobName = jobName.rsplit('-',1)[0]
+                print("THIS IS INSIDE writePostConfigXml")
                 print (arguments[-1].upper())
                 print (arguments[-2].upper())
                 if arguments[-1].upper() == 'LOWER':

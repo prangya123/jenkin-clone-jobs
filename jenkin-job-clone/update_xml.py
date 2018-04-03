@@ -19,6 +19,8 @@
 # e.g:
 # python3 update_xml.py /Users/prangyakar/PycharmProjects/create_ci_job OGD_Development_USWest_01 "'Oil&amp;Gas_Product_Demo'" dev01 demodev02
 # python3 update_xml.py /Users/prangyakar/PycharmProjects/create_ci_job OGD_Development_USWest_01 "'Oil&amp;Gas_Product_Demo'" dev01 uat000
+# python3 update_xml.py /Users/prangyakar/PycharmProjects/create_ci_job OGD_Development_USWest_01 OGD_Development_USWest_01 lowerpoc1 lowerpoc2
+# python3 update_xml.py /Users/prangyakar/PycharmProjects/create_ci_job OGD_Development_USWest_01 "'Oil&amp;Gas_Product_Demo'" lowerpoc1 temp01
 # ################################################################################################################################
 
 import os

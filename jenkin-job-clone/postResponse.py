@@ -61,7 +61,8 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                 jobName = line.split('/')[-2]
                 preJobName = jobName.split('-')[-1]
                 postJobName = jobName.rsplit('-',1)[0]
-
+                print (arguments[-1].upper())
+                print (arguments[-2].upper())
                 if arguments[-1].upper() == 'LOWER':
                 #if arguments[2].upper() in ['PERF01', 'DEV01', 'DEV02', 'QA01', 'QA02', 'LOWERPOC1', 'LOWERPOC2']: #lower target env
                     if arguments[-2].upper() == 'LOWER':
@@ -75,7 +76,7 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                     print (str)
                 #elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #higher target env
                     if arguments[-2].upper() == 'HIGHER':
-                        print ("HIGHER VIEW")
+                        
                     #if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #higher source env
                         #newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         newLine = line.rsplit('/', 4)[0] +'/'+ arguments[-3] +'/createItem?name=' + postJobName + '-' + arguments[-3] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'

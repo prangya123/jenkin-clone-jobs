@@ -75,6 +75,7 @@ def writePostConfigXml(arguments, fileName, fileNamePost):
                     print (str)
                 #elif arguments[2].upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #higher target env
                     if arguments[-2].upper() == 'HIGHER':
+                        print ("HIGHER VIEW")
                     #if preJobName.upper() in ['UAT01', 'DEMODEV01', 'DEMODEV02','DEMOPROD02', 'BFX01', 'PAMMITEMP01','PAMMITEMP02']: #higher source env
                         #newLine=line.rsplit('/',3)[0]+'/createItem?name='+ postJobName + '-' + arguments[2] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'
                         newLine = line.rsplit('/', 4)[0] +'/'+ arguments[-3] +'/createItem?name=' + postJobName + '-' + arguments[-3] + ' --data-binary @' + jobName + '.xml -H Content-Type:text/xml\n'

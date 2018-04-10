@@ -7,10 +7,10 @@
 # -----------    ----------------  -------------------------------------
 #  Date           Author            Comment
 # -----------    ----------------  -------------------------------------
-#  Dec,25.2017    Prangya P Kar      Intial Version
+# Dec-25-2017    Prangya P Kar      Intial Version
 #
 # python3 showuserstories.py --config=rallyuser.cfg
-#
+#criterion:
 #
 #################################################################################################
 
@@ -58,13 +58,14 @@ def main(args):
     projects = rally.getProjects(workspace)
 
     entity_name = 'UserStory'
-    stageFile='outputResultUS.txt'
-    finalFile='finalResultsUS.txt'
+    stageFile='outputResultUS.csv'
+    finalFile='finalResultsUS.csv'
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
 
-    ident_query = 'PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Completed'
+    #ident_query = 'PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Completed'
+    ident_query = 'PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Accepted'
 
     try:
         # for proj in projects:
@@ -80,11 +81,12 @@ def main(args):
         #             defect.PromotedImpactedEnvironment))
         #             #print("-----------------------------------------------------------------")
         #         print(response.resultCount, "qualifying defects")
-        print('FormattedID|VerifiedInBuild|Name|ScheduleState')
+        print('FormattedID|VerifiedinBuildDEPRECATED|Name|ScheduleState')
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
-            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedInBuild',
+            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildDEPRECATED',
                                  workspace=workspace, project=proj.Name)
+            #if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor']:
             if response.resultCount > 0 :
                 #print("Workspace Name: %s , Project Name: %s , Entity Name: %s " % (
                 #workspace, proj.Name, entity_name))
@@ -97,7 +99,7 @@ def main(args):
                     #             userstory.FormattedID, userstory.Name, userstory.ScheduleState, userstory.PlanEstimate, userstory.VerifiedinBuild))
                     # else:
                         print("%s|%s|%s|%s" % (
-                            userstory.FormattedID, userstory.VerifiedinBuild,userstory.Name, userstory.ScheduleState))
+                            userstory.FormattedID, userstory.VerifiedinBuildDEPRECATED,userstory.Name, userstory.ScheduleState))
                     #print("-----------------------------------------------------------------")
                     #print("%s"%(userstory.VerifiedinBuild))
         stdoutFile.close()
@@ -110,13 +112,13 @@ def main(args):
                 for line in lines:
                     VerifiedinBuild = line.split('|')[1]
                     if ',' in VerifiedinBuild:
-                                verifiedInBuildSplit = VerifiedinBuild.split(',')
-                                for i in verifiedInBuildSplit:
-                                    f2.write("%s|%s\n" % (
-                                    line.split('|')[0], i))
+                            verifiedInBuildSplit = VerifiedinBuild.split(',')
+                            for i in verifiedInBuildSplit:
+                                f2.write("%-8.8s|%s|%s\n" % (
+                                    line.split('|')[0], i , line.split('|')[2]))
                     else:
-                        f2.write("%s|%s\n" % (
-                            line.split('|')[0], line.split('|')[1]))
+                        f2.write("%-8.8s|%s|%s\n" % (
+                            line.split('|')[0], line.split('|')[1],line.split('|')[2]))
 
     except Exception:
         sys.stderr.write('ERROR:')

@@ -7,14 +7,14 @@
 # -----------    ----------------  -------------------------------------
 #  Date           Author            Comment
 # -----------    ----------------  -------------------------------------
-#  Dec,25.2017    Prangya P Kar      Intial Version
+#  Dec-25-2017    Prangya P Kar      Intial Version
 #
 # python3 showdefects.py --config=rallyuser.cfg
 #
 #criterion:
 #   PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change
 #   Exclude Projects =  'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor','Green Beret'
-#
+
 #################################################################################################
 
 import sys, os
@@ -63,13 +63,12 @@ def main(args):
 
     entity_name = 'Defect'
 
-    stageFile = 'outputResultD.txt'
-    finalFile = 'finalResultsD.txt'
+    stageFile = 'outputResultD.csv'
+    finalFile = 'finalResultsD.csv'
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
 
-    #ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change'
     ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change'
     # and Project = The Fellowship and Project != Hulk and Project != Hydra and Project != Shield and Project != Thor and Resolution = Code Change'
     try:
@@ -87,7 +86,7 @@ def main(args):
         #             #print("-----------------------------------------------------------------")
         #         print(response.resultCount, "qualifying defects")
         print(
-            'FormattedID | VerifiedInBuild | NAME | State | FixedInBuild | PromotedImpactedEnvironment')
+            'FormattedID | VerifiedInBuild | Name | State | FixedInBuild | PromotedImpactedEnvironment')
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
             response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedInBuild',
@@ -101,12 +100,15 @@ def main(args):
                     # defect.FormattedID, defect.Name, defect.State, defect.VerifiedInBuild, defect.FixedInBuild,
                     # defect.PromotedImpactedEnvironment))
                     #print("%s|%s" % ( defect.FormattedID,defect.FixedInBuild))
-                    if ',' in defect.VerifiedInBuild:
-                        verifiedInBuildSplit = defect.VerifiedInBuild.split(',')
-                        for i in verifiedInBuildSplit:
-                            print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, i, defect.Name, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
-                    else:
-                        print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.VerifiedInBuild, defect.Name, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
+                    # if ',' in defect.VerifiedInBuild:
+                    #     verifiedInBuildSplit = defect.VerifiedInBuild.split(',')
+                    #     for i in verifiedInBuildSplit:
+                    #         print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.Name, i, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
+                    # else:
+                    #    print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.Name, defect.VerifiedInBuild, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
+                    print("%s|%s|%s|%s|%s|%s" % (
+                    defect.FormattedID, defect.VerifiedInBuild, defect.Name, defect.State, defect.FixedInBuild,
+                    defect.PromotedImpactedEnvironment))
                 #print(response.resultCount, "qualifying defects")
         #print("===================================================================================================================================================================================================")
         stdoutFile.close()
@@ -121,11 +123,11 @@ def main(args):
                     if ',' in VerifiedinBuild:
                         verifiedInBuildSplit = VerifiedinBuild.split(',')
                         for i in verifiedInBuildSplit:
-                            f2.write("%s|%s\n" % (
-                                line.split('|')[0], i))
+                            f2.write("%-8.8s|%s|%s\n" % (
+                                line.split('|')[0], i ,line.split('|')[2]))
                     else:
-                        f2.write("%s|%s\n" % (
-                            line.split('|')[0], line.split('|')[1]))
+                        f2.write("%-8.8s|%s|%s\n" % (
+                            line.split('|')[0], line.split('|')[1], line.split('|')[2]))
     except Exception:
         sys.stderr.write('ERROR:')
         usage()

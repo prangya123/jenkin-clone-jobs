@@ -14,10 +14,20 @@ my $qa02_sbx_space_id="357b9319-3942-41ed-8efb-7aa257efa05e";
 my $dd02_sbx_space_id="81028cf1-b5f7-43af-8643-8ff3b24ee557";
 my $dp02_sbx_space_id="ea931220-1af1-4ae7-bb7b-d55cabcc4d7c";
 
+my $dev02_analysis_sbx_space_id="82ce41e7-6441-449b-b8d5-aaf6507bd0d6";
+my $qa02_analysis_sbx_space_id="3d138abc-383b-422d-828d-e6a30b4964ea";
+my $dd02_analysis_sbx_space_id="2b62727f-4706-4aaf-bc60-963a3530b64a";
+my $dp02_analysis_sbx_space_id="68ee9a18-8aac-45ab-b5e1-e64cbfcba020";
+
 my %dev02_hash;
 my %qa02_hash;
 my %dd02_hash;
 my %dp02_hash;
+
+my %dev02_analysis_hash;
+my %qa02_analysis_hash;
+my %dd02_analysis_hash;
+my %dp02_analysis_hash;
 
 my $hash_ref;
 my $app_name;
@@ -30,16 +40,32 @@ my $report_name = 'sbx_dashboard.html';
 $hash_ref = create_hash($dev02_sbx_space_id);
 %dev02_hash = %$hash_ref;
 
+$hash_ref = create_hash($dev02_analysis_sbx_space_id);
+%dev02_analysis_hash = %$hash_ref;
+%dev02_hash = (%dev02_hash, %dev02_analysis_hash);
+
 $hash_ref = create_hash($qa02_sbx_space_id);
 %qa02_hash = %$hash_ref;
+
+$hash_ref = create_hash($qa02_analysis_sbx_space_id);
+%qa02_analysis_hash = %$hash_ref;
+%qa02_hash = (%qa02_hash, %qa02_analysis_hash);
 
 `cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o 'Oil&Gas_Product_Demo' -s demodev02`;
 
 $hash_ref = create_hash($dd02_sbx_space_id);
 %dd02_hash = %$hash_ref;
 
+$hash_ref = create_hash($dd02_analysis_sbx_space_id);
+%dd02_analysis_hash = %$hash_ref;
+%dd02_hash = (%dd02_hash, %dd02_analysis_hash);
+
 $hash_ref = create_hash($dp02_sbx_space_id);
 %dp02_hash = %$hash_ref;
+
+$hash_ref = create_hash($dp02_analysis_sbx_space_id);
+%dp02_analysis_hash = %$hash_ref;
+%dp02_hash = (%dp02_hash, %dp02_analysis_hash);
 
 # Create HTML Report below
 

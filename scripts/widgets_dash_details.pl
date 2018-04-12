@@ -83,6 +83,14 @@ my $PROD01_TOKEN;
 my %prod01_hash;
 my %prod01_widget_info;
 
+my $BFX01_UAA="https://f6d0524d-28d1-4af8-a21c-3c779790aff4.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token/?client_id=ingestor.26b305ec-f801-4e76-b03a-ef409403546e.359a82f6-500a-4f27-b63a-6adfc1e819f1&grant_type=password&username=FuncUser01&password=Pa55w0rd";
+my $BFX01_AUTHORIZATION="aW5nZXN0b3IuMjZiMzA1ZWMtZjgwMS00ZTc2LWIwM2EtZWY0MDk0MDM1NDZlLjM1OWE4MmY2LTUwMGEtNGYyNy1iNjNhLTZhZGZjMWU4MTlmMTo=";
+my $BFX01_TENANT="28ab25e2-5922-4e71-9ee8-a7ea463bd4c3";
+my $BFX01_WRS="https://apm-widget-repo-service-svc-apm-bfx01.apm.aws-usw02-pr.predix.io/v1/widgets/";
+my $BFX01_TOKEN;
+my %bfx01_hash;
+my %bfx01_widget_info;
+
 my $index;
 my $num = 1;
 my $widget_name;
@@ -333,6 +341,35 @@ for (my $i1=0; $i1<$num1; $i1++)
 
 #print Dumper(\%demoprod02_hash);
 
+## BFX01 ## 
+
+$BFX01_TOKEN = get_token($BFX01_UAA, $BFX01_AUTHORIZATION);
+generate_json($BFX01_WRS, $BFX01_TOKEN, $BFX01_TENANT);
+
+@widget_names = `cat widgets_response.json | jq -r '"\\(.id)"'`;
+@widget_versions = `cat widgets_response.json | jq -r '"\\(.properties.ARTIFACT_VERSION)"'`;
+chomp (@widget_names);
+chomp (@widget_versions);
+
+for($index=0;$index<=$#widget_names;$index++)
+{
+    my $name1;
+    my $version1;
+    $name1 = $widget_names[$index];
+    $version1 = $widget_versions[$index];
+    $bfx01_hash{$name1} = $version1;
+}
+
+$contents = read_file();
+$data1 = decode_json($contents);
+$num1 = keys $data1->{widgets};
+
+for (my $i1=0; $i1<$num1; $i1++)
+{
+    my $v1 = $data1->{widgets}[$i1]->{'id'}; 
+    $bfx01_widget_info{$v1} = $data1->{widgets}[$i1];
+}
+
 ## PROD01 ## 
 
 $PROD01_TOKEN = get_token($PROD01_UAA, $PROD01_AUTHORIZATION);
@@ -370,7 +407,7 @@ print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xht
 print $fh "<link rel=\"stylesheet\" href=\"styles_widgets.css\">";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream widgets dashboard</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>UAT01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>DEMOPROD02</th><th>PROD01</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>UAT01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>DEMOPROD02</th><th>BFX01</th><th>PROD01</th></tr>\n";
 
 my @dev_widgets = sort keys %dev02_hash;
 for $widget_name (@dev_widgets)
@@ -383,6 +420,7 @@ for $widget_name (@dev_widgets)
     my $widget_version_demodev02 = $demodev02_hash{$widget_name};
     my $widget_version_demoprod01 = $demoprod01_hash{$widget_name};
 	my $widget_version_demoprod02 = $demoprod02_hash{$widget_name};
+    my $widget_version_bfx01 = $bfx01_hash{$widget_name};
     my $widget_version_prod01 = $prod01_hash{$widget_name};
 
     if (!defined $widget_version_qa)
@@ -489,6 +527,19 @@ for $widget_name (@dev_widgets)
         $widget_version_demoprod02 = $widget_name . "_" . $widget_version_demoprod02 . ".tar.gz";
     }
 
+    if (!defined $widget_version_bfx01)
+    {
+        $widget_version_bfx01 = "N/A";
+    }
+    elsif ($widget_version_bfx01 eq "null")
+    {
+        $widget_version_bfx01 = "N/A";
+    }
+    else
+    {
+        $widget_version_bfx01 = $widget_name . "_" . $widget_version_bfx01 . ".tar.gz";
+    }
+
     if (!defined $widget_version_prod01)
     {
         $widget_version_prod01 = "N/A";
@@ -512,6 +563,7 @@ for $widget_name (@dev_widgets)
     print $fh "<td><a class=\"button\" href=\"#demodev02_$widget_name\">$widget_version_demodev02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#demoprod01_$widget_name\">$widget_version_demoprod01</a></td>";
 	print $fh "<td><a class=\"button\" href=\"#demoprod02_$widget_name\">$widget_version_demoprod02</a></td>";
+    print $fh "<td><a class=\"button\" href=\"#bfx01_$widget_name\">$widget_version_bfx01</a></td>";
     print $fh "<td><a class=\"button\" href=\"#prod01_$widget_name\">$widget_version_prod01</a></td></tr>\n";
 
 # Print div ids below
@@ -600,11 +652,22 @@ for $widget_name (@dev_widgets)
     print $fh $pretty1;
     print $fh "</PRE></br></div></div></div>\n";
 	
-	## DEMOPROD02 ##
-        print $fh "<div id=\"demoprod02_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>DEMOPROD02 $widget_name</h2><div><PRE>";
+    print $fh "<div id=\"demoprod02_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>DEMOPROD02 $widget_name</h2><div><PRE>";
     if ($demoprod02_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($demoprod02_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
+    print $fh "</PRE></br></div></div></div>\n";
+
+    print $fh "<div id=\"bfx01_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>BFX01 $widget_name</h2><div><PRE>";
+    if ($bfx01_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($bfx01_widget_info{$widget_name});
     }
     else
     {

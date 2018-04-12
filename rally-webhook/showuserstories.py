@@ -7,14 +7,15 @@
 # -----------    ----------------  -------------------------------------
 #  Date           Author            Comment
 # -----------    ----------------  -------------------------------------
-# Dec-25-2017    Prangya P Kar      Intial Version
+#  Dec-25-2017    Prangya P Kar      Intial Version
 #
-# python3 showuserstories.py --config=rallyuser.cfg
+# python3 showdefects.py --config=rallyuser.cfg
+# python3 showuserstories.py --config=devops-rallyuser.cfg
 #criterion:
 #
 #################################################################################################
 
-import sys, os
+import sys, os, csv
 from pyral import Rally, rallyWorkset, RallyRESTAPIError
 import argparse
 
@@ -59,7 +60,10 @@ def main(args):
 
     entity_name = 'UserStory'
     stageFile='outputResultUS.csv'
-    finalFile='finalResultsUS.csv'
+    finalFile='splitResultsUS.csv'
+    finalSortedFile='sortedResultUS.csv'
+    header='FormattedID|VerifiedinBuildDEPRECATED|Name|ScheduleState'
+    finalHeader='FormattedID|VerifiedinBuildDEPRECATED|Name'
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
@@ -81,7 +85,7 @@ def main(args):
         #             defect.PromotedImpactedEnvironment))
         #             #print("-----------------------------------------------------------------")
         #         print(response.resultCount, "qualifying defects")
-        print('FormattedID|VerifiedinBuildDEPRECATED|Name|ScheduleState')
+        print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
             response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildDEPRECATED',
@@ -115,10 +119,20 @@ def main(args):
                             verifiedInBuildSplit = VerifiedinBuild.split(',')
                             for i in verifiedInBuildSplit:
                                 f2.write("%-8.8s|%s|%s\n" % (
-                                    line.split('|')[0], i , line.split('|')[2]))
+                                    line.split('|')[0], i.strip() , line.split('|')[2]))
                     else:
                         f2.write("%-8.8s|%s|%s\n" % (
                             line.split('|')[0], line.split('|')[1],line.split('|')[2]))
+
+        #Now sort the finalFile and write into finalSortedFile
+        with open(finalFile, mode='rt') as f, open(finalSortedFile, 'w') as final:
+            writer = csv.writer(final, delimiter='|')
+            reader = csv.reader(f, delimiter='|')
+            _ = next(reader)
+            result = sorted(reader, key=lambda row: row[1])
+            final.write(finalHeader+'\n')
+            for row in result:
+                writer.writerow(row)
 
     except Exception:
         sys.stderr.write('ERROR:')
@@ -126,7 +140,8 @@ def main(args):
         raise
         sys.exit(1)
 
-    fields = "FormattedID,Name,Release,Iteration,ScheduleState,VerifiedInBuild,PlanEstimate,Project,Owner,Feature"
+#    fields = "FormattedID,Name,Release,Iteration,ScheduleState,VerifiedInBuild,PlanEstimate,Project,Owner,Feature"
+
 
 
 

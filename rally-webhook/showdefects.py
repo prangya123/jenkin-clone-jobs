@@ -10,6 +10,7 @@
 #  Dec-25-2017    Prangya P Kar      Intial Version
 #
 # python3 showdefects.py --config=rallyuser.cfg
+# python3 showdefects.py --config=devops-rallyuser.cfg
 #
 #criterion:
 #   PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change
@@ -69,7 +70,7 @@ def main(args):
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
 
-    ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change'
+    ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and VerifiedInBuild != NA and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change'
     # and Project = The Fellowship and Project != Hulk and Project != Hydra and Project != Shield and Project != Thor and Resolution = Code Change'
     try:
         # for proj in projects:
@@ -124,7 +125,7 @@ def main(args):
                         verifiedInBuildSplit = VerifiedinBuild.split(',')
                         for i in verifiedInBuildSplit:
                             f2.write("%-8.8s|%s|%s\n" % (
-                                line.split('|')[0], i ,line.split('|')[2]))
+                                line.split('|')[0], i.strip() ,line.split('|')[2]))
                     else:
                         f2.write("%-8.8s|%s|%s\n" % (
                             line.split('|')[0], line.split('|')[1], line.split('|')[2]))

@@ -7,7 +7,7 @@
 # -----------    ----------------  -------------------------------------
 #  Date           Author            Comment
 # -----------    ----------------  -------------------------------------
-#  Dec-25-2017    Prangya P Kar      Intial Version
+#   Dec-25-2017    Prangya P Kar      Intial Version
 #
 # python3 showdefects.py --config=rallyuser.cfg
 # python3 showdefects.py --config=devops-rallyuser.cfg
@@ -18,7 +18,7 @@
 
 #################################################################################################
 
-import sys, os
+import sys, os, csv
 from pyral import Rally, rallyWorkset, RallyRESTAPIError
 import argparse
 
@@ -66,6 +66,10 @@ def main(args):
 
     stageFile = 'outputResultD.csv'
     finalFile = 'finalResultsD.csv'
+    finalFile = 'splitResultsD.csv'
+    finalSortedFile = 'sortedResultD.csv'
+    header = 'FormattedID | VerifiedInBuild | Name | State | FixedInBuild | PromotedImpactedEnvironment'
+    finalHeader = 'FormattedID|VerifiedinBuild|Name'
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
@@ -86,8 +90,7 @@ def main(args):
         #             defect.PromotedImpactedEnvironment))
         #             #print("-----------------------------------------------------------------")
         #         print(response.resultCount, "qualifying defects")
-        print(
-            'FormattedID | VerifiedInBuild | Name | State | FixedInBuild | PromotedImpactedEnvironment')
+        print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
             response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedInBuild',
@@ -129,6 +132,17 @@ def main(args):
                     else:
                         f2.write("%-8.8s|%s|%s\n" % (
                             line.split('|')[0], line.split('|')[1], line.split('|')[2]))
+
+        # Now sort the finalFile and write into finalSortedFile
+        with open(finalFile, mode='rt') as f, open(finalSortedFile, 'w') as final:
+            writer = csv.writer(final, delimiter='|')
+            reader = csv.reader(f, delimiter='|')
+            _ = next(reader)
+            result = sorted(reader, key=lambda row: row[1])
+            final.write(finalHeader + '\n')
+            for row in result:
+                writer.writerow(row)
+
     except Exception:
         sys.stderr.write('ERROR:')
         usage()
@@ -146,5 +160,4 @@ def main(args):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
     sys.exit(0)

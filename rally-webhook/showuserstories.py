@@ -7,9 +7,9 @@
 # -----------    ----------------  -------------------------------------
 #  Date           Author            Comment
 # -----------    ----------------  -------------------------------------
-#  Dec-25-2017    Prangya P Kar      Intial Version
+#   Dec-25-2017    Prangya P Kar      Intial Version
 #
-# python3 showdefects.py --config=rallyuser.cfg
+# python3 showuserstories.py --config=rallyuser.cfg
 # python3 showuserstories.py --config=devops-rallyuser.cfg
 #criterion:
 #

@@ -93,7 +93,7 @@ def main(args):
         print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
-            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedInBuild',
+            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildTOBEUSED',
                                  workspace=workspace, project=proj.Name)
             if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor','Green Beret']:
                 #print("Workspace Name: %s , Project Name: %s , Entity Name: %s " % (
@@ -111,7 +111,7 @@ def main(args):
                     # else:
                     #    print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.Name, defect.VerifiedInBuild, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
                     print("%s|%s|%s|%s|%s|%s" % (
-                    defect.FormattedID, defect.VerifiedInBuild, defect.Name, defect.State, defect.FixedInBuild,
+                    defect.FormattedID, defect.VerifiedinBuildTOBEUSED, defect.Name, defect.State, defect.FixedInBuild,
                     defect.PromotedImpactedEnvironment))
                 #print(response.resultCount, "qualifying defects")
         #print("===================================================================================================================================================================================================")

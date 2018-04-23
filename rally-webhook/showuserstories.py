@@ -88,7 +88,7 @@ def main(args):
         print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
-            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildDEPRECATED',
+            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildTOBEUSED',
                                  workspace=workspace, project=proj.Name)
             #if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor']:
             if response.resultCount > 0 :
@@ -103,7 +103,7 @@ def main(args):
                     #             userstory.FormattedID, userstory.Name, userstory.ScheduleState, userstory.PlanEstimate, userstory.VerifiedinBuild))
                     # else:
                         print("%s|%s|%s|%s" % (
-                            userstory.FormattedID, userstory.VerifiedinBuildDEPRECATED,userstory.Name, userstory.ScheduleState))
+                            userstory.FormattedID, userstory.userstory.VerifiedinBuildTOBEUSED,userstory.Name, userstory.ScheduleState))
                     #print("-----------------------------------------------------------------")
                     #print("%s"%(userstory.VerifiedinBuild))
         stdoutFile.close()

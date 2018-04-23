@@ -103,7 +103,7 @@ def main(args):
                     #             userstory.FormattedID, userstory.Name, userstory.ScheduleState, userstory.PlanEstimate, userstory.VerifiedinBuild))
                     # else:
                         print("%s|%s|%s|%s" % (
-                            userstory.FormattedID, userstory.userstory.VerifiedinBuildTOBEUSED,userstory.Name, userstory.ScheduleState))
+                            userstory.FormattedID, userstory.VerifiedinBuildTOBEUSED,userstory.Name, userstory.ScheduleState))
                     #print("-----------------------------------------------------------------")
                     #print("%s"%(userstory.VerifiedinBuild))
         stdoutFile.close()

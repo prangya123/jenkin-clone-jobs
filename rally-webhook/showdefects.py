@@ -68,8 +68,8 @@ def main(args):
     #finalFile = 'finalResultsD.csv'
     finalFile = 'splitResultsD.csv'
     finalSortedFile = 'sortedResultD.csv'
-    header = 'FormattedID | VerifiedInBuild | Name | State | FixedInBuild | PromotedImpactedEnvironment'
-    finalHeader = 'FormattedID|VerifiedinBuild|Name'
+    header = 'FormattedID | VerifiedinBuildTOBEUSED | Name | State | FixedInBuild | PromotedImpactedEnvironment'
+    finalHeader = 'FormattedID|VerifiedinBuildTOBEUSED|Name'
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile

@@ -65,7 +65,7 @@ def main(args):
     entity_name = 'Defect'
 
     stageFile = 'outputResultD.csv'
-    finalFile = 'finalResultsD.csv'
+    #finalFile = 'finalResultsD.csv'
     finalFile = 'splitResultsD.csv'
     finalSortedFile = 'sortedResultD.csv'
     header = 'FormattedID | VerifiedInBuild | Name | State | FixedInBuild | PromotedImpactedEnvironment'

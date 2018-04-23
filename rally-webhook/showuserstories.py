@@ -63,7 +63,7 @@ def main(args):
     finalFile='splitResultsUS.csv'
     finalSortedFile='sortedResultUS.csv'
     header='FormattedID|VerifiedinBuildDEPRECATED|Name|ScheduleState'
-    finalHeader='FormattedID|VerifiedinBuildDEPRECATED|Name'
+    finalHeader='FormattedID|VerifiedinBuildTOBEUSED|Name'
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile

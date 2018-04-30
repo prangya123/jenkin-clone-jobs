@@ -8,9 +8,10 @@
 # Bug fixed version 1.2 (CSS popup jumps back to top of page when closed).
 # Bug fixed version 1.3 (Wrong route display for prod app).
 # Added Dev02, Qa02 and DemoDev02
+# Added Bfx01
 # Removed Dev01
 # Author: Sufyan
-# Version: 1.4
+# Version: 1.5
 
 
 use warnings;
@@ -37,6 +38,7 @@ my $prod_space_id="88d8a240-068b-43c7-9f27-1365cd4c5a22";
 my $dev02_space_id="3ef76363-abd9-4a0a-b479-51c0e6ece072";
 my $qa02_space_id="d1ed22a9-ddb8-4100-b786-719d441b4755";
 my $demodev02_space_id="1bbc1c0a-3e50-4a4a-ab76-30ca2131ce04";
+my $bfx01_space_id="ae0ceb24-5dde-40b1-ad41-ee2fd6ee8764";
 
 my %qa_hash1;
 
@@ -48,6 +50,7 @@ my %prod_hash1;
 my %dev02_hash1;
 my %qa02_hash1;
 my %demodev02_hash1;
+my %bfx01_hash1;
 
 my $hash_ref;
 my $app_name;
@@ -71,6 +74,7 @@ my $prod_ctr = 0;
 my $dev02_ctr = 0;
 my $qa02_ctr = 0;
 my $demodev02_ctr = 0;
+my $bfx01_ctr = 0;
 
 `cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o OGD_Development_USWest_01 -s qa01`;
 
@@ -89,6 +93,9 @@ $hash_ref = create_hash($dev02_space_id);
 
 $hash_ref = create_hash($qa02_space_id);
 %qa02_hash1 = %$hash_ref;
+
+$hash_ref = create_hash($bfx01_space_id);
+%bfx01_hash1 = %$hash_ref;
 
 `cf login -a https://api.system.aws-usw02-pr.ice.predix.io -u $cf_user -p $cf_pwd -o "Oil\&Gas_Product_Demo" -s prod-ogd-current`;
 
@@ -113,7 +120,7 @@ print $fh "<META HTTP-EQUIV=\"refresh\" CONTENT=\"300\">";
 print $fh "<link rel=\"stylesheet\" href=\"styles.css\">";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\" >IntelliStream environments dashboard</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMODEV02</th><th>DEMOPREPROD01</th><th>PROD</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMODEV02</th><th>DEMOPREPROD01</th><th>BFX01</th><th>PROD</th></tr>\n";
 
 @dev02_apps = sort keys %dev02_hash1;
 for $app_name (@dev02_apps)
@@ -128,6 +135,7 @@ for $app_name (@dev02_apps)
 	
     my $version_qa02 = $qa02_hash1{$app_name}[0];
     my $version_demodev02 = $demodev02_hash1{$app_name}[0];
+	my $version_bfx01 = $bfx01_hash1{$app_name}[0];
 
     if (!defined $version_qa)
     {
@@ -164,6 +172,10 @@ for $app_name (@dev02_apps)
     if (!defined $version_demodev02)
     {
         $version_demodev02 = "Missing";
+    }
+	  if (!defined $version_bfx01)
+    {
+        $version_bfx01 = "Missing";
     }
 ##### Dev02		
     if ($version_dev02 ne "null")
@@ -279,7 +291,25 @@ for $app_name (@dev02_apps)
             }
         }
 
+##### bfx01
 
+        if ($version_bfx01 eq "Missing")
+        {
+            print $fh "<td NOWRAP>App is missing</td>";
+        }
+        else
+        {
+            print $fh "<td NOWRAP BGCOLOR=\"$bfx01_hash1{$app_name}[8]\">Version: 1.0.0.$version_bfx01<BR>Instances running: $bfx01_hash1{$app_name}[3]/$bfx01_hash1{$app_name}[4]<BR>Route: $bfx01_hash1{$app_name}[2]<BR>Last uploaded: $bfx01_hash1{$app_name}[5]<BR>Memory: $bfx01_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#bfx01_$app_count\">Bound Services </a></p></td>";
+
+            if ($demoprod_hash1{$app_name}[8] eq "#ffa8af")
+            {
+                $down_apps[$bfx01_ctr][4] = $app_name;
+                $bfx01_ctr++;
+            }
+        }
+	
+		
+##### Prod
 
         if ($version_prod eq "Missing")
         {
@@ -304,6 +334,7 @@ for $app_name (@dev02_apps)
 		$dev02_hash1{$app_name}[6]=~ s/,/<br>/g;
 		$qa02_hash1{$app_name}[6]=~ s/,/<br>/g;
 		$demodev02_hash1{$app_name}[6] =~ s/,/<br>/g;
+		$bfx01_hash1{$app_name}[6] =~ s/,/<br>/g;
 		
     print $fh "<div id=\"prod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $prod_hash1{$app_name}[6]</br></div></div></div>\n";
     
@@ -315,7 +346,9 @@ for $app_name (@dev02_apps)
     print $fh "<div id=\"dev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $dev02_hash1{$app_name}[6]</br></div></div></div>\n";
 	print $fh "<div id=\"qa02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa02_hash1{$app_name}[6]</br></div></div></div>\n";
 	print $fh "<div id=\"demodev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demodev02_hash1{$app_name}[6]</br></div></div></div>\n";
-        $app_count++;
+    print $fh "<div id=\"bfx01_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $bfx01_hash1{$app_name}[6]</br></div></div></div>\n";    
+		
+		$app_count++;
     }
     else
     {

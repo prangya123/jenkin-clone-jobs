@@ -28,8 +28,8 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hl:o:", ["outputResultUS="])
 
-    except getopt.GetoptError, exc:
-        print exc.msg
+    except getopt.GetoptError as exc:
+        print(exc.msg)
         usage()
         sys.exit(2)
 
@@ -60,7 +60,7 @@ def main(argv):
 
     except Exception as ex:
         if str(ex):
-            print str(ex) + "\n"
+            print (str(ex) + "\n")
 
         exit_status = 1
         exit_message = 'Failed'
@@ -94,7 +94,7 @@ class SanitizeOutputResultUS(object):
             self.__validate_inputData()
 
         except Exception as ex:
-            print ex
+            print (ex)
             raise ex
 
     def __validate_inputData(self):
@@ -155,12 +155,12 @@ def create_log_file():
     logger.addHandler(handler)
 
 def usage():
-  print "\n"
+  print ("\n")
   usage_message_one = ("Usage: " + __file__ + " [-h] -o <outputResultUS>]")
   usage_message_two = ("Usage: " + __file__ + " [-h] --outputResultUS <outputResultUS>]")
-  print usage_message_one
-  print "OR"
-  print usage_message_two
+  print (usage_message_one)
+  print ("OR")
+  print (usage_message_two)
 
 def validate_platform_clear_screen():
     platform_system = platform.system()

@@ -114,7 +114,7 @@ p {
 }
 a:-webkit-any-link {
    /* color: -webkit-link; */
-    cursor: auto;
+    cursor: pointer;
  /*   text-decoration: underline; */
 }
 

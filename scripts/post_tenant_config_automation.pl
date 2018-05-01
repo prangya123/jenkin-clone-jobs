@@ -83,9 +83,13 @@ $old_val = substr ($contents, $row_offset, $cell_end-$row_offset, $new_artifact)
 #printf "NEW TASK IS $task\n";
 #printf "OLD ART IS $old_val\n";
 
-open (my $fh, '>', "post_tenant_config.dat") or die "Could not create file.\n";
+open (my $fh, '>', "post_tenant_config.html") or die "Could not create file.\n";
 print $fh $contents;
 close($fh);
+
+open (my $fh, '>', "post_tenant_config.dat") or die "Could not create file.\n";
+print $fh1 $contents;
+close($fh1);
 
 # FUNCTIONS BELOW
 
@@ -94,9 +98,12 @@ sub read_file
     my $test_obj;
     {
     local $/; #Enable 'slurp' mode
-    open my $fh, "<", "post_tenant_config.dat";
+    open my $fh, "<", "post_tenant_config.html";
     $test_obj = <$fh>;
     close $fh;
+    open my $fh1, "<", "post_tenant_config.html";
+    $test_obj1 = <$fh1>;
+    close $fh1;
     }
-    return $test_obj;
+    return $test_obj1;
 }

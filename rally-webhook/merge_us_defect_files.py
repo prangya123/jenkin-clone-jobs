@@ -149,8 +149,9 @@ class MergeFiles(object):
                         f2.write("%-8.8s|%s|%s\n" % (
                             line.split('|')[0], artifact_name, line.split('|')[2]))
                     else:
-                        f2.write("%-8.8s|%s|%s\n" % (
-                            line.split('|')[0], verifiedInBuild, line.split('|')[2]))
+                        #if ('.zip' in verifiedInBuild or '.gz' in verifiedInBuild):
+                            #f2.write("%-8.8s|%s|%s\n" % (line.split('|')[0], verifiedInBuild, line.split('|')[2]))
+                        f2.write("%-8.8s|%s|%s\n" % (line.split('|')[0], verifiedInBuild, line.split('|')[2]))
 
     def merge_file(self):
         # Merge files
@@ -199,6 +200,7 @@ class MergeFiles(object):
                 for line in lines:
                     verifiedInBuild = line.split('|')[1]
                     if verifiedInBuild != 'None' and verifiedInBuild != '' and verifiedInBuild != 'N/A':
+                    #if ('.zip' in verifiedInBuild or '.gz' in verifiedInBuild):
                         f2.write(verifiedInBuild + ", ")
 
 

@@ -18,6 +18,7 @@ sanitizeOutputResultFile = 'sanitizeOutputResultUS.csv'
 
 def main(argv):
     logger.info("In main method .................")
+    print(platform.python_version())
 
     outputResultUS = None
 
@@ -107,24 +108,27 @@ class SanitizeOutputResultUS(object):
 
     def sanitize_output_result_us(self):
         logger.info("In sanitize_output_result_us method .................")
-        with open('outputResultUS.csv') as f1:
+        with open(self.outputResultUS) as f1:
+            f1.readline()  # skip header
+            lines = (line.rstrip() for line in f1)  # All lines including the blank ones
+            lines = (line for line in lines if line)  # Non-blank lines
             with open(sanitizeOutputResultFile, 'w') as f2:
                 f2.write(finalHeader + '\n')
-                f1.next()  # skip header
-                for line in f1:
+                for line in lines:
                     verifiedInBuild = line.split('|')[1]
                     split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
-                    artifact_list = ""
+                    artifact_name = ""
                     for value in split_verifiedInBuild:
                         if '.zip' in value:
-                            if '.zip,' in value:
-                                artifact_list += value
-                            else:
-                                artifact_list += value+','
+                            artifact_name = value
+                            break
+                        elif '.gz' in value:
+                            artifact_name = value
+                            break
 
-                    if artifact_list:
+                    if artifact_name:
                         f2.write("%-8.8s|%s|%s\n" % (
-                            line.split('|')[0], artifact_list, line.split('|')[2]))
+                            line.split('|')[0], artifact_name, line.split('|')[2]))
                     else:
                         f2.write("%-8.8s|%s|%s\n" % (
                             line.split('|')[0], verifiedInBuild, line.split('|')[2]))

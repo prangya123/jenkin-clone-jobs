@@ -110,8 +110,11 @@ def main(args):
                     #         print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.Name, i, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
                     # else:
                     #    print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.Name, defect.VerifiedInBuild, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
+                    FixedInBuild = defect.FixedInBuild
+                    if FixedInBuild != None:
+                        FixedInBuild = FixedInBuild.encode("utf-8")
                     print("%s|%s|%s|%s|%s|%s" % (
-                    defect.FormattedID, defect.VerifiedinBuildTOBEUSED, defect.Name, defect.State, defect.FixedInBuild,
+                    defect.FormattedID, defect.VerifiedinBuildTOBEUSED, defect.Name, defect.State, FixedInBuild,
                     defect.PromotedImpactedEnvironment))
                 #print(response.resultCount, "qualifying defects")
         #print("===================================================================================================================================================================================================")

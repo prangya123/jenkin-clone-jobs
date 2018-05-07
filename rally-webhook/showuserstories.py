@@ -102,8 +102,11 @@ def main(args):
                     #             print("%s|%s|%s|%s|%s" % (
                     #             userstory.FormattedID, userstory.Name, userstory.ScheduleState, userstory.PlanEstimate, userstory.VerifiedinBuild))
                     # else:
+                        VerifiedinBuildTOBEUSED = userstory.VerifiedinBuildTOBEUSED
+                        if VerifiedinBuildTOBEUSED != None:
+                            VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
                         print("%s|%s|%s|%s" % (
-                            userstory.FormattedID, userstory.VerifiedinBuildTOBEUSED,userstory.Name, userstory.ScheduleState))
+                            userstory.FormattedID, VerifiedinBuildTOBEUSED,userstory.Name, userstory.ScheduleState))
                     #print("-----------------------------------------------------------------")
                     #print("%s"%(userstory.VerifiedinBuild))
         stdoutFile.close()

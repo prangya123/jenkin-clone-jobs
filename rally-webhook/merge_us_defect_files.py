@@ -7,6 +7,7 @@ import datetime
 import platform
 import sys
 import csv
+import re
 
 logging.getLogger("requests").setLevel(logging.WARNING)
 
@@ -18,9 +19,11 @@ mergedResultFile = 'mergedResult.csv'
 mergedSortedResultFile = 'mergedSortedResult.csv'
 sortedIdFile = 'sortedId.csv'
 verifiedInBuildFile = 'verifiedInBuild.csv'
+sanitizeSortedResultUSFile = 'sanitizeSortedResultUS.csv'
 
 def main(argv):
     logger.info("In main method .................")
+    print(platform.python_version())
 
     sortedResultD = None
     sortedResultUS = None
@@ -32,8 +35,8 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hl:d:u:", ["sortedResultD=", "sortedResultUS="])
 
-    except getopt.GetoptError, exc:
-        print exc.msg
+    except getopt.GetoptError as  exc:
+        print(exc.msg)
         usage()
         sys.exit(2)
 
@@ -58,6 +61,7 @@ def main(argv):
         print("\n")
         merge_files = MergeFiles(sortedResultD, sortedResultUS)
 
+        merge_files.sanitize_output_result_us()
         merge_files.merge_file()
         merge_files.sort_merged_file()
         merge_files.get_sorted_id()
@@ -68,7 +72,7 @@ def main(argv):
 
     except Exception as ex:
         if str(ex):
-            print str(ex) + "\n"
+            print (str(ex) + "\n")
 
         exit_status = 1
         exit_message = 'Failed'
@@ -104,7 +108,7 @@ class MergeFiles(object):
             self.__validate_inputData()
 
         except Exception as ex:
-            print ex
+            print (ex)
             raise ex
 
     def __validate_inputData(self):
@@ -121,10 +125,37 @@ class MergeFiles(object):
             raise AttributeError(error_message)
 
 
+    def sanitize_output_result_us(self):
+        logger.info("In sanitize_output_result_us method .................")
+        with open(self.sortedResultUS) as f1:
+            f1.readline()  # skip header
+            lines = (line.rstrip() for line in f1)  # All lines including the blank ones
+            lines = (line for line in lines if line)  # Non-blank lines
+            with open(sanitizeSortedResultUSFile, 'w') as f2:
+                f2.write(finalHeader + '\n')
+                for line in lines:
+                    verifiedInBuild = line.split('|')[1]
+                    split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
+                    artifact_name = ""
+                    for value in split_verifiedInBuild:
+                        if '.zip' in value:
+                            artifact_name = value
+                            break
+                        elif '.gz' in value:
+                            artifact_name = value
+                            break
+
+                    if artifact_name:
+                        f2.write("%-8.8s|%s|%s\n" % (
+                            line.split('|')[0], artifact_name, line.split('|')[2]))
+                    else:
+                        f2.write("%-8.8s|%s|%s\n" % (
+                            line.split('|')[0], verifiedInBuild, line.split('|')[2]))
+
     def merge_file(self):
         # Merge files
         logger.info("In merge_file method .................")
-        filenames = [self.sortedResultD, self.sortedResultUS]
+        filenames = [self.sortedResultD, sanitizeSortedResultUSFile]
         with open(mergedResultFile, 'w') as outfile:
             outfile.write(finalHeader + '\n')
             for fname in filenames:
@@ -140,7 +171,7 @@ class MergeFiles(object):
             writer = csv.writer(final, delimiter='|')
             reader = csv.reader(f, delimiter='|')
             _ = next(reader)
-            result = sorted(reader, key=lambda row: row[1])
+            result = sorted(filter(None, reader), key=lambda row: row[1])
             final.write(finalHeader + '\n')
             for row in result:
                 writer.writerow(row)
@@ -149,9 +180,11 @@ class MergeFiles(object):
         # get ids from sorted merged file
         logger.info("In get_sorted_id method .................")
         with open(mergedSortedResultFile) as f1:
+            lines = (line.rstrip() for line in f1)  # All lines including the blank ones
+            lines = (line for line in lines if line)  # Non-blank lines
             with open(sortedIdFile, 'w') as f2:
-                f1.next()  # skip header
-                for line in f1:
+                f1.readline()  # skip header
+                for line in lines:
                     ids = line.split('|')[0]
                     f2.write(ids+", ")
 
@@ -159,12 +192,14 @@ class MergeFiles(object):
         # get verified_in_build from sorted merged file
         logger.info("In get_sorted_verified_in_build method .................")
         with open(mergedSortedResultFile) as f1:
+            lines = (line.rstrip() for line in f1)  # All lines including the blank ones
+            lines = (line for line in lines if line)  # Non-blank lines
             with open(verifiedInBuildFile, 'w') as f2:
-                f1.next()  # skip header
-                for line in f1:
+                f1.readline()  # skip header
+                for line in lines:
                     verifiedInBuild = line.split('|')[1]
-                    f2.write(verifiedInBuild+", ")
-
+                    if verifiedInBuild != 'None':
+                        f2.write(verifiedInBuild + ", ")
 
 
 
@@ -193,12 +228,12 @@ def create_log_file():
     logger.addHandler(handler)
 
 def usage():
-  print "\n"
+  print ("\n")
   usage_message_one = ("Usage: " + __file__ + " [-h] -d <sortedResultD> -u <sortedResultUS>]")
   usage_message_two = ("Usage: " + __file__ + " [-h] --sortedResultD <sortedResultD> --sortedResultUS <sortedResultUS>]")
-  print usage_message_one
-  print "OR"
-  print usage_message_two
+  print (usage_message_one)
+  print ("OR")
+  print (usage_message_two)
 
 def validate_platform_clear_screen():
     platform_system = platform.system()

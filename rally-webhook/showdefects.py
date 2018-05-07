@@ -95,6 +95,7 @@ def main(args):
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
             response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildTOBEUSED',
                                  workspace=workspace, project=proj.Name)
+            response.encoding = "utf-8"
             if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor','Green Beret']:
                 #print("Workspace Name: %s , Project Name: %s , Entity Name: %s " % (
                 #workspace, proj.Name, entity_name))
@@ -113,8 +114,13 @@ def main(args):
                     FixedInBuild = defect.FixedInBuild
                     if FixedInBuild != None:
                         FixedInBuild = FixedInBuild.encode("utf-8")
+
+                    VerifiedinBuildTOBEUSED = defect.VerifiedinBuildTOBEUSED
+                    if VerifiedinBuildTOBEUSED != None:
+                        VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
+
                     print("%s|%s|%s|%s|%s|%s" % (
-                    defect.FormattedID, defect.VerifiedinBuildTOBEUSED, defect.Name, defect.State, FixedInBuild,
+                    defect.FormattedID, VerifiedinBuildTOBEUSED, defect.Name, defect.State, FixedInBuild,
                     defect.PromotedImpactedEnvironment))
                 #print(response.resultCount, "qualifying defects")
         #print("===================================================================================================================================================================================================")

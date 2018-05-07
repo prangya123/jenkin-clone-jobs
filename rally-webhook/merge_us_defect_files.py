@@ -198,7 +198,7 @@ class MergeFiles(object):
                 f1.readline()  # skip header
                 for line in lines:
                     verifiedInBuild = line.split('|')[1]
-                    if verifiedInBuild != 'None':
+                    if verifiedInBuild != 'None' and verifiedInBuild != '' and verifiedInBuild != 'N/A':
                         f2.write(verifiedInBuild + ", ")
 
 

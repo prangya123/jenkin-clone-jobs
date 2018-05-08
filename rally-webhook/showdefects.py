@@ -35,9 +35,12 @@ errout = sys.stderr.write
 #################################################################################################
 def usage():
   print ("\n")
-  usage_message_main = ("Usage: " + __file__ + " [-h] [--help] --config=<configFile>")
-  usage_message_add = ("[UAT Promotion lists of Defect(s)] This script is to lists all  Defect(s) which are ready for UAT promotions")
-  print (usage_message_main)
+  usage_message_main1 = ("Usage: " + __file__ + "[--help] --config_file <config_file> --environment <environment>")
+  usage_message_main2 = ("Usage: " + __file__ + " [-h] -c <config_file> -e <environment>")
+  usage_message_add = ("[Environment Promotion list of Defect(s)] This script lists all  Defect(s) which are ready for promotion for a specified environment")
+  print (usage_message_main1)
+  print("OR")
+  print(usage_message_main2)
   print(usage_message_add)
   print("\n")
 

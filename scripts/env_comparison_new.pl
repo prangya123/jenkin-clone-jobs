@@ -56,6 +56,10 @@ my $bfx01_space_id="ae0ceb24-5dde-40b1-ad41-ee2fd6ee8764";
 my $bfx01_org="OGD_Development_USWest_01";
 my $bfx01_space="bfx01";
 
+my $perf02_space_id="13a5c874-204a-44ec-88a3-20346c3b3f6b";
+my $perf02_org="OGD_Development_USWest_01";
+my $perf02_space="perf02";
+
 my $env1_space_id;
 my $env1_org;
 my $env1_space;
@@ -155,6 +159,13 @@ elsif ($env1 eq "BFX01")
     $env1_org = $bfx01_org;
     $env1_space = $bfx01_space;
 }
+
+elsif ($env1 eq "PERF02")
+{
+    $env1_space_id = $perf02_space_id;
+    $env1_org = $perf02_org;
+    $env1_space = $perf02_space;
+}
 else
 {
     printf "ERROR: $env1 seems like a new environment, please update the script to include it.\nIf it is not a new environment, please file a defect.\nQuitting!\n\n";
@@ -232,6 +243,12 @@ elsif ($env2 eq "BFX01")
     $env2_space_id = $bfx01_space_id;
     $env2_org = $bfx01_org;
     $env2_space = $bfx01_space;
+}
+elsif ($env2 eq "PERF02")
+{
+    $env2_space_id = $perf02_space_id;
+    $env2_org = $perf02_org;
+    $env2_space = $perf02_space;
 }
 else
 {

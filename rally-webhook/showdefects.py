@@ -19,6 +19,7 @@
 #################################################################################################
 
 import sys, os, csv
+import getopt
 from pyral import Rally, rallyWorkset, RallyRESTAPIError
 import argparse
 
@@ -43,17 +44,25 @@ def usage():
 #################################################################################################
 
 def main(args):
-    if "-h" in args or "--help" in args or len(args) < 1:
+    environment = None
+    config_file = None
+    try:
+        opts, args = getopt.getopt(args, "h:c:e:", ["config_file=", "environment=", "help="])
+    except getopt.GetoptError as exc:
+        print(exc.msg)
         usage()
-        sys.exit(1)
+        sys.exit(2)
 
-    options = [opt for opt in sys.argv[1:] if opt.startswith('--')]
-    args = [arg for arg in sys.argv[1:] if arg not in options]
-    if len(options) < 1:
-        usage()
-        sys.exit(1)
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit(0)
 
-    server, username, password, apikey, workspace, project = rallyWorkset(options)
+        elif opt in ("-c", "--config_file"):
+            config_file = arg
+        elif opt in ("-e", "--environment"):
+            environment = arg
+    server, username, password, apikey, workspace, project = rallyWorkset(config_file)
 
     if apikey:
         rally = Rally(server, apikey=apikey, workspace=workspace, project=project)
@@ -74,7 +83,9 @@ def main(args):
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
 
-    ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and VerifiedInBuild != NA and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change'
+    ident_query = 'PromotedImpactedEnvironment = {} and State = Closed and VerifiedEnvironment = {} and ' \
+                  'VerifiedInBuild != NA and Resolution = Code Change or Resolution = Configuration Change or ' \
+                  'Resolution = Database Change'.format(environment, environment)
     # and Project = The Fellowship and Project != Hulk and Project != Hydra and Project != Shield and Project != Thor and Resolution = Code Change'
     try:
         # for proj in projects:

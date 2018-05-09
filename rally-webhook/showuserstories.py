@@ -94,9 +94,7 @@ def main(args):
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
     rally_query = None
-    #ident_query = 'PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Completed'
-    #ident_query = 'PromotedImpactedEnvironment = {} and VerifiedEnvironment = {} and ScheduleState = Accepted'.format(environment, environment)
-    query_file = os.path.join('..', QUERY_FILE)
+
     if os.path.isfile(QUERY_FILE) is False:
         err_msg = "File ["+QUERY_FILE+"] is not present."
         raise AttributeError(err_msg)

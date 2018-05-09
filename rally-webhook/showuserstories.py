@@ -17,6 +17,7 @@
 
 import sys, os, csv
 import getopt
+import og_utils
 from pyral import Rally, rallyWorkset, RallyRESTAPIError
 import argparse
 
@@ -40,7 +41,15 @@ def usage():
   print("\n")
 
 #################################################################################################
+def verify_inputs(config_file, environment):
+    if not config_file:
+        em1 = "config_file is a mandatory input parameter."
+        raise AttributeError(em1)
+    if not environment:
+        em2 = "environment is a mandatory input parameter."
+        raise AttributeError(em2)
 
+QUERY_FILE = 'rally_userstory_config.json'
 
 def main(args):
     environment = None
@@ -61,6 +70,8 @@ def main(args):
             config_file = arg
         elif opt in ("-e", "--environment"):
             environment = arg
+    verify_inputs(config_file, environment)
+
     rally_input=[]
     input = "--config="+config_file
     rally_input.append(input)
@@ -82,9 +93,21 @@ def main(args):
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
-
+    rally_query = None
     #ident_query = 'PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Completed'
-    ident_query = 'PromotedImpactedEnvironment = {} and VerifiedEnvironment = {} and ScheduleState = Accepted'.format(environment, environment)
+    #ident_query = 'PromotedImpactedEnvironment = {} and VerifiedEnvironment = {} and ScheduleState = Accepted'.format(environment, environment)
+    query_file = os.path.join('..', QUERY_FILE)
+    if os.path.isfile(QUERY_FILE) is False:
+        err_msg = "File ["+QUERY_FILE+"] is not present."
+        raise AttributeError(err_msg)
+
+    query_file_map = og_utils.load_json(QUERY_FILE)
+    if environment in query_file_map:
+        rally_query = query_file_map[environment]
+    else:
+        error_message = "There is no entry for "+environment+ " in the file "+QUERY_FILE
+        raise AttributeError(error_message)
+
 
     try:
         # for proj in projects:
@@ -103,7 +126,7 @@ def main(args):
         print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
-            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildTOBEUSED',
+            response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                                  workspace=workspace, project=proj.Name)
             #if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor']:
             if response.resultCount > 0 :

@@ -9,8 +9,8 @@
 # -----------    ----------------  -------------------------------------
 #   Dec-25-2017    Prangya P Kar      Intial Version
 #
-# python3 showuserstories.py --config=rallyuser.cfg
-# python3 showuserstories.py --config=devops-rallyuser.cfg
+# python3 showuserstories.py -c rallyuser.cfg -e QA01
+# python3 showuserstories.py --config_file devops-rallyuser.cfg --environment QA01
 #criterion:
 #
 #################################################################################################
@@ -61,7 +61,10 @@ def main(args):
             config_file = arg
         elif opt in ("-e", "--environment"):
             environment = arg
-    server, username, password, apikey, workspace, project = rallyWorkset(config_file)
+    rally_input=[]
+    input = "--config="+config_file
+    rally_input.append(input)
+    server, username, password, apikey, workspace, project = rallyWorkset(rally_input)
 
     if apikey:
         rally = Rally(server, apikey=apikey, workspace=workspace, project=project)

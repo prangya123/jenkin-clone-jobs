@@ -20,7 +20,7 @@ mergedSortedResultFile = 'mergedSortedResult.csv'
 sortedIdFile = 'sortedId.csv'
 verifiedInBuildFile = 'verifiedInBuild.csv'
 sanitizeSortedResultUSFile = 'sanitizeSortedResultUS.csv'
-
+sanitizeSortedResultDFile = 'sanitizeSortedResultD.csv'
 def main(argv):
     logger.info("In main method .................")
     print(platform.python_version())
@@ -61,7 +61,8 @@ def main(argv):
         print("\n")
         merge_files = MergeFiles(sortedResultD, sortedResultUS)
 
-        merge_files.sanitize_output_result_us()
+        merge_files.sanitize_output_result(sortedResultUS, sanitizeSortedResultUSFile)
+        merge_files.sanitize_output_result(sortedResultD, sanitizeSortedResultDFile)
         merge_files.merge_file()
         merge_files.sort_merged_file()
         merge_files.get_sorted_id()
@@ -125,13 +126,13 @@ class MergeFiles(object):
             raise AttributeError(error_message)
 
 
-    def sanitize_output_result_us(self):
-        logger.info("In sanitize_output_result_us method .................")
-        with open(self.sortedResultUS) as f1:
+    def sanitize_output_result(self, file_to_clean, sanitizeSortedResultFile):
+        logger.info("In sanitize_output_result method .................")
+        with open(file_to_clean) as f1:
             f1.readline()  # skip header
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
-            with open(sanitizeSortedResultUSFile, 'w') as f2:
+            with open(sanitizeSortedResultFile, 'w') as f2:
                 f2.write(finalHeader + '\n')
                 for line in lines:
                     verifiedInBuild = line.split('|')[1]
@@ -156,7 +157,7 @@ class MergeFiles(object):
     def merge_file(self):
         # Merge files
         logger.info("In merge_file method .................")
-        filenames = [self.sortedResultD, sanitizeSortedResultUSFile]
+        filenames = [sanitizeSortedResultDFile, sanitizeSortedResultUSFile]
         with open(mergedResultFile, 'w') as outfile:
             outfile.write(finalHeader + '\n')
             for fname in filenames:

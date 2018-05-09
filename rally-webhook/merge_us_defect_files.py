@@ -145,6 +145,9 @@ class MergeFiles(object):
                         elif '.gz' in value:
                             artifact_name = value
                             break
+                        elif '.json' in value:
+                            artifact_name = value
+                            break
 
                     if artifact_name:
                         f2.write("%-8.8s|%s|%s\n" % (

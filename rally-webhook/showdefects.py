@@ -20,6 +20,7 @@
 
 import sys, os, csv
 import getopt
+import og_utils
 from pyral import Rally, rallyWorkset, RallyRESTAPIError
 import argparse
 
@@ -45,6 +46,7 @@ def usage():
   print("\n")
 
 #################################################################################################
+QUERY_FILE = 'rally_defect_config.json'
 
 def main(args):
     environment = None
@@ -90,10 +92,18 @@ def main(args):
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
 
-    ident_query = 'PromotedImpactedEnvironment = {} and State = Closed and VerifiedEnvironment = {} and ' \
-                  'VerifiedInBuild != NA and Resolution = Code Change or Resolution = Configuration Change or ' \
-                  'Resolution = Database Change'.format(environment, environment)
-    # and Project = The Fellowship and Project != Hulk and Project != Hydra and Project != Shield and Project != Thor and Resolution = Code Change'
+
+    if os.path.isfile(QUERY_FILE) is False:
+        err_msg = "File ["+QUERY_FILE+"] is not present."
+        raise AttributeError(err_msg)
+
+    query_file_map = og_utils.load_json(QUERY_FILE)
+    if environment in query_file_map:
+        rally_query = query_file_map[environment]
+    else:
+        error_message = "There is no entry for "+environment+ " in the file "+QUERY_FILE
+        raise AttributeError(error_message)
+
     try:
         # for proj in projects:
         #     # print("    %12.12s  %s" % (proj.oid, proj.Name))
@@ -111,7 +121,7 @@ def main(args):
         print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
-            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildTOBEUSED',
+            response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                                  workspace=workspace, project=proj.Name)
             response.encoding = "utf-8"
             if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor','Green Beret']:

@@ -139,19 +139,12 @@ class MergeFiles(object):
                 split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
                 artifact_name = None
                 for value in split_verifiedInBuild:
-                    if '.zip' in value:
-                        artifact_name = value
-                        break
-                    elif '.gz' in value:
-                        artifact_name = value
-                        break
-                    elif '.json' in value:
-                        artifact_name = value
-                        break
+                    if self.check_if_string_is_artifact(value):
+                        artifact_name = self.clean_artifact(value)
+
 
                 if artifact_name:
                     logger.info("Raw artifact name is: "+artifact_name)
-                    #cleaned_artifact = self.clean_artifact(artifact_name)
                     line_passed = line.split('|')[0]+"|"+artifact_name+"|"+line.split('|')[2]+"\n"
                     logger.debug("Line passed is: " + line_passed)
                     sanitized_file_array.append(line_passed)
@@ -244,10 +237,38 @@ class MergeFiles(object):
     def clean_artifact(self, artifact_name):
         cleaned_artifact = None
         logger.info("Begin method clean_artifact")
-
+        logger.info("Incoming artifact name is : "+artifact_name)
+        if "'" in artifact_name:
+            cleaned_artifact = self.split_on_apostrophe(artifact_name)
+        else:
+            cleaned_artifact = artifact_name
+        logger.info("Cleaned artifact returned is: "+cleaned_artifact)
         logger.info("End method clean_artifact")
         return cleaned_artifact
 
+
+    def check_if_string_is_artifact(self, value):
+        is_artifact  = False
+        if '.zip' in value:
+            is_artifact = True
+
+        elif '.gz' in value:
+            is_artifact = True
+
+        elif '.json' in value:
+            is_artifact = True
+
+        return is_artifact
+
+
+    def split_on_apostrophe(self, data):
+        output = None
+        my_list = data.split("'")
+        for value in my_list:
+            if self.check_if_string_is_artifact(value):
+                output = value
+                break
+        return output
 
 
 def create_log_file():

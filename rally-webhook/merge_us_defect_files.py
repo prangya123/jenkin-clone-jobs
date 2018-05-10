@@ -96,6 +96,7 @@ class MergeFiles(object):
             cls.instance = super(MergeFiles, cls).__new__(cls)
         return cls.instance
 
+
     def __init__(self, sortedResultD, sortedResultUS):
         super(MergeFiles, self).__init__()
         try:
@@ -109,6 +110,7 @@ class MergeFiles(object):
         except Exception as ex:
             print (ex)
             raise ex
+
 
     def __validate_inputData(self):
         common_err_msg = "is not supplied as a command line argument.";
@@ -144,7 +146,6 @@ class MergeFiles(object):
 
 
                 if artifact_name:
-                    logger.info("Raw artifact name is: "+artifact_name)
                     line_passed = line.split('|')[0]+"|"+artifact_name+"|"+line.split('|')[2]+"\n"
                     logger.debug("Line passed is: " + line_passed)
                     sanitized_file_array.append(line_passed)
@@ -179,6 +180,7 @@ class MergeFiles(object):
                     for line in infile:
                         outfile.write(line)
         logger.info("End method merge_file.")
+
 
     def sort_merged_file(self):
         # Sort the mergedResult File and write into mergedSortedResult
@@ -234,15 +236,21 @@ class MergeFiles(object):
             logger.info("End method get_sorted_verified_in_build.")
 
 
-    def clean_artifact(self, artifact_name):
+    def clean_artifact(self, input_artifact_name):
         cleaned_artifact = None
+        artifact_name = input_artifact_name
         logger.info("Begin method clean_artifact")
-        logger.info("Incoming artifact name is : "+artifact_name)
-        if "'" in artifact_name:
-            cleaned_artifact = self.split_on_apostrophe(artifact_name)
-        else:
+        logger.info("Incoming artifact name is : "+input_artifact_name)
+        if artifact_name and "'" in artifact_name:
+            artifact_name = self.split_on_apostrophe(artifact_name)
+        if artifact_name and "/" in artifact_name:
+            artifact_name = self.split_on_forwardslash(artifact_name)
+        if artifact_name and "\"" in artifact_name:
+            artifact_name = self.split_on_doublequote(artifact_name)
+        if artifact_name:
             cleaned_artifact = artifact_name
-        logger.info("Cleaned artifact returned is: "+cleaned_artifact)
+
+        logger.info("Input artifact was: "+input_artifact_name+" Cleaned artifact returned is: "+cleaned_artifact)
         logger.info("End method clean_artifact")
         return cleaned_artifact
 
@@ -264,6 +272,26 @@ class MergeFiles(object):
     def split_on_apostrophe(self, data):
         output = None
         my_list = data.split("'")
+        for value in my_list:
+            if self.check_if_string_is_artifact(value):
+                output = value
+                break
+        return output
+
+
+    def split_on_forwardslash(self, data):
+        output = None
+        my_list = data.split("/")
+        for value in my_list:
+            if self.check_if_string_is_artifact(value):
+                output = value
+                break
+        return output
+
+
+    def split_on_doublequote(self, data):
+        output = None
+        my_list = data.split("\"")
         for value in my_list:
             if self.check_if_string_is_artifact(value):
                 output = value

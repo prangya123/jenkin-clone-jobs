@@ -21,6 +21,8 @@ sortedIdFile = 'sortedId.csv'
 verifiedInBuildFile = 'verifiedInBuild.csv'
 sanitizeSortedResultUSFile = 'sanitizeSortedResultUS.csv'
 sanitizeSortedResultDFile = 'sanitizeSortedResultD.csv'
+ignoreUserStoriesFile="ignore_us.csv"
+ignoreDefectsFile = "ignore_defect.csv"
 def main(argv):
     logger.info("In main method .................")
     print(platform.python_version())
@@ -54,15 +56,13 @@ def main(argv):
     start = timeit.default_timer()
     try:
         validate_platform_clear_screen()
-        start_message="Start of Merging of Defect File and UserStory File"
+        start_message="Start Proces of Sanitizing and Merging the Defect and UserStory Files."
         logger.info(start_message)
-        print("\n")
-        print(start_message)
-        print("\n")
+        print("\n"+start_message+"\n")
         merge_files = MergeFiles(sortedResultD, sortedResultUS)
 
-        merge_files.sanitize_output_result(sortedResultUS, sanitizeSortedResultUSFile)
-        merge_files.sanitize_output_result(sortedResultD, sanitizeSortedResultDFile)
+        merge_files.sanitize_output_result(sortedResultUS, sanitizeSortedResultUSFile, ignoreUserStoriesFile)
+        merge_files.sanitize_output_result(sortedResultD, sanitizeSortedResultDFile, ignoreDefectsFile)
         merge_files.merge_file()
         merge_files.sort_merged_file()
         merge_files.get_sorted_id()
@@ -82,9 +82,7 @@ def main(argv):
         stop = timeit.default_timer()
         total_time = stop - start
 
-        print("\n")
-        print("End of Merging of Defect File and UserStory File.\n")
-        print("\n")
+        print("\nEnd Proces of Sanitizing and Merging the Defect and UserStory Files.\n")
 
         logger.info(
             "Script execution status [" + exit_message + "], time taken [" + str(datetime.timedelta(seconds=total_time)) + "]")
@@ -126,40 +124,59 @@ class MergeFiles(object):
             raise AttributeError(error_message)
 
 
-    def sanitize_output_result(self, file_to_clean, sanitizeSortedResultFile):
-        logger.info("In sanitize_output_result method .................")
+    def sanitize_output_result(self, file_to_clean, sanitizeSortedResultFile, ignore_file):
+        logger.info("Begin method sanitize_output_result.")
+        ignore_array = []
+        sanitized_file_array = []
+        sanitized_file_array.append(finalHeader + '\n')
+        ignore_array.append(finalHeader + '\n')
         with open(file_to_clean) as f1:
             f1.readline()  # skip header
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
-            with open(sanitizeSortedResultFile, 'w') as f2:
-                f2.write(finalHeader + '\n')
-                for line in lines:
-                    verifiedInBuild = line.split('|')[1]
-                    split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
-                    artifact_name = ""
-                    for value in split_verifiedInBuild:
-                        if '.zip' in value:
-                            artifact_name = value
-                            break
-                        elif '.gz' in value:
-                            artifact_name = value
-                            break
-                        elif '.json' in value:
-                            artifact_name = value
-                            break
+            for line in lines:
+                verifiedInBuild = line.split('|')[1]
+                split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
+                artifact_name = None
+                for value in split_verifiedInBuild:
+                    if '.zip' in value:
+                        artifact_name = value
+                        break
+                    elif '.gz' in value:
+                        artifact_name = value
+                        break
+                    elif '.json' in value:
+                        artifact_name = value
+                        break
 
-                    if artifact_name:
-                        f2.write("%-8.8s|%s|%s\n" % (
-                            line.split('|')[0], artifact_name, line.split('|')[2]))
-                    else:
-                        #if ('.zip' in verifiedInBuild or '.gz' in verifiedInBuild):
-                            #f2.write("%-8.8s|%s|%s\n" % (line.split('|')[0], verifiedInBuild, line.split('|')[2]))
-                        f2.write("%-8.8s|%s|%s\n" % (line.split('|')[0], verifiedInBuild, line.split('|')[2]))
+                if artifact_name:
+                    logger.info("Raw artifact name is: "+artifact_name)
+                    #cleaned_artifact = self.clean_artifact(artifact_name)
+                    line_passed = line.split('|')[0]+"|"+artifact_name+"|"+line.split('|')[2]+"\n"
+                    logger.debug("Line passed is: " + line_passed)
+                    sanitized_file_array.append(line_passed)
+                else:
+                    ignored_line = line.split('|')[0]+"|"+verifiedInBuild+"|"+line.split('|')[2]+"\n"
+                    logger.debug("Line ignored is: "+ignored_line)
+                    ignore_array.append(ignored_line)
+
+        if ignore_array:
+            logger.info("Write the file "+ignore_file+", with data: "+str(ignore_array))
+            with open(ignore_file, 'w') as file_ignore:
+                file_ignore.writelines(ignore_array)
+
+        if sanitized_file_array:
+            logger.info("Write the file " + sanitizeSortedResultFile + ", with data: " + str(sanitized_file_array))
+            with open(sanitizeSortedResultFile, 'w') as sanitized_file:
+                sanitized_file.writelines(sanitized_file_array)
+
+        logger.info("End method sanitize_output_result.")
+
 
     def merge_file(self):
         # Merge files
-        logger.info("In merge_file method .................")
+        logger.info("Begin method merge_file.")
+        logger.info("Files being merged are "+sanitizeSortedResultDFile+" and "+sanitizeSortedResultUSFile+".")
         filenames = [sanitizeSortedResultDFile, sanitizeSortedResultUSFile]
         with open(mergedResultFile, 'w') as outfile:
             outfile.write(finalHeader + '\n')
@@ -168,10 +185,12 @@ class MergeFiles(object):
                     next(infile)  # skip header
                     for line in infile:
                         outfile.write(line)
+        logger.info("End method merge_file.")
 
     def sort_merged_file(self):
         # Sort the mergedResult File and write into mergedSortedResult
-        logger.info("In sort_merged_file method .................")
+        logger.info("Begin method sort_merged_file")
+        logger.info("File being sorted is: "+mergedResultFile)
         with open(mergedResultFile, mode='rt') as f, open(mergedSortedResultFile, 'w') as final:
             writer = csv.writer(final, delimiter='|')
             reader = csv.reader(f, delimiter='|')
@@ -181,31 +200,53 @@ class MergeFiles(object):
             for row in result:
                 writer.writerow(row)
 
+        logger.info("End method sort_merged_file")
+
+
     def get_sorted_id(self):
         # get ids from sorted merged file
-        logger.info("In get_sorted_id method .................")
+        logger.info("Begin method get_sorted_id")
+        id_array = []
         with open(mergedSortedResultFile) as f1:
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
+            f1.readline()  # skip header
+            for line in lines:
+                ids = line.split('|')[0]
+                id_array.append(ids+"\n")
+        logger.info("Write File "+sortedIdFile+ ", contains the ids to be promoted: \n"+str(id_array))
+        if id_array:
             with open(sortedIdFile, 'w') as f2:
-                f1.readline()  # skip header
-                for line in lines:
-                    ids = line.split('|')[0]
-                    f2.write(ids+", ")
+                f2.writelines(id_array)
+
+        logger.info("End method get_sorted_id")
+
 
     def get_sorted_verified_in_build(self):
         # get verified_in_build from sorted merged file
-        logger.info("In get_sorted_verified_in_build method .................")
+        logger.info("Begin method get_sorted_verified_in_build.")
+        verified_array = []
         with open(mergedSortedResultFile) as f1:
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
+            f1.readline()  # skip header
+            for line in lines:
+                verifiedInBuild = line.split('|')[1]
+                verified_array.append(verifiedInBuild+"\n")
+
+        logger.info("Write File " + verifiedInBuildFile + ", contains the artifacts to be promoted: \n" + str(verified_array))
+        if verified_array:
             with open(verifiedInBuildFile, 'w') as f2:
-                f1.readline()  # skip header
-                for line in lines:
-                    verifiedInBuild = line.split('|')[1]
-                    if verifiedInBuild != 'None' and verifiedInBuild != '' and verifiedInBuild != 'N/A':
-                    #if ('.zip' in verifiedInBuild or '.gz' in verifiedInBuild):
-                        f2.write(verifiedInBuild + ", ")
+                f2.writelines(verified_array)
+            logger.info("End method get_sorted_verified_in_build.")
+
+
+    def clean_artifact(self, artifact_name):
+        cleaned_artifact = None
+        logger.info("Begin method clean_artifact")
+
+        logger.info("End method clean_artifact")
+        return cleaned_artifact
 
 
 

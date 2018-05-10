@@ -8,6 +8,7 @@ import platform
 import sys
 import csv
 import re
+import traceback
 
 logging.getLogger("requests").setLevel(logging.WARNING)
 
@@ -74,7 +75,9 @@ def main(argv):
     except Exception as ex:
         if str(ex):
             print (str(ex) + "\n")
-
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        traceback.print_tb(exc_tb)
+        sys.exit(2)
         exit_status = 1
         exit_message = 'Failed'
 
@@ -155,14 +158,10 @@ class MergeFiles(object):
                     ignore_array.append(ignored_line)
 
         if ignore_array:
-            logger.info("Write the file "+ignore_file+", with data: "+str(ignore_array))
-            with open(ignore_file, 'w') as file_ignore:
-                file_ignore.writelines(ignore_array)
+            self.write_file(ignore_file, ignore_array)
 
         if sanitized_file_array:
-            logger.info("Write the file " + sanitizeSortedResultFile + ", with data: " + str(sanitized_file_array))
-            with open(sanitizeSortedResultFile, 'w') as sanitized_file:
-                sanitized_file.writelines(sanitized_file_array)
+            self.write_file(sanitizeSortedResultFile, sanitized_file_array)
 
         logger.info("End method sanitize_output_result.")
 
@@ -209,11 +208,10 @@ class MergeFiles(object):
             for line in lines:
                 ids = line.split('|')[0]
                 id_array.append(ids+"\n")
-        logger.info("Write File "+sortedIdFile+ ", contains the ids to be promoted: \n"+str(id_array))
-        if id_array:
-            with open(sortedIdFile, 'w') as f2:
-                f2.writelines(id_array)
 
+        logger.info("List of Ids to be promoted: \n" + str(id_array))
+        if id_array:
+            self.write_file(sortedIdFile, id_array)
         logger.info("End method get_sorted_id")
 
 
@@ -228,11 +226,9 @@ class MergeFiles(object):
             for line in lines:
                 verifiedInBuild = line.split('|')[1]
                 verified_array.append(verifiedInBuild+"\n")
-
-        logger.info("Write File " + verifiedInBuildFile + ", contains the artifacts to be promoted: \n" + str(verified_array))
+        logger.info("Artifacts to be promoted: \n" + str(verified_array))
         if verified_array:
-            with open(verifiedInBuildFile, 'w') as f2:
-                f2.writelines(verified_array)
+            self.write_file(verifiedInBuildFile, verified_array)
             logger.info("End method get_sorted_verified_in_build.")
 
 
@@ -297,6 +293,14 @@ class MergeFiles(object):
                 output = value
                 break
         return output
+
+
+    def write_file(self, filename, filedata_array):
+        logger.info("Begin method write_file")
+        logger.info("Write File " + filename + ", contains the data: \n" + str(filedata_array))
+        with open(filename, 'w') as file_obj:
+            file_obj.writelines(filedata_array)
+        logger.info("End method write_file")
 
 
 def create_log_file():

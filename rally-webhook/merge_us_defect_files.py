@@ -9,6 +9,8 @@ import sys
 import csv
 import re
 import traceback
+import copy
+from packaging import version
 
 logging.getLogger("requests").setLevel(logging.WARNING)
 
@@ -218,18 +220,92 @@ class MergeFiles(object):
     def get_sorted_verified_in_build(self):
         # get verified_in_build from sorted merged file
         logger.info("Begin method get_sorted_verified_in_build.")
+        build_list = self.extract_all_builds()
+        if build_list:
+            list_to_examine = copy.deepcopy(build_list)
+            promote_builds = self.get_only_highest_builds(list_to_examine)
+            if promote_builds:
+                self.write_file(verifiedInBuildFile, promote_builds)
+            logger.info("End method get_sorted_verified_in_build.")
+
+
+    def extract_all_builds(self):
         verified_array = []
+        logger.info("Begin method extract_all_builds")
         with open(mergedSortedResultFile) as f1:
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
             f1.readline()  # skip header
             for line in lines:
                 verifiedInBuild = line.split('|')[1]
-                verified_array.append(verifiedInBuild+"\n")
-        logger.info("Artifacts to be promoted: \n" + str(verified_array))
-        if verified_array:
-            self.write_file(verifiedInBuildFile, verified_array)
-            logger.info("End method get_sorted_verified_in_build.")
+                verified_array.append(verifiedInBuild)
+        logger.info("List of extracted builds: "+str(verified_array))
+        logger.info("End method extract_all_builds")
+        return verified_array
+
+
+    def get_only_highest_builds(self, build_list):
+        promote_builds = []
+        version_dict = {}
+        logger.info("Begin method get_only_highest_builds")
+        for current in build_list:
+            current_value = current.strip()
+            version = self.getVersionFromString(current_value)
+            logger.info("Version extracted for "+current_value+", is "+str(version))
+            name, v, extension = current_value.partition(version)
+            curr_key = name + extension
+            if curr_key in version_dict:
+                v_list, aux_dict = version_dict[curr_key]
+                v_list.append(version)
+                aux_dict[version] = current_value
+                version_dict[curr_key] = v_list, aux_dict
+            else:
+                v_list = []
+                aux_dict = {}
+                v_list.append(version)
+                aux_dict[version] = current_value
+                version_dict[curr_key] = (v_list, aux_dict)
+        logger.info("Version Dictionary is: "+str(version_dict))
+        promote_builds = self.getHighestVersion(version_dict)
+
+        logger.info("End method get_only_highest_builds")
+        return promote_builds
+
+
+    def getVersionFromString(self, verifiedinBuild):
+        logger.info("Begin method getVersionFromString")
+        version_string = None
+        build_list = re.findall(r'-?\d+', verifiedinBuild)
+        size = len(build_list)
+        for i in range(0, size):
+            if i == 0:
+                version_string = build_list[i]
+            else:
+                version_string = version_string + "." + build_list[i]
+
+        logger.info("End method getVersionFromString")
+        return version_string
+
+
+    def getHighestVersion(self, version_dict):
+        logger.info("Begin method getHighestVersion")
+        high_version_list = []
+        for key, complex_tuple in version_dict.items():
+            version_list = complex_tuple[0]
+            aux_dict = complex_tuple[1]
+            highestVersion = None
+            for version_number in version_list:
+                if highestVersion is None:
+                    highestVersion = version_number
+                else:
+                    if (version.parse(version_number) > version.parse(highestVersion)):
+                        highestVersion = version_number
+            real_name = aux_dict[highestVersion]
+            high_version_list.append(real_name+"\n")
+
+        logger.info("Highest Build versions to be promoted are: "+str(high_version_list))
+        logger.info("End method getHighestVersion")
+        return high_version_list
 
 
     def clean_artifact(self, input_artifact_name):

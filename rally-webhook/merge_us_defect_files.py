@@ -209,11 +209,20 @@ class MergeFiles(object):
             f1.readline()  # skip header
             for line in lines:
                 ids = line.split('|')[0]
-                id_array.append(ids+"\n")
+                key = ids+"\n"
+                if key in id_array:
+                    logger.info("Id "+ids+", already exists in the id's array. Will not be added a second time.")
+                else:
+                    id_array.append(key)
 
         logger.info("List of Ids to be promoted: \n" + str(id_array))
         if id_array:
             self.write_file(sortedIdFile, id_array)
+        else:
+            warn_msg = "No stories(US) or defects(D) available for promotion."
+            logger.info(warn_msg)
+            sys.stdout.write("\n"+warn_msg)
+            sys.stdout.flush()
         logger.info("End method get_sorted_id")
 
 
@@ -226,7 +235,11 @@ class MergeFiles(object):
             promote_builds = self.get_only_highest_builds(list_to_examine)
             if promote_builds:
                 self.write_file(verifiedInBuildFile, promote_builds)
-            logger.info("End method get_sorted_verified_in_build.")
+        else:
+            warn_msg = "No builds availble for promotion."
+            sys.stdout.write("\n"+warn_msg)
+            sys.stdout.flush()
+        logger.info("End method get_sorted_verified_in_build.")
 
 
     def extract_all_builds(self):

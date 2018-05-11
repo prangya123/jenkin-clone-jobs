@@ -314,11 +314,11 @@ class MergeFiles(object):
         logger.info("Begin method clean_artifact")
         logger.info("Incoming artifact name is : "+input_artifact_name)
         if artifact_name and "'" in artifact_name:
-            artifact_name = self.split_on_apostrophe(artifact_name)
+            artifact_name = self.split_on_given_delimiter(artifact_name, "'")
         if artifact_name and "/" in artifact_name:
-            artifact_name = self.split_on_forwardslash(artifact_name)
+            artifact_name = self.split_on_given_delimiter(artifact_name, "/")
         if artifact_name and "\"" in artifact_name:
-            artifact_name = self.split_on_doublequote(artifact_name)
+            artifact_name = self.split_on_given_delimiter(artifact_name, "\"")
         if artifact_name:
             cleaned_artifact = artifact_name
 
@@ -341,29 +341,9 @@ class MergeFiles(object):
         return is_artifact
 
 
-    def split_on_apostrophe(self, data):
+    def split_on_given_delimiter(self, data, delimiter):
         output = None
-        my_list = data.split("'")
-        for value in my_list:
-            if self.check_if_string_is_artifact(value):
-                output = value
-                break
-        return output
-
-
-    def split_on_forwardslash(self, data):
-        output = None
-        my_list = data.split("/")
-        for value in my_list:
-            if self.check_if_string_is_artifact(value):
-                output = value
-                break
-        return output
-
-
-    def split_on_doublequote(self, data):
-        output = None
-        my_list = data.split("\"")
+        my_list = data.split(delimiter)
         for value in my_list:
             if self.check_if_string_is_artifact(value):
                 output = value

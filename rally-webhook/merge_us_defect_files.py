@@ -319,6 +319,8 @@ class MergeFiles(object):
             artifact_name = self.split_on_given_delimiter(artifact_name, "/")
         if artifact_name and "\"" in artifact_name:
             artifact_name = self.split_on_given_delimiter(artifact_name, "\"")
+        if artifact_name and "=" in artifact_name:
+            artifact_name = self.split_on_given_delimiter(artifact_name, "=")
         if artifact_name:
             cleaned_artifact = artifact_name
 

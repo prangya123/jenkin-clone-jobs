@@ -77,11 +77,11 @@ def main(argv):
     except Exception as ex:
         if str(ex):
             print (str(ex) + "\n")
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        traceback.print_tb(exc_tb)
-        sys.exit(2)
+        logger.exception(ex)
         exit_status = 1
         exit_message = 'Failed'
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        traceback.print_tb(exc_tb)
 
     finally:
         stop = timeit.default_timer()

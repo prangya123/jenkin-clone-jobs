@@ -7,6 +7,10 @@ import datetime
 import platform
 import sys
 import csv
+import re
+import traceback
+import copy
+from packaging import version
 
 logging.getLogger("requests").setLevel(logging.WARNING)
 
@@ -18,9 +22,13 @@ mergedResultFile = 'mergedResult.csv'
 mergedSortedResultFile = 'mergedSortedResult.csv'
 sortedIdFile = 'sortedId.csv'
 verifiedInBuildFile = 'verifiedInBuild.csv'
-
+sanitizeSortedResultUSFile = 'sanitizeSortedResultUS.csv'
+sanitizeSortedResultDFile = 'sanitizeSortedResultD.csv'
+ignoreUserStoriesFile="ignore_us.csv"
+ignoreDefectsFile = "ignore_defect.csv"
 def main(argv):
     logger.info("In main method .................")
+    print(platform.python_version())
 
     sortedResultD = None
     sortedResultUS = None
@@ -32,8 +40,8 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hl:d:u:", ["sortedResultD=", "sortedResultUS="])
 
-    except getopt.GetoptError, exc:
-        print exc.msg
+    except getopt.GetoptError as  exc:
+        print(exc.msg)
         usage()
         sys.exit(2)
 
@@ -51,13 +59,13 @@ def main(argv):
     start = timeit.default_timer()
     try:
         validate_platform_clear_screen()
-        start_message="Start of Merging of Defect File and UserStory File"
+        start_message="Start Proces of Sanitizing and Merging the Defect and UserStory Files."
         logger.info(start_message)
-        print("\n")
-        print(start_message)
-        print("\n")
+        print("\n"+start_message+"\n")
         merge_files = MergeFiles(sortedResultD, sortedResultUS)
 
+        merge_files.sanitize_output_result(sortedResultUS, sanitizeSortedResultUSFile, ignoreUserStoriesFile)
+        merge_files.sanitize_output_result(sortedResultD, sanitizeSortedResultDFile, ignoreDefectsFile)
         merge_files.merge_file()
         merge_files.sort_merged_file()
         merge_files.get_sorted_id()
@@ -68,18 +76,18 @@ def main(argv):
 
     except Exception as ex:
         if str(ex):
-            print str(ex) + "\n"
-
+            print (str(ex) + "\n")
+        logger.exception(ex)
         exit_status = 1
         exit_message = 'Failed'
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        traceback.print_tb(exc_tb)
 
     finally:
         stop = timeit.default_timer()
         total_time = stop - start
 
-        print("\n")
-        print("End of Merging of Defect File and UserStory File.\n")
-        print("\n")
+        print("\nEnd Proces of Sanitizing and Merging the Defect and UserStory Files.\n")
 
         logger.info(
             "Script execution status [" + exit_message + "], time taken [" + str(datetime.timedelta(seconds=total_time)) + "]")
@@ -93,6 +101,7 @@ class MergeFiles(object):
             cls.instance = super(MergeFiles, cls).__new__(cls)
         return cls.instance
 
+
     def __init__(self, sortedResultD, sortedResultUS):
         super(MergeFiles, self).__init__()
         try:
@@ -104,8 +113,9 @@ class MergeFiles(object):
             self.__validate_inputData()
 
         except Exception as ex:
-            print ex
+            print (ex)
             raise ex
+
 
     def __validate_inputData(self):
         common_err_msg = "is not supplied as a command line argument.";
@@ -121,10 +131,48 @@ class MergeFiles(object):
             raise AttributeError(error_message)
 
 
+    def sanitize_output_result(self, file_to_clean, sanitizeSortedResultFile, ignore_file):
+        logger.info("Begin method sanitize_output_result.")
+        ignore_array = []
+        sanitized_file_array = []
+        sanitized_file_array.append(finalHeader + '\n')
+        ignore_array.append(finalHeader + '\n')
+        with open(file_to_clean) as f1:
+            f1.readline()  # skip header
+            lines = (line.rstrip() for line in f1)  # All lines including the blank ones
+            lines = (line for line in lines if line)  # Non-blank lines
+            for line in lines:
+                verifiedInBuild = line.split('|')[1]
+                split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
+                artifact_name = None
+                for value in split_verifiedInBuild:
+                    if self.check_if_string_is_artifact(value):
+                        artifact_name = self.clean_artifact(value)
+
+
+                if artifact_name:
+                    line_passed = line.split('|')[0]+"|"+artifact_name+"|"+line.split('|')[2]+"\n"
+                    logger.debug("Line passed is: " + line_passed)
+                    sanitized_file_array.append(line_passed)
+                else:
+                    ignored_line = line.split('|')[0]+"|"+verifiedInBuild+"|"+line.split('|')[2]+"\n"
+                    logger.debug("Line ignored is: "+ignored_line)
+                    ignore_array.append(ignored_line)
+
+        if ignore_array:
+            self.write_file(ignore_file, ignore_array)
+
+        if sanitized_file_array:
+            self.write_file(sanitizeSortedResultFile, sanitized_file_array)
+
+        logger.info("End method sanitize_output_result.")
+
+
     def merge_file(self):
         # Merge files
-        logger.info("In merge_file method .................")
-        filenames = [self.sortedResultD, self.sortedResultUS]
+        logger.info("Begin method merge_file.")
+        logger.info("Files being merged are "+sanitizeSortedResultDFile+" and "+sanitizeSortedResultUSFile+".")
+        filenames = [sanitizeSortedResultDFile, sanitizeSortedResultUSFile]
         with open(mergedResultFile, 'w') as outfile:
             outfile.write(finalHeader + '\n')
             for fname in filenames:
@@ -132,40 +180,198 @@ class MergeFiles(object):
                     next(infile)  # skip header
                     for line in infile:
                         outfile.write(line)
+        logger.info("End method merge_file.")
+
 
     def sort_merged_file(self):
         # Sort the mergedResult File and write into mergedSortedResult
-        logger.info("In sort_merged_file method .................")
+        logger.info("Begin method sort_merged_file")
+        logger.info("File being sorted is: "+mergedResultFile)
         with open(mergedResultFile, mode='rt') as f, open(mergedSortedResultFile, 'w') as final:
             writer = csv.writer(final, delimiter='|')
             reader = csv.reader(f, delimiter='|')
             _ = next(reader)
-            result = sorted(reader, key=lambda row: row[1])
+            result = sorted(filter(None, reader), key=lambda row: row[1])
             final.write(finalHeader + '\n')
             for row in result:
                 writer.writerow(row)
 
+        logger.info("End method sort_merged_file")
+
+
     def get_sorted_id(self):
         # get ids from sorted merged file
-        logger.info("In get_sorted_id method .................")
+        logger.info("Begin method get_sorted_id")
+        id_array = []
         with open(mergedSortedResultFile) as f1:
-            with open(sortedIdFile, 'w') as f2:
-                f1.next()  # skip header
-                for line in f1:
-                    ids = line.split('|')[0]
-                    f2.write(ids+", ")
+            lines = (line.rstrip() for line in f1)  # All lines including the blank ones
+            lines = (line for line in lines if line)  # Non-blank lines
+            f1.readline()  # skip header
+            for line in lines:
+                ids = line.split('|')[0]
+                key = ids+"\n"
+                if key in id_array:
+                    logger.info("Id "+ids+", already exists in the id's array. Will not be added a second time.")
+                else:
+                    id_array.append(key)
+
+        logger.info("List of Ids to be promoted: \n" + str(id_array))
+        if id_array:
+            self.write_file(sortedIdFile, id_array)
+        else:
+            warn_msg = "No stories(US) or defects(D) available for promotion."
+            logger.info(warn_msg)
+            sys.stdout.write("\n"+warn_msg)
+            sys.stdout.flush()
+        logger.info("End method get_sorted_id")
+
 
     def get_sorted_verified_in_build(self):
         # get verified_in_build from sorted merged file
-        logger.info("In get_sorted_verified_in_build method .................")
+        logger.info("Begin method get_sorted_verified_in_build.")
+        build_list = self.extract_all_builds()
+        if build_list:
+            list_to_examine = copy.deepcopy(build_list)
+            promote_builds = self.get_only_highest_builds(list_to_examine)
+            if promote_builds:
+                self.write_file(verifiedInBuildFile, promote_builds)
+        else:
+            warn_msg = "No builds availble for promotion."
+            sys.stdout.write("\n"+warn_msg)
+            sys.stdout.flush()
+        logger.info("End method get_sorted_verified_in_build.")
+
+
+    def extract_all_builds(self):
+        verified_array = []
+        logger.info("Begin method extract_all_builds")
         with open(mergedSortedResultFile) as f1:
-            with open(verifiedInBuildFile, 'w') as f2:
-                f1.next()  # skip header
-                for line in f1:
-                    verifiedInBuild = line.split('|')[1]
-                    f2.write(verifiedInBuild+", ")
+            lines = (line.rstrip() for line in f1)  # All lines including the blank ones
+            lines = (line for line in lines if line)  # Non-blank lines
+            f1.readline()  # skip header
+            for line in lines:
+                verifiedInBuild = line.split('|')[1]
+                verified_array.append(verifiedInBuild)
+        logger.info("List of extracted builds: "+str(verified_array))
+        logger.info("End method extract_all_builds")
+        return verified_array
 
 
+    def get_only_highest_builds(self, build_list):
+        promote_builds = []
+        version_dict = {}
+        logger.info("Begin method get_only_highest_builds")
+        for current in build_list:
+            current_value = current.strip()
+            version = self.getVersionFromString(current_value)
+            logger.info("Version extracted for "+current_value+", is "+str(version))
+            name, v, extension = current_value.partition(version)
+            curr_key = name + extension
+            if curr_key in version_dict:
+                v_list, aux_dict = version_dict[curr_key]
+                v_list.append(version)
+                aux_dict[version] = current_value
+                version_dict[curr_key] = v_list, aux_dict
+            else:
+                v_list = []
+                aux_dict = {}
+                v_list.append(version)
+                aux_dict[version] = current_value
+                version_dict[curr_key] = (v_list, aux_dict)
+        logger.info("Version Dictionary is: "+str(version_dict))
+        promote_builds = self.getHighestVersion(version_dict)
+
+        logger.info("End method get_only_highest_builds")
+        return promote_builds
+
+
+    def getVersionFromString(self, verifiedinBuild):
+        logger.info("Begin method getVersionFromString")
+        version_string = None
+        build_list = re.findall(r'-?\d+', verifiedinBuild)
+        size = len(build_list)
+        for i in range(0, size):
+            if i == 0:
+                version_string = build_list[i]
+            else:
+                version_string = version_string + "." + build_list[i]
+
+        logger.info("End method getVersionFromString")
+        return version_string
+
+
+    def getHighestVersion(self, version_dict):
+        logger.info("Begin method getHighestVersion")
+        high_version_list = []
+        for key, complex_tuple in version_dict.items():
+            version_list = complex_tuple[0]
+            aux_dict = complex_tuple[1]
+            highestVersion = None
+            for version_number in version_list:
+                if highestVersion is None:
+                    highestVersion = version_number
+                else:
+                    if (version.parse(version_number) > version.parse(highestVersion)):
+                        highestVersion = version_number
+            real_name = aux_dict[highestVersion]
+            high_version_list.append(real_name+"\n")
+
+        logger.info("Highest Build versions to be promoted are: "+str(high_version_list))
+        logger.info("End method getHighestVersion")
+        return high_version_list
+
+
+    def clean_artifact(self, input_artifact_name):
+        cleaned_artifact = None
+        artifact_name = input_artifact_name
+        logger.info("Begin method clean_artifact")
+        logger.info("Incoming artifact name is : "+input_artifact_name)
+        if artifact_name and "'" in artifact_name:
+            artifact_name = self.split_on_given_delimiter(artifact_name, "'")
+        if artifact_name and "/" in artifact_name:
+            artifact_name = self.split_on_given_delimiter(artifact_name, "/")
+        if artifact_name and "\"" in artifact_name:
+            artifact_name = self.split_on_given_delimiter(artifact_name, "\"")
+        if artifact_name and "=" in artifact_name:
+            artifact_name = self.split_on_given_delimiter(artifact_name, "=")
+        if artifact_name:
+            cleaned_artifact = artifact_name
+
+        logger.info("Input artifact was: "+input_artifact_name+" Cleaned artifact returned is: "+cleaned_artifact)
+        logger.info("End method clean_artifact")
+        return cleaned_artifact
+
+
+    def check_if_string_is_artifact(self, value):
+        is_artifact  = False
+        if '.zip' in value:
+            is_artifact = True
+
+        elif '.gz' in value:
+            is_artifact = True
+
+        elif '.json' in value:
+            is_artifact = True
+
+        return is_artifact
+
+
+    def split_on_given_delimiter(self, data, delimiter):
+        output = None
+        my_list = data.split(delimiter)
+        for value in my_list:
+            if self.check_if_string_is_artifact(value):
+                output = value
+                break
+        return output
+
+
+    def write_file(self, filename, filedata_array):
+        logger.info("Begin method write_file")
+        logger.info("Write File " + filename + ", contains the data: \n" + str(filedata_array))
+        with open(filename, 'w') as file_obj:
+            file_obj.writelines(filedata_array)
+        logger.info("End method write_file")
 
 
 def create_log_file():
@@ -193,12 +399,12 @@ def create_log_file():
     logger.addHandler(handler)
 
 def usage():
-  print "\n"
+  print ("\n")
   usage_message_one = ("Usage: " + __file__ + " [-h] -d <sortedResultD> -u <sortedResultUS>]")
   usage_message_two = ("Usage: " + __file__ + " [-h] --sortedResultD <sortedResultD> --sortedResultUS <sortedResultUS>]")
-  print usage_message_one
-  print "OR"
-  print usage_message_two
+  print (usage_message_one)
+  print ("OR")
+  print (usage_message_two)
 
 def validate_platform_clear_screen():
     platform_system = platform.system()

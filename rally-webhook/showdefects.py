@@ -9,8 +9,8 @@
 # -----------    ----------------  -------------------------------------
 #   Dec-25-2017    Prangya P Kar      Intial Version
 #
-# python3 showdefects.py --config=rallyuser.cfg
-# python3 showdefects.py --config=devops-rallyuser.cfg
+# python3 showdefects.py -c rallyuser.cfg -e QA01
+# python3 showdefects.py --config_file devops-rallyuser.cfg --environment QA01
 #
 #criterion:
 #   PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change
@@ -19,6 +19,8 @@
 #################################################################################################
 
 import sys, os, csv
+import getopt
+import og_utils
 from pyral import Rally, rallyWorkset, RallyRESTAPIError
 import argparse
 
@@ -34,26 +36,42 @@ errout = sys.stderr.write
 #################################################################################################
 def usage():
   print ("\n")
-  usage_message_main = ("Usage: " + __file__ + " [-h] [--help] --config=<configFile>")
-  usage_message_add = ("[UAT Promotion lists of Defect(s)] This script is to lists all  Defect(s) which are ready for UAT promotions")
-  print (usage_message_main)
+  usage_message_main1 = ("Usage: " + __file__ + "[--help] --config_file <config_file> --environment <environment>")
+  usage_message_main2 = ("Usage: " + __file__ + " [-h] -c <config_file> -e <environment>")
+  usage_message_add = ("[Environment Promotion list of Defect(s)] This script lists all  Defect(s) which are ready for promotion for a specified environment")
+  print (usage_message_main1)
+  print("OR")
+  print(usage_message_main2)
   print(usage_message_add)
   print("\n")
 
 #################################################################################################
+QUERY_FILE = 'rally_defect_config.json'
 
 def main(args):
-    if "-h" in args or "--help" in args or len(args) < 1:
+    environment = None
+    config_file = None
+    try:
+        opts, args = getopt.getopt(args, "h:c:e:", ["config_file=", "environment=", "help="])
+    except getopt.GetoptError as exc:
+        print(exc.msg)
         usage()
-        sys.exit(1)
+        sys.exit(2)
 
-    options = [opt for opt in sys.argv[1:] if opt.startswith('--')]
-    args = [arg for arg in sys.argv[1:] if arg not in options]
-    if len(options) < 1:
-        usage()
-        sys.exit(1)
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit(0)
 
-    server, username, password, apikey, workspace, project = rallyWorkset(options)
+        elif opt in ("-c", "--config_file"):
+            config_file = arg
+        elif opt in ("-e", "--environment"):
+            environment = arg
+
+    rally_input = []
+    input = "--config=" + config_file
+    rally_input.append(input)
+    server, username, password, apikey, workspace, project = rallyWorkset(rally_input)
 
     if apikey:
         rally = Rally(server, apikey=apikey, workspace=workspace, project=project)
@@ -74,8 +92,18 @@ def main(args):
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
 
-    ident_query = 'PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and VerifiedInBuild != NA and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change'
-    # and Project = The Fellowship and Project != Hulk and Project != Hydra and Project != Shield and Project != Thor and Resolution = Code Change'
+
+    if os.path.isfile(QUERY_FILE) is False:
+        err_msg = "File ["+QUERY_FILE+"] is not present."
+        raise AttributeError(err_msg)
+
+    query_file_map = og_utils.load_json(QUERY_FILE)
+    if environment in query_file_map:
+        rally_query = query_file_map[environment]
+    else:
+        error_message = "There is no entry for "+environment+ " in the file "+QUERY_FILE
+        raise AttributeError(error_message)
+
     try:
         # for proj in projects:
         #     # print("    %12.12s  %s" % (proj.oid, proj.Name))
@@ -93,8 +121,9 @@ def main(args):
         print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
-            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildTOBEUSED',
+            response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                                  workspace=workspace, project=proj.Name)
+            response.encoding = "utf-8"
             if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor','Green Beret']:
                 #print("Workspace Name: %s , Project Name: %s , Entity Name: %s " % (
                 #workspace, proj.Name, entity_name))
@@ -110,8 +139,16 @@ def main(args):
                     #         print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.Name, i, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
                     # else:
                     #    print("%s|%s|%s|%s|%s|%s" % (defect.FormattedID, defect.Name, defect.VerifiedInBuild, defect.State, defect.FixedInBuild, defect.PromotedImpactedEnvironment))
+                    FixedInBuild = defect.FixedInBuild
+                    if FixedInBuild != None:
+                        FixedInBuild = FixedInBuild.encode("utf-8")
+
+                    VerifiedinBuildTOBEUSED = defect.VerifiedinBuildTOBEUSED
+                    if VerifiedinBuildTOBEUSED != None:
+                        VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
+
                     print("%s|%s|%s|%s|%s|%s" % (
-                    defect.FormattedID, defect.VerifiedinBuildTOBEUSED, defect.Name, defect.State, defect.FixedInBuild,
+                    defect.FormattedID, VerifiedinBuildTOBEUSED, defect.Name, defect.State, FixedInBuild,
                     defect.PromotedImpactedEnvironment))
                 #print(response.resultCount, "qualifying defects")
         #print("===================================================================================================================================================================================================")

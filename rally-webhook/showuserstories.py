@@ -9,13 +9,15 @@
 # -----------    ----------------  -------------------------------------
 #   Dec-25-2017    Prangya P Kar      Intial Version
 #
-# python3 showuserstories.py --config=rallyuser.cfg
-# python3 showuserstories.py --config=devops-rallyuser.cfg
+# python3 showuserstories.py -c rallyuser.cfg -e QA01
+# python3 showuserstories.py --config_file devops-rallyuser.cfg --environment QA01
 #criterion:
 #
 #################################################################################################
 
 import sys, os, csv
+import getopt
+import og_utils
 from pyral import Rally, rallyWorkset, RallyRESTAPIError
 import argparse
 
@@ -29,27 +31,51 @@ errout = sys.stderr.write
 ##################################################################################################
 def usage():
   print ("\n")
-  usage_message_main = ("Usage: " + __file__ + " [-h] [--help] --config=<configFile>")
-  usage_message_add = ("[UAT Promotion lists of UserStory(s)] This script is to lists all  UserStory(s) which are ready for UAT promotions")
-  print (usage_message_main)
+  usage_message_main1 = ("Usage: " + __file__ + "[--help] --config_file <config_file> --environment <environment>")
+  usage_message_main2 = ("Usage: " + __file__ + "[-h] -c <config_file> -e <environment>")
+  usage_message_add = ("[Environment Promotion list of UserStory(s)] This script lists all  UserStories which are ready for promotion to a specified environment.")
+  print (usage_message_main1)
+  print("OR")
+  print(usage_message_main2)
   print(usage_message_add)
   print("\n")
 
 #################################################################################################
+def verify_inputs(config_file, environment):
+    if not config_file:
+        em1 = "config_file is a mandatory input parameter."
+        raise AttributeError(em1)
+    if not environment:
+        em2 = "environment is a mandatory input parameter."
+        raise AttributeError(em2)
 
+QUERY_FILE = 'rally_userstory_config.json'
 
 def main(args):
-    if "-h" in args or "--help" in args or len(args) < 1:
+    environment = None
+    config_file = None
+    try:
+        opts, args = getopt.getopt(args, "h:c:e:", ["config_file=", "environment=", "help="])
+    except getopt.GetoptError as exc:
+        print(exc.msg)
         usage()
-        sys.exit(1)
+        sys.exit(2)
 
-    options = [opt for opt in args if opt.startswith('--')]
-    args = [arg for arg in args if arg not in options]
-    if len(options) < 1:
-        usage()
-        sys.exit(1)
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit(0)
 
-    server, username, password, apikey, workspace, project = rallyWorkset(options)
+        elif opt in ("-c", "--config_file"):
+            config_file = arg
+        elif opt in ("-e", "--environment"):
+            environment = arg
+    verify_inputs(config_file, environment)
+
+    rally_input=[]
+    input = "--config="+config_file
+    rally_input.append(input)
+    server, username, password, apikey, workspace, project = rallyWorkset(rally_input)
 
     if apikey:
         rally = Rally(server, apikey=apikey, workspace=workspace, project=project)
@@ -67,9 +93,19 @@ def main(args):
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
     sys.stdout = stdoutFile
+    rally_query = None
 
-    #ident_query = 'PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Completed'
-    ident_query = 'PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Accepted'
+    if os.path.isfile(QUERY_FILE) is False:
+        err_msg = "File ["+QUERY_FILE+"] is not present."
+        raise AttributeError(err_msg)
+
+    query_file_map = og_utils.load_json(QUERY_FILE)
+    if environment in query_file_map:
+        rally_query = query_file_map[environment]
+    else:
+        error_message = "There is no entry for "+environment+ " in the file "+QUERY_FILE
+        raise AttributeError(error_message)
+
 
     try:
         # for proj in projects:
@@ -88,7 +124,7 @@ def main(args):
         print(header)
         for proj in projects:
             # print("    %12.12s  %s" % (proj.oid, proj.Name))
-            response = rally.get(entity_name, fetch=True, query=ident_query, order='VerifiedinBuildTOBEUSED',
+            response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                                  workspace=workspace, project=proj.Name)
             #if response.resultCount > 0 and proj.Name not in [ 'The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor']:
             if response.resultCount > 0 :
@@ -102,8 +138,11 @@ def main(args):
                     #             print("%s|%s|%s|%s|%s" % (
                     #             userstory.FormattedID, userstory.Name, userstory.ScheduleState, userstory.PlanEstimate, userstory.VerifiedinBuild))
                     # else:
+                        VerifiedinBuildTOBEUSED = userstory.VerifiedinBuildTOBEUSED
+                        if VerifiedinBuildTOBEUSED != None:
+                            VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
                         print("%s|%s|%s|%s" % (
-                            userstory.FormattedID, userstory.VerifiedinBuildTOBEUSED,userstory.Name, userstory.ScheduleState))
+                            userstory.FormattedID, VerifiedinBuildTOBEUSED,userstory.Name, userstory.ScheduleState))
                     #print("-----------------------------------------------------------------")
                     #print("%s"%(userstory.VerifiedinBuild))
         stdoutFile.close()

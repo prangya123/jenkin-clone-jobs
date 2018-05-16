@@ -88,7 +88,7 @@ def main(args):
     stageFile='outputResultUS.csv'
     finalFile='splitResultsUS.csv'
     finalSortedFile='sortedResultUS.csv'
-    header='FormattedID|VerifiedinBuildDEPRECATED|Name|ScheduleState'
+    header='FormattedID|VerifiedinBuildTOBEUSED|Name|ScheduleState'
     finalHeader='FormattedID|VerifiedinBuildTOBEUSED|Name'
     temp = sys.stdout
     stdoutFile = open(stageFile, 'w')
@@ -177,7 +177,7 @@ def main(args):
         sys.stderr.write('ERROR:')
         usage()
         raise
-        sys.exit(1)
+        #sys.exit(1)
 
 #    fields = "FormattedID,Name,Release,Iteration,ScheduleState,VerifiedInBuild,PlanEstimate,Project,Owner,Feature"
 

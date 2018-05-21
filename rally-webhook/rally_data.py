@@ -153,12 +153,14 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
                         FixedInBuild = defect.FixedInBuild
                         VerifiedinBuildTOBEUSED = defect.VerifiedinBuildTOBEUSED
                         if FixedInBuild != None:
-                            FixedInBuild = FixedInBuild.encode("utf-8")
+                            FixedInBuild_byte = FixedInBuild.encode("utf-8")
+                            FixedInBuild_str = str(FixedInBuild_byte)
                         if VerifiedinBuildTOBEUSED != None:
-                                VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
-                        line = defect.FormattedID+"|"+VerifiedinBuildTOBEUSED+"|"+defect.Name+"|"+defect.State+"|"+FixedInBuild+"|"+defect.PromotedImpactedEnvironment+"\n"
+                                VerifiedinBuildTOBEUSED_byte = VerifiedinBuildTOBEUSED.encode("utf-8")
+                                VerifiedinBuildTOBEUSED_str = str(VerifiedinBuildTOBEUSED_byte)
+                        line = defect.FormattedID+"|"+VerifiedinBuildTOBEUSED_str.strip()+"|"+defect.Name+"|"+defect.State+"|"+FixedInBuild_str.strip()+"|"+defect.PromotedImpactedEnvironment+"\n"
                         data_array.append(line)
-                        raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED, defect.Name))
+                        raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED_str.strip(), defect.Name))
     logger.info("End method get_rally_entity_data")
     return data_array, raw_data_array
 

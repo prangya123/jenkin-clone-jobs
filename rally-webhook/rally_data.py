@@ -135,7 +135,7 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
     for proj in projects:
         response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                              workspace=workspace, project=proj.Name)
-        print(response)
+        #print(response)
         response.encoding = "utf-8"
         if response.resultCount > 0:
             if entity_name == us_entity:
@@ -154,13 +154,17 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
                         VerifiedinBuildTOBEUSED = defect.VerifiedinBuildTOBEUSED
                         if FixedInBuild != None:
                             FixedInBuild_byte = FixedInBuild.encode("utf-8")
-                            FixedInBuild_str = str(FixedInBuild_byte)
+                            FixedInBuild_str = (str(FixedInBuild_byte)).strip()
+                        else:
+                            FixedInBuild_str = 'None'
                         if VerifiedinBuildTOBEUSED != None:
                                 VerifiedinBuildTOBEUSED_byte = VerifiedinBuildTOBEUSED.encode("utf-8")
-                                VerifiedinBuildTOBEUSED_str = str(VerifiedinBuildTOBEUSED_byte)
-                        line = defect.FormattedID+"|"+VerifiedinBuildTOBEUSED_str.strip()+"|"+defect.Name+"|"+defect.State+"|"+FixedInBuild_str.strip()+"|"+defect.PromotedImpactedEnvironment+"\n"
+                                VerifiedinBuildTOBEUSED_str = (str(VerifiedinBuildTOBEUSED_byte)).strip()
+                        else:
+                            VerifiedinBuildTOBEUSED_str = 'None'
+                        line = defect.FormattedID+"|"+VerifiedinBuildTOBEUSED_str+"|"+defect.Name+"|"+defect.State+"|"+FixedInBuild_str+"|"+defect.PromotedImpactedEnvironment+"\n"
                         data_array.append(line)
-                        raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED_str.strip(), defect.Name))
+                        raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED_str, defect.Name))
     logger.info("End method get_rally_entity_data")
     return data_array, raw_data_array
 

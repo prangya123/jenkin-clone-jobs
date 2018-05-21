@@ -38,7 +38,7 @@ def validate_file(file_name, file_tag):
   logger.info("End method validate_file")
 
 
-def write_file(self, filename, filedata_array):
+def write_file(filename, filedata_array):
     logger.info("Begin method write_file")
     logger.info("Write File " + filename + ", contains the data: \n" + str(filedata_array))
     with open(filename, 'w') as file_obj:
@@ -51,6 +51,9 @@ def remove_specific_pattern(input_string):
   if '\xe2\x80\x8b' in input_string:
     prefix, separator, postfix = input_string.partition('\xe2\x80\x8b')
     output_string = prefix+postfix
+  if '\\xe2\\x80\\x8b' in input_string:
+    prefix, separator, postfix = input_string.partition('\\xe2\\x80\\x8b')
+    output_string = prefix + postfix
   else:
     output_string = input_string
   logger.info("Input was: "+input_string+". Cleaned value was: "+output_string)

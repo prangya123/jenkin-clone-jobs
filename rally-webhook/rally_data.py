@@ -102,10 +102,8 @@ def main(argv):
         og_utils.write_file(entity_dict['stageFile'], data_array)
         file_split_data_array, split_data_array = split_data_on_field(raw_data_array)
         og_utils.write_file(entity_dict['finalFile'], file_split_data_array)
-        
-
-
-
+        sorted_file_array = create_sorted_file(split_data_array)
+        og_utils.write_file(entity_dict['finalSortedFile'], sorted_file_array)
 
         exit_status = 0
         exit_message = 'Success'
@@ -138,25 +136,26 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
         response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                              workspace=workspace, project=proj.Name)
         print(response)
-        # response.encoding = "utf-8"
+        response.encoding = "utf-8"
         if response.resultCount > 0:
             if entity_name == us_entity:
                 for userstory in response:
                     VerifiedinBuildTOBEUSED = userstory.VerifiedinBuildTOBEUSED
                     if VerifiedinBuildTOBEUSED != None:
-                        #VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
-                        line = userstory.FormattedID+"|"+VerifiedinBuildTOBEUSED+"|"+userstory.Name+"|"+userstory.ScheduleState+"\n"
+                        VerifiedinBuildTOBEUSED_byte = VerifiedinBuildTOBEUSED.encode("utf-8")
+                        VerifiedinBuildTOBEUSED_str = str(VerifiedinBuildTOBEUSED_byte)
+                        line = userstory.FormattedID+"|"+VerifiedinBuildTOBEUSED_str.strip()+"|"+userstory.Name+"|"+userstory.ScheduleState+"\n"
                         data_array.append(line)
-                        raw_data_array.append((userstory.FormattedID, VerifiedinBuildTOBEUSED, userstory.Name))
+                        raw_data_array.append((userstory.FormattedID, VerifiedinBuildTOBEUSED_str.strip(), userstory.Name))
             elif entity_name == defect_entity:
                 if proj.Name not in ['The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor', 'Green Beret']:
                     for defect in response:
                         FixedInBuild = defect.FixedInBuild
                         VerifiedinBuildTOBEUSED = defect.VerifiedinBuildTOBEUSED
-                        #if FixedInBuild != None:
-                            #FixedInBuild = FixedInBuild.encode("utf-8")
-                        #if VerifiedinBuildTOBEUSED != None:
-                                #VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
+                        if FixedInBuild != None:
+                            FixedInBuild = FixedInBuild.encode("utf-8")
+                        if VerifiedinBuildTOBEUSED != None:
+                                VerifiedinBuildTOBEUSED = VerifiedinBuildTOBEUSED.encode("utf-8")
                         line = defect.FormattedID+"|"+VerifiedinBuildTOBEUSED+"|"+defect.Name+"|"+defect.State+"|"+FixedInBuild+"|"+defect.PromotedImpactedEnvironment+"\n"
                         data_array.append(line)
                         raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED, defect.Name))
@@ -180,17 +179,29 @@ def split_data_on_field(raw_data_array):
                 cleaned_build = og_utils.remove_specific_pattern(each_obj.strip())
                 line= curr_id+"|"+cleaned_build+"|"+curr_name+"\n"
                 file_split_data_array.append(line)
-                split_data_array.append((curr_id.trim(), cleaned_build, curr_name))
+                split_data_array.append((curr_id, cleaned_build, curr_name))
         else:
             cleaned_build = og_utils.remove_specific_pattern(curr_build.strip())
             line = curr_id + "|" + curr_build.strip() + "|" + curr_name + "\n"
             file_split_data_array.append(line)
-            split_data_array.append((curr_id.trim(), cleaned_build, curr_name))
+            split_data_array.append((curr_id, cleaned_build, curr_name))
 
     logger.info("End method split_data_on_field")
     return file_split_data_array, split_data_array
 
 
+def create_sorted_file(split_data_array):
+    logger.info("Begin method split_data_array.")
+    sorted_file_array = []
+    sorted_file_array.append(finalHeader + "\n")
+    if split_data_array:
+        split_data_array.sort(key=lambda x: x[1])
+        for curr_tuple in split_data_array:
+            line = curr_tuple[0]+"|"+curr_tuple[1]+"|"+curr_tuple[2]+"\n"
+            sorted_file_array.append(line)
+    logger.info("Sorte File data: "+str(sorted_file_array))
+    logger.info("End method split_data_array.")
+    return sorted_file_array
 
 
 def set_entity(story_type):

@@ -109,7 +109,7 @@ class MergeFiles(object):
             print('Validating User Input: ')
             self.sortedResultD = sortedResultD
             self.sortedResultUS = sortedResultUS
-
+            self.all_ids = set()
             self.__validate_inputData()
 
         except Exception as ex:
@@ -133,34 +133,36 @@ class MergeFiles(object):
 
     def sanitize_output_result(self, file_to_clean, sanitizeSortedResultFile, ignore_file):
         logger.info("Begin method sanitize_output_result.")
-        ignore_array = []
+        ignore_array_file = []
         sanitized_file_array = []
         sanitized_file_array.append(finalHeader + '\n')
-        ignore_array.append(finalHeader + '\n')
+        ignore_array_file.append(finalHeader + '\n')
         with open(file_to_clean) as f1:
             f1.readline()  # skip header
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
             for line in lines:
+                id = line.split('|')[0]
+                self.all_ids.add(id)
                 verifiedInBuild = line.split('|')[1]
+                name = line.split('|')[2]
                 split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
                 artifact_name = None
                 for value in split_verifiedInBuild:
                     if self.check_if_string_is_artifact(value):
                         artifact_name = self.clean_artifact(value)
-
-
                 if artifact_name:
-                    line_passed = line.split('|')[0]+"|"+artifact_name+"|"+line.split('|')[2]+"\n"
+                    line_passed = id+"|"+artifact_name+"|"+name+"\n"
                     logger.debug("Line passed is: " + line_passed)
                     sanitized_file_array.append(line_passed)
                 else:
-                    ignored_line = line.split('|')[0]+"|"+verifiedInBuild+"|"+line.split('|')[2]+"\n"
-                    logger.debug("Line ignored is: "+ignored_line)
-                    ignore_array.append(ignored_line)
+                    ignored_line = id+"|"+verifiedInBuild+"|"+name+"\n"
+                    logger.info("Line ignored is: "+ignored_line)
+                    ignore_array_file.append(ignored_line)
 
-        if ignore_array:
-            self.write_file(ignore_file, ignore_array)
+        if ignore_array_file:
+            ignore_array_file.sort(key=lambda x: x[0])
+            self.write_file(ignore_file, ignore_array_file)
 
         if sanitized_file_array:
             self.write_file(sanitizeSortedResultFile, sanitized_file_array)

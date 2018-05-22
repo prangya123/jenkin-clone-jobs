@@ -121,7 +121,7 @@ def main(argv):
         stop = timeit.default_timer()
         total_time = stop - start
 
-        print("\nEnd Process of Sanitizing and Merging the Defect and UserStory Files.\n")
+        print("\nEnd Process of Retrieving data from Rally for promotion.\n")
 
         logger.info(
             "Script execution status [" + exit_message + "], time taken [" + str(datetime.timedelta(seconds=total_time)) + "]")
@@ -201,7 +201,7 @@ def create_sorted_file(split_data_array):
         for curr_tuple in split_data_array:
             line = curr_tuple[0]+"|"+curr_tuple[1]+"|"+curr_tuple[2]+"\n"
             sorted_file_array.append(line)
-    logger.info("Sorte File data: "+str(sorted_file_array))
+    logger.info("Sorted File data: "+str(sorted_file_array))
     logger.info("End method split_data_array.")
     return sorted_file_array
 

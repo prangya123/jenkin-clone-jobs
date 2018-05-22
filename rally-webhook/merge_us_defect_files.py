@@ -163,10 +163,10 @@ class MergeFiles(object):
 
         if ignore_array_file:
             ignore_array_file.sort(key=lambda x: x[0])
-            self.write_file(ignore_file, ignore_array_file)
+            og_utils.write_file(ignore_file, ignore_array_file)
 
         if sanitized_file_array:
-            self.write_file(sanitizeSortedResultFile, sanitized_file_array)
+            og_utils.write_file(sanitizeSortedResultFile, sanitized_file_array)
 
         logger.info("End method sanitize_output_result.")
 

@@ -10,6 +10,7 @@ import csv
 import re
 import traceback
 import copy
+import og_utils
 from packaging import version
 
 logging.getLogger("requests").setLevel(logging.WARNING)
@@ -68,9 +69,9 @@ def main(argv):
         merge_files.sanitize_output_result(sortedResultD, sanitizeSortedResultDFile, ignoreDefectsFile)
         merge_files.merge_file()
         merge_files.sort_merged_file()
-        merge_files.get_sorted_id()
+        id_array = merge_files.get_sorted_id()
         merge_files.get_sorted_verified_in_build()
-
+        get_ignored_ids = merge_files.get_ignored_ids(id_array)
         exit_status = 0
         exit_message = 'Success'
 
@@ -216,16 +217,19 @@ class MergeFiles(object):
                     logger.info("Id "+ids+", already exists in the id's array. Will not be added a second time.")
                 else:
                     id_array.append(key)
-
+        file_id_array = []
+        file_id_array.append("FormattedID\n")
         logger.info("List of Ids to be promoted: \n" + str(id_array))
         if id_array:
-            self.write_file(sortedIdFile, id_array)
+            file_id_array.extend(id_array)
+            og_utils.write_file(sortedIdFile, file_id_array)
         else:
             warn_msg = "No stories(US) or defects(D) available for promotion."
             logger.info(warn_msg)
             sys.stdout.write("\n"+warn_msg)
             sys.stdout.flush()
         logger.info("End method get_sorted_id")
+        return id_array
 
 
     def get_sorted_verified_in_build(self):
@@ -236,7 +240,7 @@ class MergeFiles(object):
             list_to_examine = copy.deepcopy(build_list)
             promote_builds = self.get_only_highest_builds(list_to_examine)
             if promote_builds:
-                self.write_file(verifiedInBuildFile, promote_builds)
+                og_utils.write_file(verifiedInBuildFile, promote_builds)
         else:
             warn_msg = "No builds availble for promotion."
             sys.stdout.write("\n"+warn_msg)
@@ -377,6 +381,20 @@ class MergeFiles(object):
             file_obj.writelines(filedata_array)
         logger.info("End method write_file")
 
+
+    def get_ignored_ids(self, id_array):
+        logger.info("Begin method get_ignored_ids")
+        ignore_ids =[]
+        ignore_ids.append("FormattedID\n")
+        for curr_id in self.all_ids:
+            if curr_id not in id_array:
+                ignore_ids.append(curr_id+"\n")
+        if ignore_ids:
+            ignore_ids.sort(key=lambda x: x[0])
+            og_utils.write_file("ignore_ids.csv", ignore_ids)
+        logger.info("List of Ids that will not be promoted are: "+str(ignore_ids))
+        logger.info("End method get_ignored_ids")
+        return ignore_ids
 
 def create_log_file():
     cur_dir = os.path.dirname(os.path.realpath(__file__))

@@ -145,11 +145,10 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
                     if VerifiedinBuildTOBEUSED != None:
                         VerifiedinBuildTOBEUSED_byte = VerifiedinBuildTOBEUSED.encode("utf-8")
                         VerifiedinBuildTOBEUSED_str = (str(VerifiedinBuildTOBEUSED_byte)).strip()
-                    else:
-                        VerifiedinBuildTOBEUSED_str = 'None'
-                    line = userstory.FormattedID+"|"+VerifiedinBuildTOBEUSED_str+"|"+userstory.Name+"|"+userstory.ScheduleState+"\n"
-                    data_array.append(line)
-                    raw_data_array.append((userstory.FormattedID, VerifiedinBuildTOBEUSED_str, userstory.Name))
+                        line = userstory.FormattedID + "|" + VerifiedinBuildTOBEUSED_str + "|" + userstory.Name + "|" + userstory.ScheduleState + "\n"
+                        data_array.append(line)
+                        raw_data_array.append((userstory.FormattedID, VerifiedinBuildTOBEUSED_str, userstory.Name))
+
             elif entity_name == defect_entity:
                 if proj.Name not in ['The Fellowship', 'Hulk', 'Hydra', 'Shield', 'Thor', 'Green Beret']:
                     for defect in response:
@@ -157,11 +156,9 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
                         if VerifiedinBuildTOBEUSED != None:
                                 VerifiedinBuildTOBEUSED_byte = VerifiedinBuildTOBEUSED.encode("utf-8")
                                 VerifiedinBuildTOBEUSED_str = (str(VerifiedinBuildTOBEUSED_byte)).strip()
-                        else:
-                            VerifiedinBuildTOBEUSED_str = 'None'
-                        line = defect.FormattedID+"|"+VerifiedinBuildTOBEUSED_str+"|"+defect.Name+"|"+defect.State+"|"+defect.PromotedImpactedEnvironment+"\n"
-                        data_array.append(line)
-                        raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED_str, defect.Name))
+                                line = defect.FormattedID + "|" + VerifiedinBuildTOBEUSED_str + "|" + defect.Name + "|" + defect.State + "|" + defect.PromotedImpactedEnvironment + "\n"
+                                data_array.append(line)
+                                raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED_str, defect.Name))
     logger.info("End method get_rally_entity_data")
     return data_array, raw_data_array
 

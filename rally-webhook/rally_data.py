@@ -102,7 +102,7 @@ def main(argv):
         #print(data_array)
         og_utils.write_file(entity_dict['stageFile'], data_array)
         file_split_data_array, split_data_array = split_data_on_field(raw_data_array)
-        og_utils.write_file(entity_dict['finalFile'], file_split_data_array)
+        #og_utils.write_file(entity_dict['finalFile'], file_split_data_array)
         sorted_file_array = create_sorted_file(split_data_array)
         og_utils.write_file(entity_dict['finalSortedFile'], sorted_file_array)
 

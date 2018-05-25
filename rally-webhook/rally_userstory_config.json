@@ -1,4 +1,3 @@
 {
-  "QA01":"PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Accepted",
   "UAT01": "PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Accepted"
 }

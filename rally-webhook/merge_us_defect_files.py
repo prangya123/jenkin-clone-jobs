@@ -10,6 +10,7 @@ import csv
 import re
 import traceback
 import copy
+import og_utils
 from packaging import version
 
 logging.getLogger("requests").setLevel(logging.WARNING)
@@ -68,9 +69,9 @@ def main(argv):
         merge_files.sanitize_output_result(sortedResultD, sanitizeSortedResultDFile, ignoreDefectsFile)
         merge_files.merge_file()
         merge_files.sort_merged_file()
-        merge_files.get_sorted_id()
+        id_array = merge_files.get_sorted_id()
         merge_files.get_sorted_verified_in_build()
-
+        get_ignored_ids = merge_files.get_ignored_ids(id_array)
         exit_status = 0
         exit_message = 'Success'
 
@@ -109,7 +110,7 @@ class MergeFiles(object):
             print('Validating User Input: ')
             self.sortedResultD = sortedResultD
             self.sortedResultUS = sortedResultUS
-
+            self.all_ids = set()
             self.__validate_inputData()
 
         except Exception as ex:
@@ -133,37 +134,39 @@ class MergeFiles(object):
 
     def sanitize_output_result(self, file_to_clean, sanitizeSortedResultFile, ignore_file):
         logger.info("Begin method sanitize_output_result.")
-        ignore_array = []
+        ignore_array_file = []
         sanitized_file_array = []
         sanitized_file_array.append(finalHeader + '\n')
-        ignore_array.append(finalHeader + '\n')
+        ignore_array_file.append(finalHeader + '\n')
         with open(file_to_clean) as f1:
             f1.readline()  # skip header
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
             for line in lines:
+                id = line.split('|')[0]
+                self.all_ids.add(id)
                 verifiedInBuild = line.split('|')[1]
+                name = line.split('|')[2]
                 split_verifiedInBuild = re.split('[> <]', verifiedInBuild)
                 artifact_name = None
                 for value in split_verifiedInBuild:
                     if self.check_if_string_is_artifact(value):
                         artifact_name = self.clean_artifact(value)
-
-
                 if artifact_name:
-                    line_passed = line.split('|')[0]+"|"+artifact_name+"|"+line.split('|')[2]+"\n"
+                    line_passed = id+"|"+artifact_name+"|"+name+"\n"
                     logger.debug("Line passed is: " + line_passed)
                     sanitized_file_array.append(line_passed)
                 else:
-                    ignored_line = line.split('|')[0]+"|"+verifiedInBuild+"|"+line.split('|')[2]+"\n"
-                    logger.debug("Line ignored is: "+ignored_line)
-                    ignore_array.append(ignored_line)
+                    ignored_line = id+"|"+verifiedInBuild+"|"+name+"\n"
+                    logger.info("Line ignored is: "+ignored_line)
+                    ignore_array_file.append(ignored_line)
 
-        if ignore_array:
-            self.write_file(ignore_file, ignore_array)
+        if ignore_array_file:
+            ignore_array_file.sort(key=lambda x: x[0])
+            og_utils.write_file(ignore_file, ignore_array_file)
 
         if sanitized_file_array:
-            self.write_file(sanitizeSortedResultFile, sanitized_file_array)
+            og_utils.write_file(sanitizeSortedResultFile, sanitized_file_array)
 
         logger.info("End method sanitize_output_result.")
 
@@ -214,16 +217,19 @@ class MergeFiles(object):
                     logger.info("Id "+ids+", already exists in the id's array. Will not be added a second time.")
                 else:
                     id_array.append(key)
-
+        file_id_array = []
+        file_id_array.append("FormattedID\n")
         logger.info("List of Ids to be promoted: \n" + str(id_array))
         if id_array:
-            self.write_file(sortedIdFile, id_array)
+            file_id_array.extend(id_array)
+            og_utils.write_file(sortedIdFile, file_id_array)
         else:
             warn_msg = "No stories(US) or defects(D) available for promotion."
             logger.info(warn_msg)
             sys.stdout.write("\n"+warn_msg)
             sys.stdout.flush()
         logger.info("End method get_sorted_id")
+        return id_array
 
 
     def get_sorted_verified_in_build(self):
@@ -234,7 +240,7 @@ class MergeFiles(object):
             list_to_examine = copy.deepcopy(build_list)
             promote_builds = self.get_only_highest_builds(list_to_examine)
             if promote_builds:
-                self.write_file(verifiedInBuildFile, promote_builds)
+                og_utils.write_file(verifiedInBuildFile, promote_builds)
         else:
             warn_msg = "No builds availble for promotion."
             sys.stdout.write("\n"+warn_msg)
@@ -334,6 +340,8 @@ class MergeFiles(object):
             artifact_name = self.split_on_given_delimiter(artifact_name, "\"")
         if artifact_name and "=" in artifact_name:
             artifact_name = self.split_on_given_delimiter(artifact_name, "=")
+        if artifact_name and "&nbsp;" in artifact_name:
+            artifact_name = self.split_on_given_delimiter(artifact_name, "&nbsp;")
         if artifact_name:
             cleaned_artifact = artifact_name
 
@@ -373,6 +381,20 @@ class MergeFiles(object):
             file_obj.writelines(filedata_array)
         logger.info("End method write_file")
 
+
+    def get_ignored_ids(self, id_array):
+        logger.info("Begin method get_ignored_ids")
+        ignore_ids =[]
+        ignore_ids.append("FormattedID\n")
+        for curr_id in self.all_ids:
+            if curr_id not in id_array:
+                ignore_ids.append(curr_id+"\n")
+        if ignore_ids:
+            ignore_ids.sort(key=lambda x: x[0])
+            og_utils.write_file("ignore_ids.csv", ignore_ids)
+        logger.info("List of Ids that will not be promoted are: "+str(ignore_ids))
+        logger.info("End method get_ignored_ids")
+        return ignore_ids
 
 def create_log_file():
     cur_dir = os.path.dirname(os.path.realpath(__file__))

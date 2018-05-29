@@ -385,13 +385,16 @@ class MergeFiles(object):
     def get_ignored_ids(self, id_array):
         logger.info("Begin method get_ignored_ids")
         ignore_ids =[]
-        ignore_ids.append("FormattedID\n")
+        file_ignore_ids = []
+        file_ignore_ids.append("FormattedID\n")
         for curr_id in self.all_ids:
-            if curr_id not in id_array:
-                ignore_ids.append(curr_id+"\n")
+            check_string = curr_id+"\n"
+            if check_string not in id_array:
+                ignore_ids.append(check_string)
         if ignore_ids:
             ignore_ids.sort(key=lambda x: x[0])
-            og_utils.write_file("ignore_ids.csv", ignore_ids)
+            file_ignore_ids.extend(ignore_ids)
+        og_utils.write_file("ignore_ids.csv", file_ignore_ids)
         logger.info("List of Ids that will not be promoted are: "+str(ignore_ids))
         logger.info("End method get_ignored_ids")
         return ignore_ids

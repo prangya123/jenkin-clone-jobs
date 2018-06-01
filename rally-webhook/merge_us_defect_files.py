@@ -27,6 +27,9 @@ sanitizeSortedResultUSFile = 'sanitizeSortedResultUS.csv'
 sanitizeSortedResultDFile = 'sanitizeSortedResultD.csv'
 ignoreUserStoriesFile="ignore_us.csv"
 ignoreDefectsFile = "ignore_defect.csv"
+DIR_NAME = "logs"
+
+
 def main(argv):
     logger.info("In main method .................")
     print(platform.python_version())
@@ -112,6 +115,7 @@ class MergeFiles(object):
             self.sortedResultUS = sortedResultUS
             self.all_ids = set()
             self.__validate_inputData()
+            og_utils.check_or_create_report_directory(DIR_NAME)
 
         except Exception as ex:
             print (ex)
@@ -163,10 +167,12 @@ class MergeFiles(object):
 
         if ignore_array_file:
             ignore_array_file.sort(key=lambda x: x[0])
-            og_utils.write_file(ignore_file, ignore_array_file)
+            filepath = os.path.join('.',DIR_NAME, ignore_file)
+            og_utils.write_file(filepath, ignore_array_file)
 
         if sanitized_file_array:
-            og_utils.write_file(sanitizeSortedResultFile, sanitized_file_array)
+            filepath2 = os.path.join('.', DIR_NAME, sanitizeSortedResultFile)
+            og_utils.write_file(filepath2, sanitized_file_array)
 
         logger.info("End method sanitize_output_result.")
 
@@ -176,10 +182,12 @@ class MergeFiles(object):
         logger.info("Begin method merge_file.")
         logger.info("Files being merged are "+sanitizeSortedResultDFile+" and "+sanitizeSortedResultUSFile+".")
         filenames = [sanitizeSortedResultDFile, sanitizeSortedResultUSFile]
-        with open(mergedResultFile, 'w') as outfile:
+        filepath = os.path.join('.',DIR_NAME, mergedResultFile)
+        with open(filepath, 'w') as outfile:
             outfile.write(finalHeader + '\n')
             for fname in filenames:
-                with open(fname) as infile:
+                fpath = os.path.join('.',DIR_NAME, fname)
+                with open(fpath) as infile:
                     next(infile)  # skip header
                     for line in infile:
                         outfile.write(line)
@@ -190,7 +198,9 @@ class MergeFiles(object):
         # Sort the mergedResult File and write into mergedSortedResult
         logger.info("Begin method sort_merged_file")
         logger.info("File being sorted is: "+mergedResultFile)
-        with open(mergedResultFile, mode='rt') as f, open(mergedSortedResultFile, 'w') as final:
+        file_path1 = os.path.join('.',DIR_NAME,mergedResultFile)
+        file_path2 = os.path.join('.', DIR_NAME, mergedSortedResultFile)
+        with open(file_path1, mode='rt') as f, open(file_path2, 'w') as final:
             writer = csv.writer(final, delimiter='|')
             reader = csv.reader(f, delimiter='|')
             _ = next(reader)
@@ -206,7 +216,8 @@ class MergeFiles(object):
         # get ids from sorted merged file
         logger.info("Begin method get_sorted_id")
         id_array = []
-        with open(mergedSortedResultFile) as f1:
+        fpath1= os.path.join('.',DIR_NAME, mergedSortedResultFile)
+        with open(fpath1) as f1:
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
             f1.readline()  # skip header
@@ -251,7 +262,8 @@ class MergeFiles(object):
     def extract_all_builds(self):
         verified_array = []
         logger.info("Begin method extract_all_builds")
-        with open(mergedSortedResultFile) as f1:
+        fpath = os.path.join('.', DIR_NAME, mergedSortedResultFile)
+        with open(fpath) as f1:
             lines = (line.rstrip() for line in f1)  # All lines including the blank ones
             lines = (line for line in lines if line)  # Non-blank lines
             f1.readline()  # skip header

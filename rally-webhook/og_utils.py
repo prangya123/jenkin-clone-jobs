@@ -59,3 +59,13 @@ def remove_specific_pattern(input_string):
   logger.info("Input was: "+input_string+". Cleaned value was: "+output_string)
   logger.info("End method remove_specific_pattern")
   return output_string
+
+
+def check_or_create_report_directory(dir_name):
+  report_directory = os.path.join('.', dir_name)
+  if not os.path.exists(report_directory):
+    logging.info("Directory ["+str(report_directory)+"] does not exist. Creating it.")
+    os.makedirs(report_directory)
+  else:
+    logging.info("Directory ["+str(report_directory)+"] exists.")
+  return report_directory

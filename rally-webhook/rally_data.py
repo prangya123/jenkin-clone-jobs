@@ -38,10 +38,12 @@ ALL_TYPE = 'all'
 USER_STORY_TYPE = 'userstory'
 DEFECT_TYPE = 'defect'
 VALID_TYPES =[USER_STORY_TYPE, DEFECT_TYPE]
+DIR_NAME = "logs"
 header = 'FormattedID | VerifiedinBuildTOBEUSED | Name | State | PromotedImpactedEnvironment'
 finalHeader = 'FormattedID|VerifiedinBuildTOBEUSED|Name'
 us_entity = 'UserStory'
 defect_entity  = 'Defect'
+
 def main(argv):
     logger.info("Begin main method.")
     logger.info("Python version: "+str(platform.python_version()))
@@ -83,6 +85,7 @@ def main(argv):
         logger.info(start_message)
         print("\n"+start_message+"\n")
         validate_inputs(config_file, environment, story_type)
+        og_utils.check_or_create_report_directory(DIR_NAME)
         rally, projects, workspace = get_rally_projects(config_file)
         entity_name = set_entity(story_type)
         entity_dict = get_file_data_based_on_entity(entity_name)
@@ -104,7 +107,8 @@ def main(argv):
         file_split_data_array, split_data_array = split_data_on_field(raw_data_array)
         #og_utils.write_file(entity_dict['finalFile'], file_split_data_array)
         sorted_file_array = create_sorted_file(split_data_array)
-        og_utils.write_file(entity_dict['finalSortedFile'], sorted_file_array)
+        filepath = os.path.join('.',DIR_NAME, entity_dict['finalSortedFile'])
+        og_utils.write_file(filepath, sorted_file_array)
 
         exit_status = 0
         exit_message = 'Success'
@@ -133,6 +137,7 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
     raw_data_array = []
     data_array = []
     data_array.append(header+"\n")
+    print("\n Retrieving Rally Data for "+entity_name+".")
     for proj in projects:
         response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                              workspace=workspace, project=proj.Name)
@@ -159,6 +164,7 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
                                 line = defect.FormattedID + "|" + VerifiedinBuildTOBEUSED_str + "|" + defect.Name + "|" + defect.State + "|" + defect.PromotedImpactedEnvironment + "\n"
                                 data_array.append(line)
                                 raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED_str, defect.Name))
+
     logger.info("End method get_rally_entity_data")
     return data_array, raw_data_array
 

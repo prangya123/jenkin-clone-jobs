@@ -9,9 +9,10 @@
 # Bug fixed version 1.3 (Wrong route display for prod app).
 # Added Dev02, Qa02 and DemoDev02
 # Added Bfx01
+# Fixed no service bind issue
 # Removed Dev01
 # Author: Sufyan
-# Version: 1.5
+# Version: 1.6
 
 
 use warnings;
@@ -182,7 +183,7 @@ for $app_name (@dev02_apps)
     {
         print $fh "<tr BGCOLOR=\"#e2f4ff\"><td NOWRAP bgcolor=\"#30aaf4\">$app_count</td><td NOWRAP bgcolor=\"#30aaf4\">$app_name</td>";
         print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[8]\">Version: 1.0.0.$version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]<BR>Last uploaded: $dev02_hash1{$app_name}[5]<BR>Memory: $dev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#dev02_$app_count\">Bound Services </a></p></td>";
-
+		print $fh "<div id=\"dev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $dev02_hash1{$app_name}[6]</br></div></div></div>\n";
         if ($dev02_hash1{$app_name}[8] eq "#ffa8af")
         {
             $down_apps[$dev02_ctr][0] = $app_name;
@@ -200,7 +201,7 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[8]\">Version: 1.0.0.$version_qa<BR>Instances running: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]<BR>Last uploaded: $qa_hash1{$app_name}[5]<BR>Memory: $qa_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#qa_$app_count\">Bound Services </a></p></td>";
-
+			 print $fh "<div id=\"qa_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa_hash1{$app_name}[6]</br></div></div></div>\n";
             if ($qa_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$qa_ctr][1] = $app_name;
@@ -217,7 +218,7 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$qa02_hash1{$app_name}[8]\">Version: 1.0.0.$version_qa02<BR>Instances running: $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]<BR>Route: $qa02_hash1{$app_name}[2]<BR>Last uploaded: $qa02_hash1{$app_name}[5]<BR>Memory: $qa02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#qa02_$app_count\">Bound Services </a></p></td>";
-
+			print $fh "<div id=\"qa02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa02_hash1{$app_name}[6]</br></div></div></div>\n";
             if ($qa02_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$qa02_ctr][1] = $app_name;
@@ -233,13 +234,14 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[8]\">Version: 1.0.0.$version_uat<BR>Instances running: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]<BR>Last uploaded: $uat_hash1{$app_name}[5]<BR>Memory: $uat_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#uat_$app_count\">Bound Services </a></p></td>";
-
+			print $fh "<div id=\"uat_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $uat_hash1{$app_name}[6]</br></div></div></div>\n";
             if ($uat_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$uat_ctr][2] = $app_name;
                 $uat_ctr++;
             }
         }
+####### Perf01
 
         if ($version_perf eq "Missing")
         {
@@ -248,7 +250,7 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$perf_hash1{$app_name}[8]\">Version: 1.0.0.$version_perf<BR>Instances running: $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]<BR>Route: $perf_hash1{$app_name}[2]<BR>Last uploaded: $perf_hash1{$app_name}[5]<BR>Memory: $perf_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#perf_$app_count\">Bound Services </a></p></td>";
-
+			print $fh "<div id=\"perf_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $perf_hash1{$app_name}[6]</br></div></div></div>\n";
             if ($perf_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$perf_ctr][3] = $app_name;
@@ -266,7 +268,7 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$demodev02_hash1{$app_name}[8]\">Version: 1.0.0.$version_demodev02<BR>Instances running: $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]<BR>Route: $demodev02_hash1{$app_name}[2]<BR>Last uploaded: $demodev02_hash1{$app_name}[5]<BR>Memory: $demodev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#demodev02_$app_count\">Bound Services </a></p></td>";
-
+			print $fh "<div id=\"demodev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demodev02_hash1{$app_name}[6]</br></div></div></div>\n";
             if($demodev02_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$demodev02_ctr][8] = $app_name;
@@ -283,7 +285,7 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$demoprod_hash1{$app_name}[8]\">Version: 1.0.0.$version_demoprod<BR>Instances running: $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]<BR>Route: $demoprod_hash1{$app_name}[2]<BR>Last uploaded: $demoprod_hash1{$app_name}[5]<BR>Memory: $demoprod_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#demoprod_$app_count\">Bound Services </a></p></td>";
-
+			print $fh "<div id=\"demoprod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demoprod_hash1{$app_name}[6]</br></div></div></div>\n";
             if ($demoprod_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$demoprod_ctr][4] = $app_name;
@@ -300,8 +302,8 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$bfx01_hash1{$app_name}[8]\">Version: 1.0.0.$version_bfx01<BR>Instances running: $bfx01_hash1{$app_name}[3]/$bfx01_hash1{$app_name}[4]<BR>Route: $bfx01_hash1{$app_name}[2]<BR>Last uploaded: $bfx01_hash1{$app_name}[5]<BR>Memory: $bfx01_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#bfx01_$app_count\">Bound Services </a></p></td>";
-
-            if ($demoprod_hash1{$app_name}[8] eq "#ffa8af")
+			print $fh "<div id=\"bfx01_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $bfx01_hash1{$app_name}[6]</br></div></div></div>\n";    
+            if ($bfx01_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$bfx01_ctr][4] = $app_name;
                 $bfx01_ctr++;
@@ -318,36 +320,25 @@ for $app_name (@dev02_apps)
         else
         {
             print $fh "<td NOWRAP BGCOLOR=\"$prod_hash1{$app_name}[8]\">Version: 1.0.0.$version_prod<BR>Instances running: $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]<BR>Route: $prod_hash1{$app_name}[2]<BR>Last uploaded: $prod_hash1{$app_name}[5]<BR>Memory: $prod_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#prod_$app_count\">Bound Services </a></p></td></tr>\n";
-
+			print $fh "<div id=\"prod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $prod_hash1{$app_name}[6]</br></div></div></div>\n";
             if ($prod_hash1{$app_name}[8] eq "#ffa8af")
             {
                 $down_apps[$prod_ctr][8] = $app_name;
                 $prod_ctr++;
             }
         }
-        $prod_hash1{$app_name}[6] =~ s/,/<br>/g;
+        #$prod_hash1{$app_name}[6] =~ s/,/<br>/g;
         
-        $demoprod_hash1{$app_name}[6]=~ s/,/<br>/g;
-        $perf_hash1{$app_name}[6]=~ s/,/<br>/g;
-        $uat_hash1{$app_name}[6]=~ s/,/<br>/g;
-        $qa_hash1{$app_name}[6]=~ s/,/<br>/g;
-		$dev02_hash1{$app_name}[6]=~ s/,/<br>/g;
-		$qa02_hash1{$app_name}[6]=~ s/,/<br>/g;
-		$demodev02_hash1{$app_name}[6] =~ s/,/<br>/g;
-		$bfx01_hash1{$app_name}[6] =~ s/,/<br>/g;
+        #$demoprod_hash1{$app_name}[6]=~ s/,/<br>/g;
+        #$perf_hash1{$app_name}[6]=~ s/,/<br>/g;
+        #$uat_hash1{$app_name}[6]=~ s/,/<br>/g;
+        #$qa_hash1{$app_name}[6]=~ s/,/<br>/g;
+	#$dev02_hash1{$app_name}[6]=~ s/,/<br>/g;
+	#$qa02_hash1{$app_name}[6]=~ s/,/<br>/g;
+	#$demodev02_hash1{$app_name}[6] =~ s/,/<br>/g;
+	#$bfx01_hash1{$app_name}[6] =~ s/,/<br>/g;
 		
-    print $fh "<div id=\"prod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $prod_hash1{$app_name}[6]</br></div></div></div>\n";
-    
-    print $fh "<div id=\"demoprod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demoprod_hash1{$app_name}[6]</br></div></div></div>\n";
-    print $fh "<div id=\"perf_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $perf_hash1{$app_name}[6]</br></div></div></div>\n";
-    print $fh "<div id=\"uat_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $uat_hash1{$app_name}[6]</br></div></div></div>\n";
-    
-    print $fh "<div id=\"qa_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa_hash1{$app_name}[6]</br></div></div></div>\n";
-    print $fh "<div id=\"dev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $dev02_hash1{$app_name}[6]</br></div></div></div>\n";
-	print $fh "<div id=\"qa02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa02_hash1{$app_name}[6]</br></div></div></div>\n";
-	print $fh "<div id=\"demodev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demodev02_hash1{$app_name}[6]</br></div></div></div>\n";
-    print $fh "<div id=\"bfx01_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $bfx01_hash1{$app_name}[6]</br></div></div></div>\n";    
-		
+  		
 		$app_count++;
     }
     else
@@ -471,11 +462,12 @@ sub create_hash
     $test_str =~ s/\"//g;
     $test_str =~ s/\]//g;
 
-    $test_service_str =~ s/\[//g;
-    $test_service_str =~ s/\\//g;
-    $test_service_str =~ s/\"//g;
-        $test_service_str =~ s/\]//g;
-#       $test_service_str =~ s/,/<br>/g;
+		 $test_service_str =~ s/\[//g;
+		 $test_service_str =~ s/\\//g;
+		 $test_service_str =~ s/\"//g;
+         $test_service_str =~ s/\]//g;
+		 $test_service_str =~ s/,/<br>/g;
+		
     @temp_app_route = split "\n", $test_str;
     @temp_bound_service = split "\n", $test_service_str;
 #    shift @temp_app_route;
@@ -497,7 +489,7 @@ sub create_hash
         $sub_hash{$name1}[3] = $temp_running_instances[$i];
         $sub_hash{$name1}[4] = $temp_total_instances[$i];
         $sub_hash{$name1}[5] = $temp_package_updated_at[$i];
-        $sub_hash{$name1}[6] = $temp_bound_service[$i];
+#        $sub_hash{$name1}[6] = $temp_bound_service[$i];
 		$sub_hash{$name1}[7] = $temp_memory[$i];
         if ($temp_running_instances[$i] ne $temp_total_instances[$i])
         {
@@ -507,6 +499,18 @@ sub create_hash
         {
             $sub_hash{$name1}[8]="#e2f4ff";
         }
+		
+		#if (length($temp_bound_service[$i]) eq "undef")
+		if (!defined $temp_bound_service[$i] || $temp_bound_service[$i] eq '')
+		{
+			$sub_hash{$name1}[6] = "No Service Bind";
+			
+		}
+		else
+		{
+			$sub_hash{$name1}[6] = $temp_bound_service[$i];
+			
+		}
 
         $i++;
     }

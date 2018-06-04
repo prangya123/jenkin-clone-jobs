@@ -67,7 +67,7 @@ my $DEMOPROD01_UAA="https://f6d0524d-28d1-4af8-a21c-3c779790aff4.predix-uaa.run.
 my $DEMOPROD01_AUTHORIZATION="aW5nZXN0b3IuMjZiMzA1ZWMtZjgwMS00ZTc2LWIwM2EtZWY0MDk0MDM1NDZlLjM1OWE4MmY2LTUwMGEtNGYyNy1iNjNhLTZhZGZjMWU4MTlmMTo=";
 my $DEMOPROD01_TENANT="140235e0-08b3-4c61-b473-241574cb889b";
 #my $DEMOPROD01_WRS="https://apm-widget-repo-service-svc-apmdemo.apm.aws-usw02-pr.predix.io/v1/widgets/";
-my $DEMOPROD01_WRS="https://apm-widget-repo-service-svc-apmdemo.apm.aws-usw02-pr.predix.io/v1/widgets/";
+my $DEMOPROD01_WRS="https://apm-widget-repo-service-svc-apmdemo.int-app.aws-usw02-pr.predix.io/v1/widgets/";
 my $DEMOPROD01_TOKEN;
 my %demoprod01_hash;
 my %demoprod01_widget_info;

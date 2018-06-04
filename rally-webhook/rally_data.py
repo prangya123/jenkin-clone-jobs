@@ -85,7 +85,6 @@ def main(argv):
         logger.info(start_message)
         print("\n"+start_message+"\n")
         validate_inputs(config_file, environment, story_type)
-        og_utils.check_or_create_report_directory(DIR_NAME)
         rally, projects, workspace = get_rally_projects(config_file)
         entity_name = set_entity(story_type)
         entity_dict = get_file_data_based_on_entity(entity_name)
@@ -303,10 +302,13 @@ def validate_platform_clear_screen():
 
 
 def create_log_file():
+    og_utils.check_or_create_report_directory(DIR_NAME)
     cur_dir = os.path.dirname(os.path.realpath(__file__))
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    log_file = os.path.splitext(__file__)[0] + timestamp+'.log'
-    log_file_path = os.path.join(cur_dir, log_file)
+    filename =os.path.basename(__file__)
+    script_file_path = os.path.splitext(__file__)[0]
+    log_file = filename + timestamp+'.log'
+    log_file_path = os.path.join(cur_dir, DIR_NAME, log_file)
     # reset the default log file
     open(log_file_path, 'w').close()
     logger.setLevel(logging.DEBUG)
@@ -316,7 +318,7 @@ def create_log_file():
         handler = logging.StreamHandler()
     else:
         # use the file handler for logging
-        handler = logging.FileHandler(log_file)
+        handler = logging.FileHandler(log_file_path)
 
     # create formatter
     fmt = '%(asctime)s %(filename)-15s %(levelname)-6s: %(message)s'

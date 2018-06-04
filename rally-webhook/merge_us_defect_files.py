@@ -115,7 +115,6 @@ class MergeFiles(object):
             self.sortedResultUS = sortedResultUS
             self.all_ids = set()
             self.__validate_inputData()
-            og_utils.check_or_create_report_directory(DIR_NAME)
 
         except Exception as ex:
             print (ex)
@@ -412,10 +411,13 @@ class MergeFiles(object):
         return ignore_ids
 
 def create_log_file():
+    og_utils.check_or_create_report_directory(DIR_NAME)
     cur_dir = os.path.dirname(os.path.realpath(__file__))
+    filename = os.path.basename(__file__)
+    script_file_path = os.path.splitext(__file__)[0]
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    log_file = os.path.splitext(__file__)[0] + timestamp+'.log'
-    log_file_path = os.path.join(cur_dir, log_file)
+    log_file = filename + timestamp+'.log'
+    log_file_path = os.path.join(cur_dir, DIR_NAME, log_file)
     # reset the default log file
     open(log_file_path, 'w').close()
     logger.setLevel(logging.DEBUG)
@@ -425,7 +427,7 @@ def create_log_file():
         handler = logging.StreamHandler()
     else:
         # use the file handler for logging
-        handler = logging.FileHandler(log_file)
+        handler = logging.FileHandler(log_file_path)
 
     # create formatter
     fmt = '%(asctime)s %(filename)-15s %(levelname)-6s: %(message)s'

@@ -38,10 +38,12 @@ ALL_TYPE = 'all'
 USER_STORY_TYPE = 'userstory'
 DEFECT_TYPE = 'defect'
 VALID_TYPES =[USER_STORY_TYPE, DEFECT_TYPE]
+DIR_NAME = "logs"
 header = 'FormattedID | VerifiedinBuildTOBEUSED | Name | State | PromotedImpactedEnvironment'
 finalHeader = 'FormattedID|VerifiedinBuildTOBEUSED|Name'
 us_entity = 'UserStory'
 defect_entity  = 'Defect'
+
 def main(argv):
     logger.info("Begin main method.")
     logger.info("Python version: "+str(platform.python_version()))
@@ -104,7 +106,8 @@ def main(argv):
         file_split_data_array, split_data_array = split_data_on_field(raw_data_array)
         #og_utils.write_file(entity_dict['finalFile'], file_split_data_array)
         sorted_file_array = create_sorted_file(split_data_array)
-        og_utils.write_file(entity_dict['finalSortedFile'], sorted_file_array)
+        filepath = os.path.join('.',DIR_NAME, entity_dict['finalSortedFile'])
+        og_utils.write_file(filepath, sorted_file_array)
 
         exit_status = 0
         exit_message = 'Success'
@@ -133,6 +136,7 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
     raw_data_array = []
     data_array = []
     data_array.append(header+"\n")
+    print("\n Retrieving Rally Data for "+entity_name+".")
     for proj in projects:
         response = rally.get(entity_name, fetch=True, query=rally_query, order='VerifiedinBuildTOBEUSED',
                              workspace=workspace, project=proj.Name)
@@ -159,6 +163,7 @@ def get_rally_entity_data(projects, rally, entity_name, workspace, rally_query):
                                 line = defect.FormattedID + "|" + VerifiedinBuildTOBEUSED_str + "|" + defect.Name + "|" + defect.State + "|" + defect.PromotedImpactedEnvironment + "\n"
                                 data_array.append(line)
                                 raw_data_array.append((defect.FormattedID, VerifiedinBuildTOBEUSED_str, defect.Name))
+
     logger.info("End method get_rally_entity_data")
     return data_array, raw_data_array
 
@@ -297,10 +302,13 @@ def validate_platform_clear_screen():
 
 
 def create_log_file():
+    og_utils.check_or_create_report_directory(DIR_NAME)
     cur_dir = os.path.dirname(os.path.realpath(__file__))
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    log_file = os.path.splitext(__file__)[0] + timestamp+'.log'
-    log_file_path = os.path.join(cur_dir, log_file)
+    filename =os.path.basename(__file__)
+    script_file_path = os.path.splitext(__file__)[0]
+    log_file = filename + timestamp+'.log'
+    log_file_path = os.path.join(cur_dir, DIR_NAME, log_file)
     # reset the default log file
     open(log_file_path, 'w').close()
     logger.setLevel(logging.DEBUG)
@@ -310,7 +318,7 @@ def create_log_file():
         handler = logging.StreamHandler()
     else:
         # use the file handler for logging
-        handler = logging.FileHandler(log_file)
+        handler = logging.FileHandler(log_file_path)
 
     # create formatter
     fmt = '%(asctime)s %(filename)-15s %(levelname)-6s: %(message)s'

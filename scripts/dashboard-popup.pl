@@ -184,7 +184,7 @@
 		if ($version_dev02 ne "null")
 		{
 			print $fh "<tr BGCOLOR=\"#e2f4ff\"><td NOWRAP bgcolor=\"#30aaf4\">$app_count</td><td NOWRAP bgcolor=\"#30aaf4\">$app_name</td>";
-			print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[9]\">Version: 1.0.0.$version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]<BR>Last uploaded: $dev02_hash1{$app_name}[5]<BR>Memory: $dev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#dev02_$app_count\">Bound Services </a></p></td>";
+			print $fh "<td NOWRAP BGCOLOR=\"$dev02_hash1{$app_name}[9]\">Version: $version_dev02<BR>Instances running: $dev02_hash1{$app_name}[3]/$dev02_hash1{$app_name}[4]<BR>Route: $dev02_hash1{$app_name}[2]<BR>Last uploaded: $dev02_hash1{$app_name}[5]<BR>Memory: $dev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#dev02_$app_count\">Bound Services </a></p></td>";
 			print $fh "<div id=\"dev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $dev02_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $dev02_hash1{$app_name}[6]</br></div></div></div>\n";
 			if ($dev02_hash1{$app_name}[9] eq "#ffa8af" || $dev02_hash1{$app_name}[9] eq "#ff0000")
 			{
@@ -202,7 +202,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[9]\">Version: 1.0.0.$version_qa<BR>Instances running: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]<BR>Last uploaded: $qa_hash1{$app_name}[5]<BR>Memory: $qa_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#qa_$app_count\">Bound Services </a></p></td>";
+				print $fh "<td NOWRAP BGCOLOR=\"$qa_hash1{$app_name}[9]\">Version: $version_qa<BR>Instances running: $qa_hash1{$app_name}[3]/$qa_hash1{$app_name}[4]<BR>Route: $qa_hash1{$app_name}[2]<BR>Last uploaded: $qa_hash1{$app_name}[5]<BR>Memory: $qa_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#qa_$app_count\">Bound Services </a></p></td>";
 				 print $fh "<div id=\"qa_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $qa_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa_hash1{$app_name}[6]</br></div></div></div>\n";
 				if ($qa_hash1{$app_name}[9] eq "#ffa8af" || $qa_hash1{$app_name}[9] eq "#ff0000")
 				{
@@ -219,7 +219,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$qa02_hash1{$app_name}[9]\">Version: 1.0.0.$version_qa02<BR>Instances running: $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]<BR>Route: $qa02_hash1{$app_name}[2]<BR>Last uploaded: $qa02_hash1{$app_name}[5]<BR>Memory: $qa02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#qa02_$app_count\">Bound Services </a></p></td>";
+				print $fh "<td NOWRAP BGCOLOR=\"$qa02_hash1{$app_name}[9]\">Version: $version_qa02<BR>Instances running: $qa02_hash1{$app_name}[3]/$qa02_hash1{$app_name}[4]<BR>Route: $qa02_hash1{$app_name}[2]<BR>Last uploaded: $qa02_hash1{$app_name}[5]<BR>Memory: $qa02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#qa02_$app_count\">Bound Services </a></p></td>";
 				print $fh "<div id=\"qa02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $qa02_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $qa02_hash1{$app_name}[6]</br></div></div></div>\n";
 				if ($qa02_hash1{$app_name}[9] eq "#ffa8af" || $qa02_hash1{$app_name}[9] eq "#ff0000")
 				{
@@ -235,7 +235,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[9]\">Version: 1.0.0.$version_uat<BR>Instances running: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]<BR>Last uploaded: $uat_hash1{$app_name}[5]<BR>Memory: $uat_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#uat_$app_count\">Bound Services </a></p></td>";
+				print $fh "<td NOWRAP BGCOLOR=\"$uat_hash1{$app_name}[9]\">Version: $version_uat<BR>Instances running: $uat_hash1{$app_name}[3]/$uat_hash1{$app_name}[4]<BR>Route: $uat_hash1{$app_name}[2]<BR>Last uploaded: $uat_hash1{$app_name}[5]<BR>Memory: $uat_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#uat_$app_count\">Bound Services </a></p></td>";
 				print $fh "<div id=\"uat_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $uat_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $uat_hash1{$app_name}[6]</br></div></div></div>\n";
 				if ($uat_hash1{$app_name}[9] eq "#ffa8af" || $uat_hash1{$app_name}[9] eq "#ff0000")
 				{
@@ -251,7 +251,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$perf_hash1{$app_name}[9]\">Version: 1.0.0.$version_perf<BR>Instances running: $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]<BR>Route: $perf_hash1{$app_name}[2]<BR>Last uploaded: $perf_hash1{$app_name}[5]<BR>Memory: $perf_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#perf_$app_count\">Bound Services </a></p></td>";
+				print $fh "<td NOWRAP BGCOLOR=\"$perf_hash1{$app_name}[9]\">Version: $version_perf<BR>Instances running: $perf_hash1{$app_name}[3]/$perf_hash1{$app_name}[4]<BR>Route: $perf_hash1{$app_name}[2]<BR>Last uploaded: $perf_hash1{$app_name}[5]<BR>Memory: $perf_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#perf_$app_count\">Bound Services </a></p></td>";
 				print $fh "<div id=\"perf_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $perf_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $perf_hash1{$app_name}[6]</br></div></div></div>\n";
 				if ($perf_hash1{$app_name}[9] eq "#ffa8af" || $perf_hash1{$app_name}[9] eq "#ff0000")
 				{
@@ -269,7 +269,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$demodev02_hash1{$app_name}[9]\">Version: 1.0.0.$version_demodev02<BR>Instances running: $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]<BR>Route: $demodev02_hash1{$app_name}[2]<BR>Last uploaded: $demodev02_hash1{$app_name}[5]<BR>Memory: $demodev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#demodev02_$app_count\">Bound Services </a></p></td>";
+				print $fh "<td NOWRAP BGCOLOR=\"$demodev02_hash1{$app_name}[9]\">Version: $version_demodev02<BR>Instances running: $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]<BR>Route: $demodev02_hash1{$app_name}[2]<BR>Last uploaded: $demodev02_hash1{$app_name}[5]<BR>Memory: $demodev02_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#demodev02_$app_count\">Bound Services </a></p></td>";
 				print $fh "<div id=\"demodev02_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $demodev02_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demodev02_hash1{$app_name}[6]</br></div></div></div>\n";
 				if($demodev02_hash1{$app_name}[9] eq "#ffa8af" || $demodev02_hash1{$app_name}[9] eq "#ff0000")
 				{
@@ -286,7 +286,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$demoprod_hash1{$app_name}[9]\">Version: 1.0.0.$version_demoprod<BR>Instances running: $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]<BR>Route: $demoprod_hash1{$app_name}[2]<BR>Last uploaded: $demoprod_hash1{$app_name}[5]<BR>Memory: $demoprod_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#demoprod_$app_count\">Bound Services </a></p></td>";
+				print $fh "<td NOWRAP BGCOLOR=\"$demoprod_hash1{$app_name}[9]\">Version: $version_demoprod<BR>Instances running: $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]<BR>Route: $demoprod_hash1{$app_name}[2]<BR>Last uploaded: $demoprod_hash1{$app_name}[5]<BR>Memory: $demoprod_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#demoprod_$app_count\">Bound Services </a></p></td>";
 				print $fh "<div id=\"demoprod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $demoprod_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $demoprod_hash1{$app_name}[6]</br></div></div></div>\n";
 				if ($demoprod_hash1{$app_name}[9] eq "#ffa8af" || $demoprod_hash1{$app_name}[9] eq "#ff0000")
 				{
@@ -303,7 +303,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$bfx01_hash1{$app_name}[9]\">Version: 1.0.0.$version_bfx01<BR>Instances running: $bfx01_hash1{$app_name}[3]/$bfx01_hash1{$app_name}[4]<BR>Route: $bfx01_hash1{$app_name}[2]<BR>Last uploaded: $bfx01_hash1{$app_name}[5]<BR>Memory: $bfx01_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#bfx01_$app_count\">Bound Services </a></p></td>";
+				print $fh "<td NOWRAP BGCOLOR=\"$bfx01_hash1{$app_name}[9]\">Version: $version_bfx01<BR>Instances running: $bfx01_hash1{$app_name}[3]/$bfx01_hash1{$app_name}[4]<BR>Route: $bfx01_hash1{$app_name}[2]<BR>Last uploaded: $bfx01_hash1{$app_name}[5]<BR>Memory: $bfx01_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#bfx01_$app_count\">Bound Services </a></p></td>";
 				print $fh "<div id=\"bfx01_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $bfx01_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $bfx01_hash1{$app_name}[6]</br></div></div></div>\n";    
 				if ($bfx01_hash1{$app_name}[9] eq "#ffa8af" || $bfx01_hash1{$app_name}[9] eq "#ff0000")
 				{
@@ -321,7 +321,7 @@
 			}
 			else
 			{
-				print $fh "<td NOWRAP BGCOLOR=\"$prod_hash1{$app_name}[9]\">Version: 1.0.0.$version_prod<BR>Instances running: $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]<BR>Route: $prod_hash1{$app_name}[2]<BR>Last uploaded: $prod_hash1{$app_name}[5]<BR>Memory: $prod_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#prod_$app_count\">Bound Services </a></p></td></tr>\n";
+				print $fh "<td NOWRAP BGCOLOR=\"$prod_hash1{$app_name}[9]\">Version: $version_prod<BR>Instances running: $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]<BR>Route: $prod_hash1{$app_name}[2]<BR>Last uploaded: $prod_hash1{$app_name}[5]<BR>Memory: $prod_hash1{$app_name}[7]<BR><p><a class=\"button\" href=\"#prod_$app_count\">Bound Services </a></p></td></tr>\n";
 				print $fh "<div id=\"prod_$app_count\" class=\"overlay\"><div class=\"popup\"><h2>Bound Services</h2><b>Service Count \= $prod_hash1{$app_name}[8]</b><a class=\"close\" href=\"#close\">\&times\;</a><div class=\"content\"> $prod_hash1{$app_name}[6]</br></div></div></div>\n";
 				if ($prod_hash1{$app_name}[9] eq "#ffa8af" || $prod_hash1{$app_name}[9] eq "#ff0000")
 				{

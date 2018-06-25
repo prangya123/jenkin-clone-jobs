@@ -40,17 +40,29 @@ elsif ($env eq "PERF01")
 {
     $env_number = 4;
 }
-elsif ($env eq "DEMOPROD02")
+elsif ($env eq "PERF02")
 {
     $env_number = 5;
 }
-elsif ($env eq "DEMODEV02")
+elsif ($env eq "DEMOPROD01")
 {
     $env_number = 6;
 }
-elsif ($env eq "PROD")
+elsif ($env eq "DEMOPROD02")
 {
     $env_number = 7;
+}
+elsif ($env eq "DEMODEV02")
+{
+    $env_number = 8;
+}
+elsif ($env eq "BFX01")
+{
+    $env_number = 9;
+}
+elsif ($env eq "PROD")
+{
+    $env_number = 10;
 }
 else
 {

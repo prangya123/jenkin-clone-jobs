@@ -31,8 +31,8 @@ my %perf01_widget_info;
 my $DEV02_UAA="https://f6d0524d-28d1-4af8-a21c-3c779790aff4.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token/?client_id=ingestor.26b305ec-f801-4e76-b03a-ef409403546e.359a82f6-500a-4f27-b63a-6adfc1e819f1&grant_type=password&username=FuncUser01&password=Pa55w0rd";
 my $DEV02_AUTHORIZATION="aW5nZXN0b3IuMjZiMzA1ZWMtZjgwMS00ZTc2LWIwM2EtZWY0MDk0MDM1NDZlLjM1OWE4MmY2LTUwMGEtNGYyNy1iNjNhLTZhZGZjMWU4MTlmMTo=";
 my $DEV02_TENANT="90226fdc-0648-42a3-8e66-e019cf3b2cce";
-#my $DEV02_WRS="https://apm-widget-repo-service-svc-apm-dev02.apm.aws-usw02-pr.predix.io/v1/widgets/";
-my $DEV02_WRS="https://apm-widget-repo-service-svc-apm-dev02.int-app.aws-usw02-pr.predix.io/v1/widgets/";
+my $DEV02_WRS="https://apm-widget-repo-service-svc-apm-dev02.apm.aws-usw02-pr.predix.io/v1/widgets/";
+#my $DEV02_WRS="https://apm-widget-repo-service-svc-apm-dev02.int-app.aws-usw02-pr.predix.io/v1/widgets/";
 my $DEV02_TOKEN;
 my %dev02_hash;
 my %dev02_widget_info;
@@ -201,7 +201,7 @@ for (my $i1=0; $i1<$num1; $i1++)
     my $v1 = $data1->{widgets}[$i1]->{'id'}; 
     $dev02_widget_info{$v1} = $data1->{widgets}[$i1];
 }
-
+exit 1;
 ## QA02 ## 
 
 $QA02_TOKEN = get_token($QA02_UAA, $QA02_AUTHORIZATION);

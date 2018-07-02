@@ -201,7 +201,7 @@ for (my $i1=0; $i1<$num1; $i1++)
     my $v1 = $data1->{widgets}[$i1]->{'id'}; 
     $dev02_widget_info{$v1} = $data1->{widgets}[$i1];
 }
-exit 1;
+
 ## QA02 ## 
 
 $QA02_TOKEN = get_token($QA02_UAA, $QA02_AUTHORIZATION);

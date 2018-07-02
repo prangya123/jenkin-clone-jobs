@@ -735,6 +735,8 @@ sub generate_json
     $command = $command." -H 'tenant: $tenant'";
 #    $command = $command." | jq -r '.widgets[]'";
 
+print "COMMAND is: \n".$command."\n\n";
+
     `$command > widgets_response1.json`;
 
     `cat widgets_response1.json | jq -r '.widgets[]' > widgets_response.json`;

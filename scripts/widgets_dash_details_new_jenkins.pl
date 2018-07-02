@@ -728,7 +728,7 @@ sub get_token
 sub generate_json
 {
     my ($wrs, $token, $tenant) = @_;
-    my $command ="curl -sX GET";
+    my $command ="curl -skX GET";
     $command = $command." '$wrs'";
     $command = $command." -H 'authorization: Bearer $token'";
     $command = $command." -H 'cache-control: no-cache'";

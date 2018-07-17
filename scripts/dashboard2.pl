@@ -12,6 +12,7 @@ my $cf_pwd = $ARGV[1];
 my $qa01_space_id="7057482e-d735-47f3-8c20-3a0c99837186";
 my $uat01_space_id="14568591-961d-42f8-b6f2-628c97c4e4fc";
 my $perf01_space_id="cd98d78c-21bf-45d6-aa14-a4226b14c7c5";
+my $perf02_space_id="13a5c874-204a-44ec-88a3-20346c3b3f6b";
 my $demoprod_space_id="f73004e8-a449-4fca-bb72-d7c6524ed070";
 my $prod_space_id="88d8a240-068b-43c7-9f27-1365cd4c5a22";
 my $dev02_space_id="3ef76363-abd9-4a0a-b479-51c0e6ece072";
@@ -23,6 +24,7 @@ my $demoprod02_space_id="0bb3331e-65bc-4125-ade7-cf6878f46bcd";
 my %qa_hash1;
 my %uat_hash1;
 my %perf_hash1;
+my %perf02_hash1;
 my %demoprod_hash1;
 my %prod_hash1;
 my %dev02_hash1;
@@ -43,6 +45,7 @@ my @down_apps;
 my $qa_ctr = 0;
 my $uat_ctr = 0;
 my $perf_ctr = 0;
+my $perf02_ctr = 0;
 my $demoprod_ctr = 0;
 my $prod_ctr = 0;
 my $dev02_ctr = 0;
@@ -61,6 +64,9 @@ $hash_ref = create_hash($uat01_space_id);
 
 $hash_ref = create_hash($perf01_space_id);
 %perf_hash1 = %$hash_ref;
+
+$hash_ref = create_hash($perf02_space_id);
+%perf02_hash1 = %$hash_ref;
 
 $hash_ref = create_hash($dev02_space_id);
 %dev02_hash1 = %$hash_ref;
@@ -94,7 +100,7 @@ open (my $fh, '>', $report_name) or die "Could not create file.\n";
 print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment dashboard</title>\n<body>\n";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream environments dashboard</font> - Last run on $time_stamp PST<BR><a href=\"https\:\/\/ogd-dashboard-auth.run.aws-usw02-pr.ice.predix.io\" target=\"_blank\">Click here to visit Dashboard version 2 beta!</a><BR><a href=\"https\:\/\/ogddash.run.aws-usw02-pr.ice.predix.io\/widgets_dashboard_details.html\" target=\"_blank\">Click for widgets dashboard</a></th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>DEMOPREPROD01</th><th>DEMOPROD02</th><th>DEMODEV02</th><th>BFX01</th><th>PROD</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Application Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>UAT01</th><th>PERF01</th><th>PERF02</th><th>DEMOPREPROD01</th><th>DEMOPROD02</th><th>DEMODEV02</th><th>BFX01</th><th>PROD</th></tr>\n";
 
 @index_apps = sort keys %dev02_hash1;
 for $app_name (@index_apps)
@@ -102,6 +108,7 @@ for $app_name (@index_apps)
     my $version_qa = $qa_hash1{$app_name}[0];
     my $version_uat = $uat_hash1{$app_name}[0];
     my $version_perf = $perf_hash1{$app_name}[0];
+    my $version_perf02 = $perf02_hash1{$app_name}[0];
     my $version_demoprod = $demoprod_hash1{$app_name}[0];
     my $version_demoprod02 = $demoprod02_hash1{$app_name}[0];
     my $version_prod = $prod_hash1{$app_name}[0];
@@ -123,6 +130,11 @@ for $app_name (@index_apps)
     if (!defined $version_perf)
     {
         $version_perf = "Missing";
+    }
+
+    if (!defined $version_perf02)
+    {
+        $version_perf02 = "Missing";
     }
 
     if (!defined $version_demoprod)
@@ -225,6 +237,21 @@ for $app_name (@index_apps)
                 $perf_ctr++;
             }
         }
+
+        if ($version_perf02 eq "Missing")
+        {
+            print $fh "<td NOWRAP>App is missing</td>";
+        }
+        else
+        {
+            print $fh "<td NOWRAP BGCOLOR=\"$perf02_hash1{$app_name}[5]\">Artifact: $version_perf02<BR>Instances running: $perf02_hash1{$app_name}[3]/$perf02_hash1{$app_name}[4]<BR>Route: $perf02_hash1{$app_name}[2]</td>";
+
+            if ($perf02_hash1{$app_name}[5] eq "#ffa8af")
+            {
+                $down_apps[$perf02_ctr][5] = $app_name.":"." $perf02_hash1{$app_name}[3]/$perf02_hash1{$app_name}[4]";
+                $perf02_ctr++;
+            }
+        }
         
         if ($version_demoprod eq "Missing")
         {
@@ -236,7 +263,7 @@ for $app_name (@index_apps)
 
             if ($demoprod_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$demoprod_ctr][5] = $app_name.":"." $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]";
+                $down_apps[$demoprod_ctr][6] = $app_name.":"." $demoprod_hash1{$app_name}[3]/$demoprod_hash1{$app_name}[4]";
                 $demoprod_ctr++;
             }
         }
@@ -251,7 +278,7 @@ for $app_name (@index_apps)
 
             if ($demoprod02_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$demoprod02_ctr][6] = $app_name.":"." $demoprod02_hash1{$app_name}[3]/$demoprod02_hash1{$app_name}[4]";
+                $down_apps[$demoprod02_ctr][7] = $app_name.":"." $demoprod02_hash1{$app_name}[3]/$demoprod02_hash1{$app_name}[4]";
                 $demoprod02_ctr++;
             }
         }
@@ -266,7 +293,7 @@ for $app_name (@index_apps)
 
             if($demodev02_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$demodev02_ctr][7] = $app_name.":"." $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]";
+                $down_apps[$demodev02_ctr][8] = $app_name.":"." $demodev02_hash1{$app_name}[3]/$demodev02_hash1{$app_name}[4]";
                 $demodev02_ctr++;
             }
         }
@@ -281,7 +308,7 @@ for $app_name (@index_apps)
 
             if($bfx01_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$bfx01_ctr][8] = $app_name.":"." $bfx01_hash1{$app_name}[3]/$bfx01_hash1{$app_name}[4]";
+                $down_apps[$bfx01_ctr][9] = $app_name.":"." $bfx01_hash1{$app_name}[3]/$bfx01_hash1{$app_name}[4]";
                 $bfx01_ctr++;
             }
         }
@@ -296,7 +323,7 @@ for $app_name (@index_apps)
 
             if ($prod_hash1{$app_name}[5] eq "#ffa8af")
             {
-                $down_apps[$prod_ctr][9] = $app_name.":"." $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]";
+                $down_apps[$prod_ctr][10] = $app_name.":"." $prod_hash1{$app_name}[3]/$prod_hash1{$app_name}[4]";
                 $prod_ctr++;
             }
         }
@@ -353,13 +380,13 @@ open (my $fh2, '>', $report2_name) or die "Could not create file.\n";
 print $fh2 "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xhtml\"><title>Environment report</title>\n<body>\n";
 print $fh2 "<table border=\"1\">\n";
 print $fh2 "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"7\">IntelliStream services unavailability report</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh2 "<tr bgcolor=\"#30aaf4\"><th><font size=\"5\">DEV02</th><th><font size=\"5\">QA01</th><th><font size=\"5\">QA02</th><th><font size=\"5\">UAT01</th><th><font size=\"5\">PERF01</th><th><font size=\"5\">DEMOPREPROD01</th><th><font size=\"5\">DEMOPROD02</th><th><font size=\"5\">DEMODEV02</th><th><font size=\"5\">BFX01</th><th><font size=\"5\">PROD</th></tr>\n";
+print $fh2 "<tr bgcolor=\"#30aaf4\"><th><font size=\"5\">DEV02</th><th><font size=\"5\">QA01</th><th><font size=\"5\">QA02</th><th><font size=\"5\">UAT01</th><th><font size=\"5\">PERF01</th><th><font size=\"5\">PERF02</th><th><font size=\"5\">DEMOPREPROD01</th><th><font size=\"5\">DEMOPROD02</th><th><font size=\"5\">DEMODEV02</th><th><font size=\"5\">BFX01</th><th><font size=\"5\">PROD</th></tr>\n";
 
 for my $i ( 0 .. $#down_apps ) 
 {
     print $fh2 "<tr>";
 
-	for my $j ( 0 .. 9 )
+	for my $j ( 0 .. 10 )
     {
         if (!defined $down_apps[$i][$j])
         {

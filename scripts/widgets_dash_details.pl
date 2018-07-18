@@ -5,7 +5,8 @@ use JSON::PP;
 use Data::Dumper qw(Dumper);
 $Data::Dumper::Terse = 1;
 
-my $time_stamp = `echo \$(date +"%a %F %r")`;
+#my $time_stamp = `echo \$(date +"%a %F %r")`;
+my $time_stamp = `echo \$(env TZ=America/Los_Angeles date +"%a %F %r")`;
 chomp ($time_stamp);
 
 my $widgets_report = "widgets_dashboard_details.html";
@@ -26,6 +27,14 @@ my $PERF01_WRS="https://apm-widget-repo-service-svc-ogperf.apm.aws-usw02-pr.pred
 my $PERF01_TOKEN;
 my %perf01_hash;
 my %perf01_widget_info;
+
+my $PERF02_UAA="https://f6d0524d-28d1-4af8-a21c-3c779790aff4.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token/?client_id=ingestor.26b305ec-f801-4e76-b03a-ef409403546e.359a82f6-500a-4f27-b63a-6adfc1e819f1&grant_type=password&username=FuncUser01&password=Pa55w0rd";
+my $PERF02_AUTHORIZATION="aW5nZXN0b3IuMjZiMzA1ZWMtZjgwMS00ZTc2LWIwM2EtZWY0MDk0MDM1NDZlLjM1OWE4MmY2LTUwMGEtNGYyNy1iNjNhLTZhZGZjMWU4MTlmMTo=";
+my $PERF02_TENANT="3aad14b1-4308-4e57-84f7-b6c3d2f7ddd9";
+my $PERF02_WRS="https://apm-widget-repo-service-svc-apm-perf02.apm.aws-usw02-pr.predix.io/v1/widgets/";
+my $PERF02_TOKEN;
+my %perf02_hash;
+my %perf02_widget_info;
 
 my $DEV02_UAA="https://f6d0524d-28d1-4af8-a21c-3c779790aff4.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token/?client_id=ingestor.26b305ec-f801-4e76-b03a-ef409403546e.359a82f6-500a-4f27-b63a-6adfc1e819f1&grant_type=password&username=FuncUser01&password=Pa55w0rd";
 my $DEV02_AUTHORIZATION="aW5nZXN0b3IuMjZiMzA1ZWMtZjgwMS00ZTc2LWIwM2EtZWY0MDk0MDM1NDZlLjM1OWE4MmY2LTUwMGEtNGYyNy1iNjNhLTZhZGZjMWU4MTlmMTo=";
@@ -164,6 +173,34 @@ for (my $i1=0; $i1<$num1; $i1++)
 {
     my $v1 = $data1->{widgets}[$i1]->{'id'}; 
     $perf01_widget_info{$v1} = $data1->{widgets}[$i1];
+}
+## PERF02 ##
+
+$PERF02_TOKEN = get_token($PERF02_UAA, $PERF02_AUTHORIZATION);
+generate_json($PERF02_WRS, $PERF02_TOKEN, $PERF02_TENANT);
+
+@widget_names = `cat widgets_response.json | jq -r '"\\(.id)"'`;
+@widget_versions = `cat widgets_response.json | jq -r '"\\(.properties.ARTIFACT_VERSION)"'`;
+chomp (@widget_names);
+chomp (@widget_versions);
+
+for($index=0;$index<=$#widget_names;$index++)
+{
+    my $name1;
+    my $version1;
+    $name1 = $widget_names[$index];
+    $version1 = $widget_versions[$index];
+    $perf02_hash{$name1} = $version1;
+}
+
+$contents = read_file();
+$data1 = decode_json($contents);
+$num1 = keys $data1->{widgets};
+
+for (my $i1=0; $i1<$num1; $i1++)
+{
+    my $v1 = $data1->{widgets}[$i1]->{'id'}; 
+    $perf02_widget_info{$v1} = $data1->{widgets}[$i1];
 }
 
 ## DEV02 ## 
@@ -407,13 +444,14 @@ print $fh "<html lang=\"en\" xml:lang=\"en\" xmlns= \"http://www.w3.org/1999/xht
 print $fh "<link rel=\"stylesheet\" href=\"styles_widgets.css\">";
 print $fh "<table border=\"1\">\n";
 print $fh "<tr bgcolor=\"#30aaf4\"><th colspan=\"100%\" align=\"left\"><font size=\"5\">IntelliStream widgets dashboard</font> - Last run on $time_stamp PST</th></tr>\n";
-print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>UAT01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>DEMOPROD02</th><th>BFX01</th><th>PROD01</th></tr>\n";
+print $fh "<tr bgcolor=\"#30aaf4\">\n<th NOWRAP>Sr. No.</th><th>Widget Name</th><th>DEV02</th><th>QA01</th><th>QA02</th><th>PERF01</th><th>PERF02</th><th>UAT01</th><th>DEMODEV02</th><th>DEMOPROD01</th><th>DEMOPROD02</th><th>BFX01</th><th>PROD01</th></tr>\n";
 
 my @dev_widgets = sort keys %dev02_hash;
 for $widget_name (@dev_widgets)
 {
     my $widget_version_qa = $qa01_hash{$widget_name};
     my $widget_version_perf = $perf01_hash{$widget_name};
+    my $widget_version_perf02 = $perf02_hash{$widget_name};
     my $widget_version_dev02 = $dev02_hash{$widget_name};
     my $widget_version_qa02 = $qa02_hash{$widget_name};
     my $widget_version_uat01 = $uat01_hash{$widget_name};
@@ -447,6 +485,19 @@ for $widget_name (@dev_widgets)
     else
     {
         $widget_version_perf = $widget_name . "_" . $widget_version_perf . ".tar.gz";
+    }
+
+    if (!defined $widget_version_perf02)
+    {
+        $widget_version_perf02 = "N/A";
+    }
+    elsif ($widget_version_perf02 eq "null")
+    {
+        $widget_version_perf02 = "N/A";
+    }
+    else
+    {
+        $widget_version_perf02 = $widget_name . "_" . $widget_version_perf02 . ".tar.gz";
     }
 
     if (!defined $widget_version_dev02)
@@ -559,6 +610,7 @@ for $widget_name (@dev_widgets)
     print $fh "<td><a class=\"button\" href=\"#qa01_$widget_name\">$widget_version_qa</a></td>";
     print $fh "<td><a class=\"button\" href=\"#qa02_$widget_name\">$widget_version_qa02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#perf01_$widget_name\">$widget_version_perf</a></td>";
+    print $fh "<td><a class=\"button\" href=\"#perf02_$widget_name\">$widget_version_perf02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#uat01_$widget_name\">$widget_version_uat01</a></td>";
     print $fh "<td><a class=\"button\" href=\"#demodev02_$widget_name\">$widget_version_demodev02</a></td>";
     print $fh "<td><a class=\"button\" href=\"#demoprod01_$widget_name\">$widget_version_demoprod01</a></td>";
@@ -608,6 +660,18 @@ for $widget_name (@dev_widgets)
     if ($perf01_widget_info{$widget_name})
     {
         $pretty1 = JSON::PP->new->pretty->encode($perf01_widget_info{$widget_name});
+    }
+    else
+    {
+        $pretty1 = "NULL";
+    }
+    print $fh $pretty1;
+    print $fh "</PRE></br></div></div></div>\n";
+
+    print $fh "<div id=\"perf02_$widget_name\" class=\"modal-window\"><div class=\"header\"><a href=\"#modal-close\" title=\"Close\" class=\"modal-close\">Close</a><h2>PERF02 $widget_name</h2><div><PRE>";
+    if ($perf02_widget_info{$widget_name})
+    {
+        $pretty1 = JSON::PP->new->pretty->encode($perf02_widget_info{$widget_name});
     }
     else
     {

@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use Data::Dumper qw(Dumper);
 
-my $time_stamp = `echo \$(date +"%a %F %r")`;
+my $time_stamp = `echo \$(env TZ=America/Los_Angeles date +"%a %F %r")`;
 chomp ($time_stamp);
 
 my $cf_user = $ARGV[0];

@@ -1,3 +1,4 @@
 {
-  "UAT01": "PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Accepted"
+  "UAT01": "PromotedImpactedEnvironment = QA01 and VerifiedEnvironment = QA01 and ScheduleState = Accepted",
+  "PREPROD01": "PromotedImpactedEnvironment = UAT01 and VerifiedEnvironment = UAT01 and ScheduleState = Accepted"
 }

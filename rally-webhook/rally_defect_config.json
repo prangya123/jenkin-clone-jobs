@@ -1,4 +1,4 @@
 {
-  "UAT01": "PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change"
+  "UAT01": "PromotedImpactedEnvironment = QA01 and State = Closed and VerifiedEnvironment = QA01 and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change",
   "PREPROD01":"PromotedImpactedEnvironment = UAT01 and State = Closed and VerifiedEnvironment = UAT01 and Resolution = Code Change or Resolution = Configuration Change or Resolution = Database Change"
 }

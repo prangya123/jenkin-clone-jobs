@@ -21,8 +21,9 @@ logger.addHandler(logging.NullHandler())
 # -----------    ----------------  -------------------------------------
 #  Date           Author            Comment
 # -----------    ----------------  -------------------------------------
-#  This is rewritten from initial code of showdefects.py and showuserstories.py  to reduce code redundancy
-#   May-17-2018  Khushnuma Daruwala to increase maintainiility add logging and other features.
+#  This is rewritten from initial code of showdefects.py and showuserstories.py[by Prangya Parmita Kar]  to reduce code redundancy
+#  May-17-2018  Khushnuma Daruwala     modified to increase maintainiility add logging and other features.
+#  Aug-01-2018  Prangya Parmita Kar    Enhanced for preprod promotion query, see the config for details
 #
 #
 # python3 rally_data.py -c rallyuser.cfg -e QA01

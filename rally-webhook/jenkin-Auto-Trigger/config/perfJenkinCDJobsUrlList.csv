@@ -5,6 +5,10 @@ wellStateEvaluator,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/vie
 Asset-Management-Microapp-wellbuilder,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/asset-management-microapp-upstream/job/asset-management-microapp-upstream-WellBuilder-PERF02/
 rules-editor-microapp,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/RulesEditor-Microcapp/job/RulesEditor-App-PERF02/
 ogd-gen-query-executor-engine,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/Query-Executor-Engine-Service/job/APM-IS-Query-Executor-Engine-Service-PERF02/
+rul_dataingestor,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/QA02/job/IntelliStream/job/RUL-ModelResultIngestor/job/RUL-ModelResultIngestor-PERF02/
+rul-microapp,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/QA02/job/IntelliStream/job/RUL-UIApp/job/RUL-Micro-App/job/RUL_AppHub-PERF02/
+rul_analysis,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/QA02/job/IntelliStream/job/RUL-Analysis/job/RUL-Analysis-PERF02/
+rul_orchestration,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/QA02/job/IntelliStream/job/RUL-Orchestration/job/RUL-Orchestration-PERF02/
 ***************CONFIG LISTS**************
 ogd-config-cups,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/job/DevTools/job/OGD-CUPS-SERVICES/job/ogd-cups-uups-service-CD/
 ogd-config-widget_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/

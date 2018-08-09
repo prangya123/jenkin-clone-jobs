@@ -85,9 +85,7 @@ def main(argv):
         jenkin_env_mapping_file_map = load_json(jenkin_env_mapping_file)
         if environment in jenkin_env_mapping_file_map:
             env_name = jenkin_env_mapping_file_map[environment]
-            #print(env_name)
             envJobsUrlList = env_name["urlLists"]
-            #print(envJobsUrlList)
         else:
             error_message = "There is no entry for " + environment + " in the file " + jenkin_env_mapping_file_map
             raise AttributeError(error_message)
@@ -208,7 +206,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                 line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"TENANTIDS\", \"value\":\"' + tenantids + '\"},{\"name\":\"ACTION\", \"value\":\"update\"},{\"name\":\"USERNAME\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"PASSWORD\", \"value\":\"'+jenkin_values[5]+'\"},{\"name\":\"Artifact_Number\", \"value\":\"'+artifactNo+'\"}]}\' -H \"' + \
                             jenkin_values[3] + '\"'
                 line = 'curl -X POST ' + line
-                print(line)
+                #print(line)
                 # Now push the job into jenking
                 try:
                     os.system(line)
@@ -221,7 +219,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                     line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"Artifact_Number\", \"value\":\"' + artifactNo + '\"},{\"name\":\"ENV\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"VERSION\", \"value\":\"' + symver + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"'+jenkin_values[9]+'\"}]}\' -H \"' + \
                             jenkin_values[3] + '\"'
                     line = 'curl -X POST ' + line
-                    print(line)
+                    #print(line)
                     # Now push the job into jenking
                     try:
                         os.system(line)
@@ -250,7 +248,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                     line = urlName.replace('https://', 'https://' + jenkin_values[0] + ":" + jenkin_values[1] + '@', 1)
                     line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"ArtifactNum\", \"value\":\"' + artifactNum1 + '\"},{\"name\":\"Section\", \"value\":\"' + tenantSection + '\"},{\"name\":\"TargetOrg\", \"value\":\"' + targetOrg + '\"},{\"name\":\"SPACE\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"DedicatedSpace\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"TenantID\", \"value\":\"' + tenantids1 + '\"},{\"name\":\"ApplicationName\", \"value\":\"' + product + '\"},{\"name\":\"ApmEnvType\", \"value\":\"' + apmEnvType + '\"},{\"name\":\"func_user_name\", \"value\":\"' +jenkin_values[4] + '\"},{\"name\":\"func_user_password\", \"value\":\"' + jenkin_values[5] + '\"},{\"name\":\"devops_user_name\", \"value\":\"' + jenkin_values[6] + '\"},{\"name\":\"devops_user_password\", \"value\":\"' + jenkin_values[7] + '\"},{\"name\":\"UAASecret\", \"value\":\"' + jenkin_values[8] + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"' + jenkin_values[9] + '\"}]}\' -H \"' + jenkin_values[3] + '\"'
                     line = 'curl -X POST ' + line
-                    print(line)
+                    #print(line)
                     # Now push the job into jenking
                     try:
                         os.system(line)
@@ -323,11 +321,11 @@ def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResul
         lines = (line for line in lines if line)  # Non-blank lines
         for line in lines:
             artifactName = line[0:re.search('\d', line).start() - 1]  # first part is job name
-            print(artifactName)
+           # print(artifactName)
             artifactVersion = line[re.search('\d', line).start():[m.start() for m in re.finditer(r"\.", line)][2]]
-            print(artifactVersion)
+           # print(artifactVersion)
             artifactNo = re.findall(r'\d+', line)[-1]
-            print(artifactNo)
+           # print(artifactNo)
             with open(file_path2, 'r') as f2:
                 for ln in f2:
                     urlList = ln.split(',')

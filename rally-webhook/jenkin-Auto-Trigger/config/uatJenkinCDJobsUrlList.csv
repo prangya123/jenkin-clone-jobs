@@ -86,6 +86,10 @@ pcm-weather-service,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HE
 Asset-Management-Microapp-wellbuilder,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/view/UAT01/job/WellbuilderApp/job/asset-management-microapp-upstream-UAT01/
 apmonshore-well-commissioning,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/view/UAT01/job/WellCommissioning/job/APMOnshore-Well_Commissioning-UAT01/
 wellStateEvaluator,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/view/UAT01/job/WellStateEvaluator/job/well_state_evaluator-UAT01/
+rul_dataingestor,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-ModelResultIngestor/job/RUL-ModelResultIngestor-UAT01/
+rul-microapp,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Micro-App/job/RUL_AppHub-UAT01/
+rul_analysis,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Analysis/job/RUL-Analysis-UAT01/
+rul_orchestration,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Orchestration/job/RUL-Orchestration-UAT01/
 ***************CONFIG LISTS**************
 
 

@@ -1,0 +1,8 @@
+{
+	"UAT01": {
+		"urlLists": "config/uatJenkinCDJobsUrlList.csv"
+	},
+	"PERF02": {
+		"urlLists": "config/perfJenkinCDJobsUrlList.csv"
+	}
+}

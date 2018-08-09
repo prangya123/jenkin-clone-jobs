@@ -1,0 +1,43 @@
+***************APP LISTS**************
+apmonshore-alertgeneration,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/APM-Onshore-AlertGeneration/job/APM-Onshore-AlertGeneration-PERF02/
+pcm-data-ingestion-service,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/PCM/job/PCM-Data-Ingestion-Service/job/PCM-Data-Ingestion-Service-PERF02/
+wellStateEvaluator,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/Avengers_Calculation_Engine/job/well_state_evaluator-PERF02/
+Asset-Management-Microapp-wellbuilder,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/asset-management-microapp-upstream/job/asset-management-microapp-upstream-WellBuilder-PERF02/
+rules-editor-microapp,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/RulesEditor-Microcapp/job/RulesEditor-App-PERF02/
+ogd-gen-query-executor-engine,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/Query-Executor-Engine-Service/job/APM-IS-Query-Executor-Engine-Service-PERF02/
+***************CONFIG LISTS**************
+ogd-config-cups,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/job/DevTools/job/OGD-CUPS-SERVICES/job/ogd-cups-uups-service-CD/
+ogd-config-widget_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+***************WIDGET LISTS**************
+ong-geospatial,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/job/OGD-Widgets/job/ong-geospatial/job/ong-geospatial-DEV02-poc/,90226fdc-0648-42a3-8e66-e019cf3b2cce,1e1bdb55-4396-44dd-90ea-65f98fbe22da,0c349a5c-0478-4104-976c-3bf4bcae5621,7dcbf36f-5f74-4b7d-8b16-95779f423423
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

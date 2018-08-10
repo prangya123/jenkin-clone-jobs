@@ -161,8 +161,6 @@ def write_jenkin_jobUrl(jobName, jobVersion, artifactNo, urlName, jenkin_values)
     print(line)
     line = 'curl -X POST ' + line
     print(line)
-    # Now push the job into jenking
-    os.system(line)
     with open(jenkinJobUrlFile, 'a') as file_obj:
         file_obj.writelines(line + '\n')
 
@@ -182,8 +180,8 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                 # Now push the job into jenking
                 try:
                     os.system(line)
-                    if counter % 3 == 0:
-                        time.sleep(3)
+                    if counter % 5 == 0:
+                        time.sleep(60)
                 except:
                     print("Error in Jenkin App job push...")
             logger.info("Successfully pushed all App jobs")

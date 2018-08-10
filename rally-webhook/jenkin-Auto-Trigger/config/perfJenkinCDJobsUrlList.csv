@@ -9,6 +9,8 @@ rul_dataingestor,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/
 rul-microapp,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/QA02/job/IntelliStream/job/RUL-UIApp/job/RUL-Micro-App/job/RUL_AppHub-PERF02/
 rul_analysis,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/QA02/job/IntelliStream/job/RUL-Analysis/job/RUL-Analysis-PERF02/
 rul_orchestration,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/QA02/job/IntelliStream/job/RUL-Orchestration/job/RUL-Orchestration-PERF02/
+scheduler,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/APM-Onshore-Scheduler/job/Scheduler-PERF02/
+apmonshore-tagcalculation-engine,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/view/PERF02/job/IntelliStream/job/Avengers_Calculation_Engine/job/apmonshore-tagcalculation-engine-PERF02/
 ***************CONFIG LISTS**************
 ogd-config-cups,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/job/DevTools/job/OGD-CUPS-SERVICES/job/ogd-cups-uups-service-CD/
 ogd-config-widget_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/

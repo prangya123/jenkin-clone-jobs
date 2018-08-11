@@ -1,6 +1,6 @@
 #!groovy
 
-node('master') {
+
     FILES_DIR = '/var/lib/jenkins/' 
  	//Home directory	/var/lib/jenkins
     cleanWs()
@@ -14,4 +14,4 @@ node('master') {
         def filename = filenames[i]
         echo "${filename}"
     }
-}
+

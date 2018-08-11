@@ -101,12 +101,3 @@ Benchmark.bmbm do |x|
   x.report('api:')   { n.times { api } }
   x.report('groovy:')  { n.times { groovy } }
 end
-© 2018 GitHub, Inc.
-Help
-Support
-API
-Training
-Shop
-Blog
-About
-GitHub Enterprise 2.13.1

@@ -210,7 +210,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                             jenkin_values[3] + '\"'
                 line = 'curl -X POST ' + line
                 print(line)
-                print("******widget")
+                #print("******widget")
                 # Now push the job into jenking
                 try:
                     os.system(line)
@@ -224,7 +224,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                             jenkin_values[3] + '\"'
                     line = 'curl -X POST ' + line
                     print(line)
-                    print("********cups")
+                    #print("********cups")
                     # Now push the job into jenking
                     try:
                         os.system(line)
@@ -245,7 +245,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                         line = urlName.replace('https://', 'https://' + jenkin_values[0] + ":" + jenkin_values[1] + '@', 1)
                         line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"ArtifactNum\", \"value\":\"' + artifactNo + '\"},{\"name\":\"ApmEnvType\", \"value\":\"' + apmEnvType + '\"},{\"name\":\"TenantID\", \"value\":\"' + tenantid + '\"},{\"name\":\"func_user_name\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"func_user_password\", \"value\":\"' + jenkin_values[5] + '\"},{\"name\":\"space\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"Enterprise\", \"value\":\"all\"},{\"name\":\"FolderVersion\", \"value\":\"version1.0\"},{\"name\":\"RulesFileName\", \"value\":\"upgrade.json\"},{\"name\":\"ApplicationName\", \"value\":\"' + product + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"' + jenkin_values[9] + '\"}]}\' -H \"' + jenkin_values[3] + '\"'
                         line = 'curl -X POST ' + line
-                        print("@@@@@@@@@@upgrade")
+                        #print("********upgrade")
                         print(line)
                     # Now push the job into jenking
                     try:
@@ -285,7 +285,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                     line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"ArtifactNum\", \"value\":\"' + artifactNum1 + '\"},{\"name\":\"Section\", \"value\":\"' + tenantSection + '\"},{\"name\":\"TargetOrg\", \"value\":\"' + targetOrg + '\"},{\"name\":\"SPACE\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"DedicatedSpace\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"TenantID\", \"value\":\"' + tenantids1 + '\"},{\"name\":\"ApplicationName\", \"value\":\"' + product + '\"},{\"name\":\"ApmEnvType\", \"value\":\"' + apmEnvType + '\"},{\"name\":\"func_user_name\", \"value\":\"' +jenkin_values[4] + '\"},{\"name\":\"func_user_password\", \"value\":\"' + jenkin_values[5] + '\"},{\"name\":\"devops_user_name\", \"value\":\"' + jenkin_values[6] + '\"},{\"name\":\"devops_user_password\", \"value\":\"' + jenkin_values[7] + '\"},{\"name\":\"UAASecret\", \"value\":\"' + jenkin_values[8] + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"' + jenkin_values[9] + '\"}]}\' -H \"' + jenkin_values[3] + '\"'
                     line = 'curl -X POST ' + line
                     print(line)
-                    print("******else")
+                    #print("******tenant-config")
                     # Now push the job into jenking
                     try:
                         os.system(line)

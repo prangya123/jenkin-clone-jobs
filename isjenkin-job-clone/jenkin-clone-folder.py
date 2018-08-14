@@ -41,6 +41,7 @@ jenkin_credential_file = "credentials/jenkin_credential.json"
 jenkinUrl = 'isjenkins.dsa.apps.ge.com'
 url = ""
 DIR_NAME = "logs"
+DIR_CONFIG_NAME = "jenkinxml"
 
 fileName = 'joblist.txt'
 fileDirName = 'jobDir.txt'
@@ -79,6 +80,7 @@ def main(argv):
 
 
     check_or_create_report_directory(DIR_NAME)
+    check_or_create_report_directory(DIR_CONFIG_NAME)
     create_log_file()
     start = timeit.default_timer()
     try:

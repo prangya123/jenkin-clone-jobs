@@ -14,8 +14,9 @@ apmonshore-tagcalculation-engine,https://isjenkins.dsa.apps.ge.com/job/Oil_and_G
 ***************CONFIG LISTS**************
 ogd-config-cups,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/job/DevTools/job/OGD-CUPS-SERVICES/job/ogd-cups-uups-service-CD/
 ogd-config-widget_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-uom_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-upgrade_pcm,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/TenantUpgrade-CD/
 ***************WIDGET LISTS**************
-ong-geospatial,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/job/OGD-Widgets/job/ong-geospatial/job/ong-geospatial-DEV02-poc/,90226fdc-0648-42a3-8e66-e019cf3b2cce,1e1bdb55-4396-44dd-90ea-65f98fbe22da,0c349a5c-0478-4104-976c-3bf4bcae5621,7dcbf36f-5f74-4b7d-8b16-95779f423423
 
 
 

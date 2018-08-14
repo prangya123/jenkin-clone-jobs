@@ -21,7 +21,7 @@ import requests
 # Aug-03-2018  Prangya Parmita Kar  Initial Version,
 #
 #
-# python3 jenkinAutoTriggerPromotion-p1.py -f1 verifiedInBuild.csv --environment UAT01
+# python3 jenkinAutoTriggerPromotion-p1.py -f1 verifiedInBuild-demo.csv --environment UAT01
 #
 #
 #################################################################################################
@@ -32,7 +32,7 @@ logger.addHandler(logging.NullHandler())
 
 jenkin_credential_file = "credentials/jenkin_credential.json"
 jenkin_env_mapping_file = "config/jenkin_env_mapping.json"
-verifiedInBuild_c = 'verifiedInBuild.csv'
+verifiedInBuild_c = 'verifiedInBuild-demo.csv'
 
 sanitizeSortedResultUatFile = 'sanitizeSortedResultUat.csv'
 jenkinJobUrlFile = 'output/jenkinJobUrlFile.csv'
@@ -120,7 +120,7 @@ def main(argv):
         stop = timeit.default_timer()
         total_time = stop - start
 
-        print("\nSuccessfully Pushed all jobs\n")
+       # print("\nSuccessfully Pushed all jobs\n")
 
         logger.info(
             "Script execution status [" + exit_message + "], time taken [" + str(

@@ -21,7 +21,7 @@ import requests
 # Aug-03-2018  Prangya Parmita Kar  Initial Version,
 #
 #
-# python3 jenkinAutoTriggerPromotion.py -f1 verifiedInBuild.csv --environment UAT01
+# python3 jenkinAutoTriggerPromotion-p1.py -f1 verifiedInBuild.csv --environment UAT01
 #
 #
 #################################################################################################
@@ -71,7 +71,7 @@ def main(argv):
     create_log_file()
     start = timeit.default_timer()
     try:
-        validate_platform_clear_screen()
+        #validate_platform_clear_screen()
         start_message = "Start Process of Auto Promotion Jobs Push."
         logger.info(start_message)
         print("\n" + start_message + "\n")
@@ -83,6 +83,7 @@ def main(argv):
 
         logger.info('Read Data from Jenking env file')
         jenkin_env_mapping_file_map = load_json(jenkin_env_mapping_file)
+        print(jenkin_env_mapping_file_map)
         if environment in jenkin_env_mapping_file_map:
             env_name = jenkin_env_mapping_file_map[environment]
             envJobsUrlList = env_name["urlLists"]
@@ -94,7 +95,7 @@ def main(argv):
         jenkin_values = read_jenkin_credentials(jenkin_credential_file)
         open(jenkinJobUrlFile, 'w').close()  # flush existing data
         assemble_uat_data(sanitizeSortedResultUatFile, jenkin_values)
-        trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_values,environment)
+        trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_values,environment,jenkin_env_mapping_file_map)
         with open(jenkinJobStatus, 'w') as file_obj:
             file_obj.writelines("Date: ".ljust(13) + "Artifact Name:".ljust(53) + "Job Status:" + '\n')
         logger.info("Wait 5 min...let the Jenkin jobs finish.")
@@ -165,10 +166,14 @@ def write_jenkin_jobUrl(jobName, jobVersion, artifactNo, urlName, jenkin_values)
         file_obj.writelines(line + '\n')
 
 
-def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_values,environment):
+def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_values,environment,jenkin_env_mapping_file_map):
     #Push all apps first
     logger.info("Begin method push_jenkin_jobs")
     logger.info("Push All apps first")
+    if environment in jenkin_env_mapping_file_map:
+        env_name = jenkin_env_mapping_file_map[environment]
+        envTenantidsLists = env_name["tenantidsList"]
+        envTenantidsList = str(envTenantidsLists).split(',')
     if os.stat(jenkinJobUrlFile).st_size > 0:
         counter = 0
         with open(jenkinJobUrlFile, 'r') as urlFile:
@@ -204,7 +209,8 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                 line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"TENANTIDS\", \"value\":\"' + tenantids + '\"},{\"name\":\"ACTION\", \"value\":\"update\"},{\"name\":\"USERNAME\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"PASSWORD\", \"value\":\"'+jenkin_values[5]+'\"},{\"name\":\"Artifact_Number\", \"value\":\"'+artifactNo+'\"}]}\' -H \"' + \
                             jenkin_values[3] + '\"'
                 line = 'curl -X POST ' + line
-                #print(line)
+                print(line)
+                print("******widget")
                 # Now push the job into jenking
                 try:
                     os.system(line)
@@ -217,12 +223,35 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                     line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"Artifact_Number\", \"value\":\"' + artifactNo + '\"},{\"name\":\"ENV\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"VERSION\", \"value\":\"' + symver + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"'+jenkin_values[9]+'\"}]}\' -H \"' + \
                             jenkin_values[3] + '\"'
                     line = 'curl -X POST ' + line
-                    #print(line)
+                    print(line)
+                    print("********cups")
                     # Now push the job into jenking
                     try:
                         os.system(line)
                     except:
                         print("Error in Jenkin Cups job push...")
+                elif jobNameSplit[-1][0:7].lower() == 'upgrade':
+
+                    jobSection = jobNameSplit[len(jobNameSplit) - 1].split('_')  # split the last section of jobname to get tenant section and product
+                    product = jobSection[1]  # get the product name like intellistrem or pcm etc..
+                    if product == 'intellistream':
+                        product = 'IntelliStream'
+                    elif product == 'pcm':
+                        product = 'PCM'
+                    else:
+                        print("product is different than IntelliStream or PCM")
+                        # print(tenantSection+ '****' + product)
+                    for tenantid in envTenantidsList:
+                        line = urlName.replace('https://', 'https://' + jenkin_values[0] + ":" + jenkin_values[1] + '@', 1)
+                        line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"ArtifactNum\", \"value\":\"' + artifactNo + '\"},{\"name\":\"ApmEnvType\", \"value\":\"' + apmEnvType + '\"},{\"name\":\"TenantID\", \"value\":\"' + tenantid + '\"},{\"name\":\"func_user_name\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"func_user_password\", \"value\":\"' + jenkin_values[5] + '\"},{\"name\":\"space\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"Enterprise\", \"value\":\"all\"},{\"name\":\"FolderVersion\", \"value\":\"version1.0\"},{\"name\":\"RulesFileName\", \"value\":\"upgrade.json\"},{\"name\":\"ApplicationName\", \"value\":\"' + product + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"' + jenkin_values[9] + '\"}]}\' -H \"' + jenkin_values[3] + '\"'
+                        line = 'curl -X POST ' + line
+                        print("@@@@@@@@@@upgrade")
+                        print(line)
+                    # Now push the job into jenking
+                    try:
+                        os.system(line)
+                    except:
+                        print("Error in Jenkin OGD config upgrade job push...")
                 else:
                     jobSection = jobNameSplit[len(jobNameSplit)-1].split('_') #split the last section of jobname to get tenant section and product
                     tenantSection = jobSection[0] # get the tenant section like widget or classification or uom etc..
@@ -239,14 +268,24 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                    # print (ArtifactNum1)
 
                     targetOrg = 'OGD_Development_USWest_01' # may need to change for demo
-                    tenantids1 = str(environment).lower()+'_base_tenants' #need to generate the tenant id string as per env
+                    # need to generate the tenant id string as per env
+                    if environment == 'UAT01' and product == 'IntelliStream':
+                        tenantids1 = str(environment).lower() + '_intellistream_base_tenants'
+                    elif environment == 'UAT01' and product == 'PCM':
+                        tenantids1 = str(environment).lower() + '_pcm_base_tenants'
+                    elif environment == 'PERF02':
+                        tenantids1 = str(environment).lower() + '_base_tenants'
+                    else:
+                        print ("environment is not UAT01 or PERF02")
+
                   #  print (tenantids1)
                     apmEnvType = 'preprod'
 
                     line = urlName.replace('https://', 'https://' + jenkin_values[0] + ":" + jenkin_values[1] + '@', 1)
                     line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"ArtifactNum\", \"value\":\"' + artifactNum1 + '\"},{\"name\":\"Section\", \"value\":\"' + tenantSection + '\"},{\"name\":\"TargetOrg\", \"value\":\"' + targetOrg + '\"},{\"name\":\"SPACE\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"DedicatedSpace\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"TenantID\", \"value\":\"' + tenantids1 + '\"},{\"name\":\"ApplicationName\", \"value\":\"' + product + '\"},{\"name\":\"ApmEnvType\", \"value\":\"' + apmEnvType + '\"},{\"name\":\"func_user_name\", \"value\":\"' +jenkin_values[4] + '\"},{\"name\":\"func_user_password\", \"value\":\"' + jenkin_values[5] + '\"},{\"name\":\"devops_user_name\", \"value\":\"' + jenkin_values[6] + '\"},{\"name\":\"devops_user_password\", \"value\":\"' + jenkin_values[7] + '\"},{\"name\":\"UAASecret\", \"value\":\"' + jenkin_values[8] + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"' + jenkin_values[9] + '\"}]}\' -H \"' + jenkin_values[3] + '\"'
                     line = 'curl -X POST ' + line
-                    #print(line)
+                    print(line)
+                    print("******else")
                     # Now push the job into jenking
                     try:
                         os.system(line)

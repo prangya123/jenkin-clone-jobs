@@ -1,8 +1,10 @@
 {
 	"UAT01": {
-		"urlLists": "config/uatJenkinCDJobsUrlList.csv"
+		"urlLists": "config/uatJenkinCDJobsUrlList.csv",
+		"tenantidsList":"75eaec32-a802-4c7b-9f70-b11efd06ced4,f0cd40c5-a5d7-440a-a3e2-f83e97763a82,34c4f516-f797-4540-a157-7e778b2bf8e9,94bb333e-438c-47e2-b700-25f698591c9c,57751636-93a7-4046-92e0-7ae1b9e15c5b"
 	},
 	"PERF02": {
-		"urlLists": "config/perfJenkinCDJobsUrlList.csv"
+		"urlLists": "config/perfJenkinCDJobsUrlList.csv",
+		"tenantidsList":"3aad14b1-4308-4e57-84f7-b6c3d2f7ddd9,fca6de48-bdaa-4fea-bd13-3348709db49b,548dc196-6f09-4c0e-a980-3a24ea168f20,c74c7c0a-158d-40d0-9d4e-cec5306a70a2,358ea3e2-b6ab-48e0-9a49-df5c4ee3773e"
 	}
 }

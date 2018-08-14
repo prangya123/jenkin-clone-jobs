@@ -90,17 +90,25 @@ rul_dataingestor,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/
 rul-microapp,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Micro-App/job/RUL_AppHub-UAT01/
 rul_analysis,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Analysis/job/RUL-Analysis-UAT01/
 rul_orchestration,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Orchestration/job/RUL-Orchestration-UAT01/
-***************CONFIG LISTS**************
+***************CONFIG LISTS************************
 ogd-config-cups,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/OGD-CUPS-SERVICES/job/ogd-cups-uups-service-CD-HEnv/
-ogd-config-widget_intellistream,
-
-
-
-
-
-
-
-***************WIDGET LISTS**************
+ogd-config-classification_intellistre​am,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-context_intellistre​am,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-widget_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-template_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-tenantconfig_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-marker_intellistrea​m,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-operatortoken_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-uom_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-reporttemplate_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-upgrade_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/TenantUpgrade-CD/
+*********************PCM***************************
+ogd-config-classification_pcm,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-template_pcm,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-tenantconfig_pcm,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-marker_pcm,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
+ogd-config-upgrade_pcm,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/TenantUpgrade-CD/
+***************WIDGET LISTS**************************
 ong-asset-overview,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/OGD-Widgets-HEnv/job/ong-asset-overview-CD-HEnv/,1c521a0f-a1a8-475e-84eb-a9485fcff47e",34ececaa-78cd-4f0b-acb0-20b1bb7c6efa,051108c6-6181-41ff-9ec7-c29f20ca9f2b,c4967001-8f65-4efd-8ac2-ed3617f9620d,3aad14b1-4308-4e57-84f7-b6c3d2f7ddd9,75eaec32-a802-4c7b-9f70-b11efd06ced4,da922316-de58-401a-942b-eeb471d4b649,9220bb98-2369-4ae5-a688-6835b346eb5e,2f827688-2370-496f-b210-830a85d9581e,d42e9a5a-c521-4a52-a167-31ee1e68cfa4,deacd1a6-f39c-4646-9462-fa6784f1682b
 ong-watch-list,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/OGD-Widgets-HEnv/job/ong-asset-overview-CD-HEnv/,1c521a0f-a1a8-475e-84eb-a9485fcff47e,34ececaa-78cd-4f0b-acb0-20b1bb7c6efa,051108c6-6181-41ff-9ec7-c29f20ca9f2b,c4967001-8f65-4efd-8ac2-ed3617f9620d,3aad14b1-4308-4e57-84f7-b6c3d2f7ddd9,75eaec32-a802-4c7b-9f70-b11efd06ced4,da922316-de58-401a-942b-eeb471d4b649,9220bb98-2369-4ae5-a688-6835b346eb5e,2f827688-2370-496f-b210-830a85d9581e,d42e9a5a-c521-4a52-a167-31ee1e68cfa4,deacd1a6-f39c-4646-9462-fa6784f1682b
 ong-asset-summary,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/OGD-Widgets-HEnv/job/ong-asset-summary-HEnv/,3aad14b1-4308-4e57-84f7-b6c3d2f7ddd9,75eaec32-a802-4c7b-9f70-b11efd06ced4,da922316-de58-401a-942b-eeb471d4b649,9220bb98-2369-4ae5-a688-6835b346eb5e,2f827688-2370-496f-b210-830a85d9581e,d42e9a5a-c521-4a52-a167-31ee1e68cfa4,deacd1a6-f39c-4646-9462-fa6784f1682b,1c521a0f-a1a8-475e-84eb-a9485fcff47e

@@ -21,7 +21,7 @@ import requests
 # Aug-03-2018  Prangya Parmita Kar  Initial Version,
 #
 #
-# python3 jenkinAutoTriggerPromotion-p1.py -f1 verifiedInBuild-demo.csv --environment UAT01
+# python3 jenkinAutoTriggerPromotion-p1.py -f1 verifiedInBuild.csv --environment UAT01
 #
 #
 #################################################################################################
@@ -32,12 +32,14 @@ logger.addHandler(logging.NullHandler())
 
 jenkin_credential_file = "credentials/jenkin_credential.json"
 jenkin_env_mapping_file = "config/jenkin_env_mapping.json"
-verifiedInBuild_c = 'verifiedInBuild-demo.csv'
+verifiedInBuild_c = 'verifiedInBuild.csv'
 
 sanitizeSortedResultUatFile = 'sanitizeSortedResultUat.csv'
 jenkinJobUrlFile = 'output/jenkinJobUrlFile.csv'
 jenkinJobStatus = 'output/jenkinJobStatus.csv'
 DIR_NAME = "logs"
+
+jenkinUrl = 'isjenkins.dsa.apps.ge.com'
 
 
 def main(argv):
@@ -52,7 +54,7 @@ def main(argv):
         sys.exit(1)
 
     try:
-        opts, args = getopt.getopt(argv, "h:f1:e", ["verifiedInBuild=", "environment="])
+        opts, args = getopt.getopt(argv, "h:f1:e:", ["verifiedInBuild=", "environment=",])
     except getopt.GetoptError as  exc:
         print(exc.msg)
         usage()
@@ -87,17 +89,19 @@ def main(argv):
         if environment in jenkin_env_mapping_file_map:
             env_name = jenkin_env_mapping_file_map[environment]
             envJobsUrlList = env_name["urlLists"]
+            envView = env_name["view"]
+
         else:
             error_message = "There is no entry for " + environment + " in the file " + jenkin_env_mapping_file_map
             raise AttributeError(error_message)
 
-        split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResultUatFile)
         jenkin_values = read_jenkin_credentials(jenkin_credential_file)
+        split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResultUatFile,jenkin_values,environment, envView)
         open(jenkinJobUrlFile, 'w').close()  # flush existing data
         assemble_uat_data(sanitizeSortedResultUatFile, jenkin_values)
         trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_values,environment,jenkin_env_mapping_file_map)
         with open(jenkinJobStatus, 'w') as file_obj:
-            file_obj.writelines("Date: ".ljust(13) + "Artifact Name:".ljust(53) + "Job Status:" + '\n')
+           file_obj.writelines("Date: ".ljust(13) + "Artifact Name:".ljust(33) + "Job Status:".ljust(15) + "Jenkin Log URL:" + '\n')
         logger.info("Wait 5 min...let the Jenkin jobs finish.")
         time.sleep(300)  # wait 5 min finish all jobs and get the job status
         jenkin_job_status(sanitizeSortedResultUatFile, jenkin_values, jenkinJobStatus)
@@ -313,10 +317,14 @@ def jenkin_job_status(sanitizeSortedResultUatFile, jenkin_values, jenkinJobStatu
                         status = value
                         if status == None:
                             status = 'RUNNING'
+                    if key == 'id':
+                        buildId = value
                 # dt=datetime.datetime.now().date()
+                #contruct the jenkin lastbuild consol output url
+                jenkinLogUrl = url + buildId +'/console'
                 with open(jenkinJobStatus, 'a') as file_obj:
                     file_obj.writelines(
-                        str(datetime.date.today()) + " : " + line.rsplit('|')[0].ljust(50) + " : " + status + '\n')
+                        str(datetime.date.today()) + " : " + line.rsplit('|')[0].ljust(30) + " : " + status.ljust(15) + jenkinLogUrl + '\n')
             except:
                 print(jsonurl)
                 print("Error getting Jenkin job status.....")
@@ -343,7 +351,7 @@ def read_jenkin_credentials(jenkin_credential_file):
     return jenkin_val
 
 
-def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResultUatFile):
+def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResultUatFile, jenkin_values, environment, envView):
     logger.info("Begin method split_uat_data_on_field")
     print("Read data from "+verifiedInBuild+" and "+envJobsUrlList+" started")
     file_path1 = os.path.join('.', verifiedInBuild)
@@ -354,7 +362,7 @@ def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResul
         writer = csv.writer(final, delimiter=',')
         reader = csv.reader(f1, delimiter=',')
         # _ = next(reader)
-        lines = (line.rstrip() for line in f1)  # All lines including the blenlank ones
+        lines = (line.rstrip() for line in f1)  # All lines including the blank ones
         lines = (line for line in lines if line)  # Non-blank lines
         for line in lines:
             artifactName = line[0:re.search('\d', line).start() - 1]  # first part is job name
@@ -373,9 +381,43 @@ def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResul
                         urlName = ""
 
             if not urlName:
-                err_msg = "***ERROR****: URL is a mandatory field. Missing in envJobsUrlList file for : " + artifactName
-                logger.error(err_msg)
-                raise AttributeError(err_msg)
+                #Possible it may be a new job. Need to find the Url. if url doesn't exists then throw error
+                #construct the new url first
+                if str(environment).upper() == 'UAT01':
+                    url = 'https://' + jenkin_values[0] + ':' + jenkin_values[1] + '@' + jenkinUrl + '/job/' + envView + 'job/'+artifactName+'/job/'+artifactName+'-UAT01/'+'api/json?pretty=true'
+                    print(url)
+                elif str(environment).upper() == 'PERF02':
+                    url = 'https://' + jenkin_values[0] + ':' + jenkin_values[1] + '@' + jenkinUrl + '/job/' + envView + '/job/' + artifactName + '-PERF02/' + 'api/json?pretty=true'
+                    print(url)
+                # Do the HTTP get request
+                try:
+                    response = requests.get(url, verify=True)  # Verify is check SSL certificate
+                    print(response.status_code)
+                    # Error handling
+                    # Check for HTTP codes other than 200
+                    if response.status_code != 200:
+                        print('Status:', response.status_code, 'Problem with the accessing URL request for '+ artifactName +'. Exiting..')
+                        err_msg = "***ERROR****: URL is a mandatory field. Missing in envJobsUrlList file for : " + artifactName
+                        logger.error(err_msg)
+                        raise AttributeError(err_msg)
+                    else:
+                        if str(environment).upper() == 'UAT01':
+                            urlName = 'https://' + jenkinUrl + '/job/' + envView + 'job/'+artifactName+'/job/'+ artifactName +'-UAT01/'
+                        elif str(environment).upper() == 'PERF02':
+                            urlName = 'https://' + jenkinUrl + '/job/' + envView + '/job/' + artifactName + '-PERF02/'
+
+                        if artifactName[0:4].lower() == 'ong-':
+                            line = artifactName + "|" + artifactVersion + "|" + artifactNo + "|" + "|".join(urlList[1:len(urlList)])
+                            print(line)
+                        else:
+                            line = artifactName + "|" + artifactVersion + "|" + artifactNo + "|" + urlName
+                            print(line)
+                except:
+                    print("Error in Artifact : "+ artifactName)
+                    print("Error in getResponse for the Url : " + url)
+                    logger.error("Error in getResponse for the Url : " + url)
+                    raise AttributeError("Error in URL Response")
+
             elif artifactName[0:4].lower() == 'ong-':
                 line = artifactName + "|" + artifactVersion + "|" + artifactNo + "|" + "|".join(urlList[1:len(urlList)])
                 print(line)

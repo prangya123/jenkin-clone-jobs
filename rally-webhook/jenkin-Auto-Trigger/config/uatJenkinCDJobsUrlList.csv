@@ -91,7 +91,6 @@ rul-microapp,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/
 rul_analysis,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Analysis/job/RUL-Analysis-UAT01/
 rul_orchestration,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/RUL-Orchestration/job/RUL-Orchestration-UAT01/
 mweo_app,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/view/UAT01/job/MWEO/job/MWEO-UAT01/
-ogd-gaslift-analysis,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/view/UAT01/job/ogd-gaslift-analysis/job/ogd-gaslift-analysis-UAT01/
 
 ***************CONFIG LISTS************************
 ogd-config-cups,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/OGD-CUPS-SERVICES/job/ogd-cups-uups-service-CD-HEnv/

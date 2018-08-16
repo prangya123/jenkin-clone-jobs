@@ -210,7 +210,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                 tenantids = '\,'.join(lineList[4:len(lineList)])
                 print(tenantids)
                 line = urlName.replace('https://', 'https://' + jenkin_values[0] + ":" + jenkin_values[1] + '@', 1)
-                line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"TENANTIDS\", \"value\":\"' + tenantids + '\"},{\"name\":\"ACTION\", \"value\":\"update\"},{\"name\":\"USERNAME\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"PASSWORD\", \"value\":\"'+jenkin_values[5]+'\"},{\"name\":\"Artifact_Number\", \"value\":\"'+artifactNo+'\"}]}\' -H \"' + \
+                line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"Environment\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"TENANTIDS\", \"value\":\"' + tenantids + '\"},{\"name\":\"ACTION\", \"value\":\"update\"},{\"name\":\"USERNAME\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"PASSWORD\", \"value\":\"'+jenkin_values[5]+'\"},{\"name\":\"Artifact_Number\", \"value\":\"'+artifactNo+'\"}]}\' -H \"' + \
                             jenkin_values[3] + '\"'
                 line = 'curl -X POST ' + line
                 print(line)

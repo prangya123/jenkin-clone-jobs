@@ -20,6 +20,9 @@ ogd-config-widget_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Ga
 ogd-config-uom_intellistream,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/PostTenantConfigSetup-CD/
 ogd-config-upgrade_pcm,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital-HEnv/job/utils/job/PostTenantSteps/job/TenantUpgrade-CD/
 ***************WIDGET LISTS**************
+ong-tree-view-browser,https://isjenkins.dsa.apps.ge.com/job/Oil_and_Gas_Digital/job/OGD-Widgets/job/ong-tree-view-browser/job/ong-tree-view-browser-CD/,3aad14b1-4308-4e57-84f7-b6c3d2f7ddd9,fca6de48-bdaa-4fea-bd13-3348709db49b,548dc196-6f09-4c0e-a980-3a24ea168f20,c74c7c0a-158d-40d0-9d4e-cec5306a70a2,358ea3e2-b6ab-48e0-9a49-df5c4ee3773e
+
+
 
 
 

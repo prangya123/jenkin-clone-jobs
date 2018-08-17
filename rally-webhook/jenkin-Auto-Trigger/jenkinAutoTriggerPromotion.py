@@ -21,7 +21,7 @@ import requests
 # Aug-03-2018  Prangya Parmita Kar  Initial Version,
 #
 #
-# python3 jenkinAutoTriggerPromotion-p1.py -f1 verifiedInBuild.csv --environment UAT01
+# python3 jenkinAutoTriggerPromotion.py -f1 verifiedInBuild.csv --environment UAT01
 #
 #
 #################################################################################################
@@ -85,7 +85,7 @@ def main(argv):
 
         logger.info('Read Data from Jenking env file')
         jenkin_env_mapping_file_map = load_json(jenkin_env_mapping_file)
-        print(jenkin_env_mapping_file_map)
+        #print(jenkin_env_mapping_file_map)
         if environment in jenkin_env_mapping_file_map:
             env_name = jenkin_env_mapping_file_map[environment]
             envJobsUrlList = env_name["urlLists"]
@@ -101,7 +101,7 @@ def main(argv):
         assemble_uat_data(sanitizeSortedResultUatFile, jenkin_values)
         trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_values,environment,jenkin_env_mapping_file_map)
         with open(jenkinJobStatus, 'w') as file_obj:
-           file_obj.writelines("Date: ".ljust(13) + "Artifact Name:".ljust(33) + "Job Status:".ljust(15) + "Jenkin Log URL:" + '\n')
+           file_obj.writelines("Date: ".ljust(13) + "Artifact Name:".ljust(53) + "Job Status:".ljust(15) + "Jenkin Log URL:" + '\n')
         logger.info("Wait 5 min...let the Jenkin jobs finish.")
         time.sleep(300)  # wait 5 min finish all jobs and get the job status
         jenkin_job_status(sanitizeSortedResultUatFile, jenkin_values, jenkinJobStatus)
@@ -174,6 +174,8 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
     #Push all apps first
     logger.info("Begin method push_jenkin_jobs")
     logger.info("Push All apps first")
+    print("Begin method push_jenkin_jobs")
+    print("Push All apps first")
     if environment in jenkin_env_mapping_file_map:
         env_name = jenkin_env_mapping_file_map[environment]
         envTenantidsLists = env_name["tenantidsList"]
@@ -196,6 +198,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
             logger.info("Successfully pushed all App jobs")
     #Push widget and config on-fly
     logger.info("Push All Widget and Cups jobs")
+    print("Push All Widget and Cups jobs")
     with open(sanitizeSortedResultUatFile, 'r') as f1:
         lines = (line.rstrip() for line in f1)  # All lines including the blank ones
         lines = (line for line in lines if line)  # Non-blank lines
@@ -204,6 +207,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
             jobName = lineList[0]  # first part is job name
             symver = lineList[1] # version number
             artifactNo = lineList[2] # build number or artifact  number
+            artifactNum1 = symver + '.' + artifactNo
             urlName = lineList[3] # url
             print(jobName)
             if jobName[0:4].lower() == 'ong-':
@@ -214,7 +218,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                             jenkin_values[3] + '\"'
                 line = 'curl -X POST ' + line
                 print(line)
-                #print("******widget")
+                print("******widget")
                 # Now push the job into jenking
                 try:
                     os.system(line)
@@ -228,7 +232,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                             jenkin_values[3] + '\"'
                     line = 'curl -X POST ' + line
                     print(line)
-                    #print("********cups")
+                    print("********cups")
                     # Now push the job into jenking
                     try:
                         os.system(line)
@@ -247,15 +251,15 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                         # print(tenantSection+ '****' + product)
                     for tenantid in envTenantidsList:
                         line = urlName.replace('https://', 'https://' + jenkin_values[0] + ":" + jenkin_values[1] + '@', 1)
-                        line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"ArtifactNum\", \"value\":\"' + artifactNo + '\"},{\"name\":\"ApmEnvType\", \"value\":\"' + apmEnvType + '\"},{\"name\":\"TenantID\", \"value\":\"' + tenantid + '\"},{\"name\":\"func_user_name\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"func_user_password\", \"value\":\"' + jenkin_values[5] + '\"},{\"name\":\"space\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"Enterprise\", \"value\":\"all\"},{\"name\":\"FolderVersion\", \"value\":\"version1.0\"},{\"name\":\"RulesFileName\", \"value\":\"upgrade.json\"},{\"name\":\"ApplicationName\", \"value\":\"' + product + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"' + jenkin_values[9] + '\"}]}\' -H \"' + jenkin_values[3] + '\"'
+                        line = line + 'build --data-urlencode json=\'{\"parameter\":[{\"name\":\"ArtifactNum\", \"value\":\"' + artifactNum1 + '\"},{\"name\":\"ApmEnvType\", \"value\":\"' + apmEnvType + '\"},{\"name\":\"TenantID\", \"value\":\"' + tenantid + '\"},{\"name\":\"func_user_name\", \"value\":\"' + jenkin_values[4] + '\"},{\"name\":\"func_user_password\", \"value\":\"' + jenkin_values[5] + '\"},{\"name\":\"space\", \"value\":\"' + str(environment).lower() + '\"},{\"name\":\"Enterprise\", \"value\":\"all\"},{\"name\":\"FolderVersion\", \"value\":\"version1.0\"},{\"name\":\"RulesFileName\", \"value\":\"upgrade.json\"},{\"name\":\"ApplicationName\", \"value\":\"' + product + '\"},{\"name\":\"FrameworkArtifactNumber\", \"value\":\"' + jenkin_values[9] + '\"}]}\' -H \"' + jenkin_values[3] + '\"'
                         line = 'curl -X POST ' + line
-                        #print("********upgrade")
+                        print("********upgrade")
                         print(line)
-                    # Now push the job into jenking
-                    try:
-                        os.system(line)
-                    except:
-                        print("Error in Jenkin OGD config upgrade job push...")
+                        # Now push the job into jenking
+                        try:
+                            os.system(line)
+                        except:
+                            print("Error in Jenkin OGD config upgrade job push...")
                 else:
                     jobSection = jobNameSplit[len(jobNameSplit)-1].split('_') #split the last section of jobname to get tenant section and product
                     tenantSection = jobSection[0] # get the tenant section like widget or classification or uom etc..
@@ -268,7 +272,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
                         print("product is different than IntelliStream or PCM")
                     #print(tenantSection+ '****' + product)
 
-                    artifactNum1= symver+'.'+artifactNo #artifact num created as per tenant config
+                    #artifactNum1= symver+'.'+artifactNo #artifact num created as per tenant config
                    # print (ArtifactNum1)
 
                     targetOrg = 'OGD_Development_USWest_01' # may need to change for demo
@@ -299,6 +303,7 @@ def trigger_jenkin_jobs(jenkinJobUrlFile,sanitizeSortedResultUatFile,jenkin_valu
 
 def jenkin_job_status(sanitizeSortedResultUatFile, jenkin_values, jenkinJobStatus):
     logger.info("Get the status of all jobs we pushed")
+    print("Get the status of all jobs we pushed")
     with open(sanitizeSortedResultUatFile, 'r') as data_file:
         lines = (line.rstrip() for line in data_file)  # All new-line char including the blank ones
         lines = (line for line in lines if line)  # Non-blank lines
@@ -324,11 +329,12 @@ def jenkin_job_status(sanitizeSortedResultUatFile, jenkin_values, jenkinJobStatu
                 jenkinLogUrl = url + buildId +'/console'
                 with open(jenkinJobStatus, 'a') as file_obj:
                     file_obj.writelines(
-                        str(datetime.date.today()) + " : " + line.rsplit('|')[0].ljust(30) + " : " + status.ljust(15) + jenkinLogUrl + '\n')
+                        str(datetime.date.today()) + " : " + line.rsplit('|')[0].ljust(50) + " : " + status.ljust(15) + jenkinLogUrl + '\n')
             except:
                 print(jsonurl)
                 print("Error getting Jenkin job status.....")
     logger.info("Successfully write the status of all pushed jobs into : "+jenkinJobStatus)
+    print("Successfully write the status of all pushed jobs into : "+jenkinJobStatus)
 
 def read_jenkin_credentials(jenkin_credential_file):
     print("read_jenkin_credentials started")
@@ -365,12 +371,14 @@ def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResul
         lines = (line.rstrip() for line in f1)  # All lines including the blank ones
         lines = (line for line in lines if line)  # Non-blank lines
         for line in lines:
+            #artifact = line
             artifactName = line[0:re.search('\d', line).start() - 1]  # first part is job name
            # print(artifactName)
             artifactVersion = line[re.search('\d', line).start():[m.start() for m in re.finditer(r"\.", line)][2]]
            # print(artifactVersion)
             artifactNo = re.findall(r'\d+', line)[-1]
            # print(artifactNo)
+          #  print(artifact)
             with open(file_path2, 'r') as f2:
                 for ln in f2:
                     urlList = ln.split(',')
@@ -384,10 +392,10 @@ def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResul
                 #Possible it may be a new job. Need to find the Url. if url doesn't exists then throw error
                 #construct the new url first
                 if str(environment).upper() == 'UAT01':
-                    url = 'https://' + jenkin_values[0] + ':' + jenkin_values[1] + '@' + jenkinUrl + '/job/' + envView + 'job/'+artifactName+'/job/'+artifactName+'-UAT01/'+'api/json?pretty=true'
+                    url = 'https://' + jenkin_values[0] + ':' + jenkin_values[1] + '@' + jenkinUrl + '/job/' + envView + 'job/' + artifactName +'/job/'+ artifactName+'-UAT01/'+'api/json?pretty=true'
                     print(url)
                 elif str(environment).upper() == 'PERF02':
-                    url = 'https://' + jenkin_values[0] + ':' + jenkin_values[1] + '@' + jenkinUrl + '/job/' + envView + '/job/' + artifactName + '-PERF02/' + 'api/json?pretty=true'
+                    url = 'https://' + jenkin_values[0] + ':' + jenkin_values[1] + '@' + jenkinUrl + '/job/' + envView + 'job/' + artifactName +'/job/'+ artifactName+'-PERF02/'+'api/json?pretty=true'
                     print(url)
                 # Do the HTTP get request
                 try:
@@ -402,16 +410,18 @@ def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResul
                         raise AttributeError(err_msg)
                     else:
                         if str(environment).upper() == 'UAT01':
-                            urlName = 'https://' + jenkinUrl + '/job/' + envView + 'job/'+artifactName+'/job/'+ artifactName +'-UAT01/'
+                            urlName = 'https://' + jenkinUrl + '/job/' + envView + 'job/' + artifactName+'/job/'+ artifactName +'-UAT01/'
                         elif str(environment).upper() == 'PERF02':
-                            urlName = 'https://' + jenkinUrl + '/job/' + envView + '/job/' + artifactName + '-PERF02/'
+                            urlName = 'https://' + jenkinUrl + '/job/' + envView + 'job/' + artifactName+'/job/'+ artifactName +'-PERF02/'
 
-                        if artifactName[0:4].lower() == 'ong-':
-                            line = artifactName + "|" + artifactVersion + "|" + artifactNo + "|" + "|".join(urlList[1:len(urlList)])
+                        if (artifactName[0:4].lower() != 'ong-') and (artifactName[0:10].lower() != 'ogd-config'):
+                            line = artifactName + "|" + artifactVersion + "|" + artifactNo + "|" + urlName + '\n'
                             print(line)
                         else:
-                            line = artifactName + "|" + artifactVersion + "|" + artifactNo + "|" + urlName
-                            print(line)
+                            print("Error in Artifact : " + artifactName)
+                            print("Error: Artifact is not an app : " + url)
+                            logger.error("Error: Artifact is not an app : URL is a mandatory field. Missing in envJobsUrlList file " + url)
+                            raise AttributeError("Error: Artifact is not an app")
                 except:
                     print("Error in Artifact : "+ artifactName)
                     print("Error in getResponse for the Url : " + url)
@@ -434,7 +444,8 @@ def split_uat_data_on_field(verifiedInBuild, envJobsUrlList, sanitizeSortedResul
         logger.info("Successfully created a sanitized file :"+sanitizeSortedResultUatFile)
         print("split_uat_data_on_field ended")
         sys.exit()
-
+    logger.info("End method split_uat_data_on_field")
+    print("End method split_uat_data_on_field")
 def load_json(json_file):
   logger.info("Begin method load_json : "+json_file)
   # load the Json file into an object

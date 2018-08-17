@@ -39,7 +39,7 @@ jenkinJobUrlFile = 'output/jenkinJobUrlFile.csv'
 jenkinJobStatus = 'output/jenkinJobStatus.csv'
 DIR_NAME = "logs"
 
-jenkinUrl = 'isjenkins.dsa.apps.ge.com'
+jenkinUrl = 'jenkin.......'
 
 
 def main(argv):
